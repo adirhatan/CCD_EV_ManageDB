@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- One interface's XML file conatians all its related protocols definitions -->
+<SessionsManageConf>
+	<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->
+	<ProtocolConf>
+		<protocol>Crystal</protocol>
+		<proj>MR</proj>
+		<phase>A0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>Crystal</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<field alias="ESR">sType</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>NA</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>NA</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>NONE</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>NPL0</SRTemplate>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+			<!-- SRreportId: report id that is used for LogicUnit status report (optional) -->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options are equals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		
+		<table_div tdname="Crystal" tname="Crystal">
+			<table_div_line dname="PPM" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">Temperature Tolerance</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Drive Level" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">Drive Level</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Gain Margin" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">Gain Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Wake Up" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">Wake Up</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Transfer Function" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">Transfer Function</table_div_field>
+			</table_div_line>
+
+		</table_div>
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+			<!-- skew:skew (FF/TYP/SS)-->
+			<!-- type:Board configuration (first letter upper case)-->
+			<!-- setup:Setup (first letter upper case)-->
+			<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>N</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>N</type>
+				<setup>H</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>N</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>N</type>
+				<setup>H</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>N</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>N</type>
+				<setup>H</setup>
+				<num>1</num>
+			</unit>
+		</units>
+	</ProtocolConf>
+	
+
+</SessionsManageConf>

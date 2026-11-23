@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<MongoTablesIndexes>
+
+
+	<TMP>
+		<Table name="Executions">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="CIO_Rounded_Gen2_Rx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="CIO_Rounded_Gen2_Tx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="CIO_Rounded_Gen3_Rx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="CIO_Rounded_Gen3_Tx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="TBT3_Legacy_Gen2_Rx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="TBT3_Legacy_Gen2_Tx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="TBT3_Legacy_Gen3_Rx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="TBT3_Legacy_Gen3_Tx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="USB3.1_GEN1_GEN2_RX">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="USB3.1_GEN1_GEN2_TX">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_Common">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_Common_Active_Cable">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_Common_Retimer">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_RX_Results">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_RL">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_MultiFunction">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_MultiFunction_Retimer">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_MultiFunction_Active_Cable">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_RDRV">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_RDRV_Retimer">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_RDRV_Active_Cable">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_Measurements">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_TNL">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+	</TMP>
+	<PRM>
+		<Table name="CIO_Rounded_Gen2_Rx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="CIO_Rounded_Gen2_Tx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="CIO_Rounded_Gen3_Rx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="CIO_Rounded_Gen3_Tx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="TBT3_Legacy_Gen2_Rx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="TBT3_Legacy_Gen2_Tx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="TBT3_Legacy_Gen3_Rx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="TBT3_Legacy_Gen3_Tx">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="USB3.1_GEN1_GEN2_RX">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="USB3.1_GEN1_GEN2_TX">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="Test_DP_src0">
+			<Field name="TestName" />
+			<Field name="ProjectName" />
+		</Table>
+		<Table name="DP_Common">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_Common_Active_Cable">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_Common_Retimer">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_RX_Results">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_RL">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_MultiFunction">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_MultiFunction_Retimer">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_MultiFunction_Active_Cable">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_RDRV">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_RDRV_Retimer">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_RDRV_Active_Cable">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_Measurements">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+		<Table name="DP_TX_TNL">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+		</Table>
+	</PRM>
+	<CMP>
+		<Table name="DP_cert_test">
+			<Field name="TestName" />
+			<Field name="ProjectName" />
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="DP_TX">
+			<Field name="BoardNumber" />
+			<Field name="AppTestName" />
+			<Field name="AppTestDetails" />
+			<Field name="Lane" />
+			<Field name="Port" />
+			<Field name="NVM_REV" />
+		</Table>
+		<Table name="DPpp_TX">
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="HDMI1p4_TX">
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="HDMI2p0_TX">
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="TBT_TX">
+			<Field name="BoardNumber" />
+			<Field name="AppTestName" />
+			<Field name="AppTestDetails" />
+			<Field name="Lane" />
+			<Field name="Port" />
+			<Field name="NVM_REV" />
+		</Table>
+		<Table name="TBT_RX">
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="USB3p1_TX">
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="USB2p0_TX">
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="USB3p1_TX">
+			<Field name="BoardNumber" />
+		</Table>
+	</CMP>
+
+
+</MongoTablesIndexes>

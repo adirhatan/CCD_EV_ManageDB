@@ -1,0 +1,144 @@
+﻿@model IndicatorDisplayResult
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+@{
+    ViewBag.Title = "Indicator Result";
+}
+
+<h2>Indicator @ViewBag.official  Result</h2>
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+    @using (Html.BeginForm("ViewExportFile", "ManageDB", FormMethod.Post, new { @id = "vForm", @name = "vForm" }))
+    {
+            <input type="submit" value="View in Excel" title="View in Excel" class="button" />
+            <input type="hidden" id="filename" name="filename" value="@ViewBag.filename" />
+    }
+
+   @using (Html.BeginForm("IndicatorsList", "GeneralDB", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+   {
+     <input type="hidden" id="proj" name="proj" value="@Model.Ind.project" />
+       <input type="hidden" id="phase" name="phase" value="@Model.Ind.phase" />
+     <p>
+        Name: <b>@Model.Ind._id </b>&nbsp; Spec:@Model.Ind.spec &nbsp; Lanes count:@Model.Ind.lanes
+    </p>
+       <br />
+       <!--<table id="table_id" class="display">-->
+        <table id="fsTables" class="display">
+        <thead>
+            <tr>
+                <th >
+                    SpecTestName
+                </th>
+                <th >
+                    Units&nbsp;
+                </th>
+                @foreach (IndWeekSum ww in Model.Res.weeks)
+                {
+                    <th >
+                        WW @ww.Name &nbsp;                                                                                                              
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+        @{
+                int cnt = 0;
+
+                foreach (IndTest test in Model.Ind.tests)
+                {
+                    int cntw = 0;
+                    string tn = "t" + cnt.ToString();
+                    string u = "u" + cnt.ToString();
+                    string w = "w" + cnt.ToString();
+                    int blockedNum ;
+
+                     <tr>
+                        <!--<td><input type="text" name="@tn" value="@test.SpecTestName" disabled="disabled" style="width: 350px"/></td>-->
+                        <td>@test.SpecTestName</td>
+                        <td><input type="text" name="@u" value="@test.UnitsNum" style="width: 25px" disabled="disabled"/></td>
+                        @foreach (WorkWeek ww in test.WorkWeeks)
+                        {
+                            string wn = w + "_" + cntw.ToString();
+                            blockedNum = 0;
+                            if (ww.Blocked)
+                            {
+                                blockedNum = ww.PlannedOrig;
+                            }
+                            <td>
+                                <input type="text" name= "@wn" value="@ww.PlannedOrig" style="width: 25px" disabled="disabled" title="@test.SpecTestName: WW @ww.Name planned"/>
+                                <input type="text" name= "@wn" value="@ww.Executed" style="width: 25px" disabled="disabled" title="@test.SpecTestName: WW @ww.Name executed"/>
+                                <input type="text" name= "@wn" value="@ww.Passed" style="width: 25px" disabled="disabled" title="@test.SpecTestName: WW @ww.Name passed"/>
+                                @if ((ww.Executed - ww.Passed) > 0L)
+                                {
+                                    <input type="text" value="@(ww.Executed - ww.Passed)" style="width: 33px; background-color: Red" title="WW @ww.Name failed" disabled="disabled"/>
+                                }
+                                else
+                                {
+                                    <input type="text" value="0" style="width: 33px" title="WW @ww.Name failed total" disabled="disabled"/>
+                                }
+                                <input type="text" name= "@wn" value="@blockedNum" style="width: 25px" disabled="disabled" title="@test.SpecTestName: WW @ww.Name blocked"/>
+                            </td>
+                            cntw++;
+                        }
+                    </tr>
+                        cnt++;
+                }
+            <tr>
+            <td>Total: Planned/Exec/Pass/Fail/Blocked</td>
+            <td></td>
+                @foreach (IndWeekSum ww in Model.Res.weeks)
+                {
+                   <td >
+                        <input type="text" value="@ww.plannedTestsAc" style="width: 33px" title="WW @ww.Name planned total" disabled="disabled"/>
+                        <input type="text" value="@ww.executedTestsAc" style="width: 33px" title="WW @ww.Name executed total" disabled="disabled"/>
+                        <input type="text" value="@ww.passedTestsAc" style="width: 33px" title="WW @ww.Name passed total" disabled="disabled"/>
+                        @if (ww.failedTestsAc > 0L)
+                        {
+                            <input type="text" value="@ww.failedTestsAc" style="width: 33px; background-color: Red" title="WW @ww.Name failed total" disabled="disabled"/>
+                        }
+                        else
+                        {
+                            <input type="text" value="@ww.failedTestsAc" style="width: 33px" title="WW @ww.Name failed total" disabled="disabled"/>
+                        }
+                        <input type="text" value="@ww.blockedTestsAc" style="width: 33px" title="WW @ww.Name blocked total" disabled="disabled"/>
+                   </td>
+                }
+            </tr>
+
+                        <tr>
+            <td>Coverage:</td>
+            <td></td>
+                @foreach (IndWeekSum ww in Model.Res.weeks)
+                {
+                   <td>
+                        <input type="text" value="@ww.CoverageAc" style="width: 50px" title="WW @ww.Name coverage total"disabled="disabled"/>
+                   </td>
+                }
+            </tr>
+            
+                        <tr>
+            <td>Pending:</td>
+            <td></td>
+                @foreach (IndWeekSum ww in Model.Res.weeks)
+                {
+                   <td>
+                        <input type="text" value="@ww.pendingTestsAc" style="width: 50px" title="WW @ww.Name pending total"disabled="disabled"/>
+                   </td>
+                }
+            </tr>
+            
+            
+         }
+         
+    </tbody>
+    </table>
+   <br /><br />
+
+          <input type="submit" value="Back to List" class="button" />
+
+   }
+

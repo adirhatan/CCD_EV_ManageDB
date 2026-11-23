@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "My Preferences";
+}
+
+<h2>My Preferences</h2>
+
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+ @using (Html.BeginForm("PreferencesUpdate", "ManageDB", FormMethod.Post, new { @id = "PreferencesForm", @name = "PreferencesForm" }))
+  {
+      bool noneChecked = (ViewBag.QueryDays == "0");
+      bool weekChecked = (ViewBag.QueryDays == "7");
+      bool monthChecked = (ViewBag.QueryDays == "30");
+      bool yearChecked = (ViewBag.QueryDays == "365");
+ <p> Choose default query time limit: <br />
+ @Html.RadioButton("QueryDays", "0", noneChecked, new { @onclick = "document.getElementById('PreferencesForm').submit()" }) None <br />
+ @Html.RadioButton("QueryDays", "7", weekChecked, new { @onclick = "document.getElementById('PreferencesForm').submit()" }) Week <br />
+ @Html.RadioButton("QueryDays", "30", monthChecked, new { @onclick = "document.getElementById('PreferencesForm').submit()" }) Month<br />
+ @Html.RadioButton("QueryDays", "365", yearChecked, new { @onclick = "document.getElementById('PreferencesForm').submit()" }) Year<br />
+ </p>
+ <p>Mail: <input type="text" name="mailAddress" value="@ViewBag.Mail"/></p>
+ <input type="submit" />
+  }
+  <br />
+
+

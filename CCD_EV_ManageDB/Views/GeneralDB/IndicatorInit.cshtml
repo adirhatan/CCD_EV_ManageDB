@@ -1,0 +1,73 @@
+﻿@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+@{
+    ViewBag.Title = "Indicator Init";
+}
+
+<h2>Indicator Init</h2>
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+   @using (Html.BeginForm("IndicatorsListAction", "GeneralDB", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+   {
+     <input type="hidden" id="action" name="action" value="initInd" />
+     <p>
+        Select table: 
+        <select id="col" name="col" class="wselect">
+                <option value="@ViewBag.col"> @ViewBag.col</option>
+        </select>  
+        Select Project: 
+        <select id="proj" name="proj" >
+                <option value="@ViewBag.proj"> @ViewBag.proj</option>
+        </select> 
+        Select Project: 
+        <select id="phase" name="phase" >
+                <option value="@ViewBag.phase"> @ViewBag.phase</option>
+        </select> 
+        Select spec
+        <select id="spec" name="spec" class="wselect">
+            @foreach (var spec in ViewBag.speclist)
+            {
+                <option value="@spec.ToString()"> @spec.ToString()</option>
+            }
+        </select>
+        Lanes:
+        <select id="lanes" name="lanes" >
+                <option value="1">No Lanes (1)</option>
+                <option value="2">2</option>
+                <option value="4">4</option>
+        </select>  
+        WW start
+        <select id="wws" name="wws" >
+            @foreach (KeyValuePair<string,string> ww in ViewBag.workweeks)
+            {
+                <option value="@ww.Value"> @ww.Key</option>
+            }
+        </select> 
+        Weeks #
+        <select id="wn" name="wn" >
+   <!--             <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12" selected="selected">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option> -->
+                
+            @foreach (string wn in ViewBag.weekNumbers)
+            {
+                <option value="@wn"> @wn</option>
+            }
+        </select> 
+    <br /><br />
+          <input type="submit" value="Save" class="button" />
+    </p>
+   }
+

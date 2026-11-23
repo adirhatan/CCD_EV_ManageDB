@@ -1,0 +1,20 @@
+﻿@model CCD_EV_ManageDB.Models.DBAdm
+@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "ConfigurationForm";
+}
+
+<h2>ConfigurationForm</h2>
+@using (Html.BeginForm("RolesAdmin", "Admin", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+{
+    foreach (userCCDEV user in Model.users)
+       {
+       <p>  User:   @Html.TextBox("user", user.id)
+            Roles:  @Html.TextBox("role0", user.roles.ElementAt(0).ToString());
+            @Html.TextBox("role1", user.roles.ElementAt(1).ToString());
+            @Html.TextBox("role2", user.roles.ElementAt(2).ToString());
+            @Html.TextBox("role3", user.roles.ElementAt(3).ToString());
+       </p>
+       }
+}

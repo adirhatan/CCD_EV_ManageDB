@@ -1,0 +1,41 @@
+﻿@model CCD_EV_ManageDB.Models.FileLoad
+
+@{
+    ViewBag.Title = "LoadFile";
+    string dbName = "TMP";
+    if (Model.db == "CMP") {dbName = "COMP";}
+}
+
+
+<h2>Load formatted excel file to @dbName DB</h2>
+@using (Html.BeginForm("LoadFile", "ManageDB", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <p>Select table: 
+        <select id="col" name="col">
+        @foreach (var col in ViewBag.collist)
+        {
+            if (col.ToString() == Model.col)
+            {
+            <option value="@col.ToString()" selected="selected"> @col.ToString()</option>   
+            }
+            else
+            {
+            <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        }
+        </select> 
+    </p>
+    <input type="hidden" name="_db" value="@Model.db" />
+    <input type="file" name="file" class="button" />
+    <!--
+    <p>
+        <br />
+        OR file name (which was put manually in "uploads" shared drive server folder):
+        <br />
+        <input type="text" name="Mfile" title="name of file which is in SD uploads folder"/> 
+    </p>
+    -->
+    <input type="submit" value="OK"  class="button"/>
+}
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 

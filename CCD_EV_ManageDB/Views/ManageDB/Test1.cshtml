@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "Test1";
+}
+
+<h2>Test1</h2>
+
+<script language="JavaScript">    function getForm(sourceDoc, formId) { return sourceDoc.getElementById(formId); }
+    function getFormElement(sourceForm, elementName) { return sourceForm[elementName]; for (var i = 0; i < sourceForm.elements.length; i++) { var theElement = sourceForm.elements[i]; if (theElement.name == elementName) { return theElement; } } }
+    function moveSelected(sourceElementId, targetElementId, moveAll) {
+        var sourceElement = document.getElementById(sourceElementId); var targetElement = null; if (targetElementId != null) { targetElement = document.getElementById(targetElementId); }
+        if (sourceElement == null || sourceElement.tagName != "SELECT" || (targetElement != null && targetElement.tagName != "SELECT")) { return; }
+        var unselectedOptions = new Array(); for (var i = 0; i < sourceElement.length; i++) {
+            var option = sourceElement.options[i]; if (option.selected || moveAll) {
+                if (targetElement != null) {
+                    var alreadyExists = false; for (var j = 0; j < targetElement.length; j++) { if (targetElement.options[j].value == option.value) { alreadyExists = true; break; } }
+                    if (!alreadyExists) { targetElement.options[targetElement.length] = new Option(option.text, option.value); } 
+                } else { sourceElement.options[i] = null; i--; } 
+            }
+            option.selected = false;
+        }
+        //updateHiddenForm();
+    }
+    function updateHiddenForm() { var sourceElement = document.getElementById('foundMultiple'); var theForm = sourceElement.form; var useridEl = theForm.elements['userids']; useridEl.value = ""; for (var i = 0; i < sourceElement.length; i++) { var option = sourceElement.options[i]; useridEl.value += option.value; if (i + 1 < sourceElement.length) { useridEl.value += ','; } } }
+    function clearSelect(formId, elementId) { var formElement = document.getElementById(formId).elements[elementId]; formElement.selectedIndex = -1; }</script>
+
+<table class="NoBorders">
+<tr>
+<td width="25%">
+<label for="foundMultipleTemp">Found Users:</label>
+</td>
+<td>&nbsp;</td>
+<td width="25%">
+<label for="foundMultiple">
+Selected Users:
+</label>
+</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>
+<select name="foundMultipleTemp" multiple="multiple" size="12" style="width: 150px;" class="InputField" id="foundMultipleTemp"><option value="user3437">Dahan, Asher IDC</option>
+<option value="user3456">Dayan, Jhuda</option>
+<option value="user3441">lab_ccd_ev</option>
+<option value="user3442">Shachor, Sara</option>
+<option value="user8982">Shemer, Naty</option>
+<option value="user3607">Surijan, Einat</option>
+<option value="user10981">Traitelovich, Avi</option>
+<option value="user3168">Vekker, Alexander</option></select>
+<table style="padding: 0px;" align="center">
+<tr><td nowrap><div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><a id="add" href="javascript: moveSelected('foundMultipleTemp', 'foundMultiple', false);">Add</a></div><div class="Right">&nbsp;</div></div>
+</td></tr>
+</table>
+<br/>
+<table style="padding: 0px;" align="center">
+<tr><td nowrap><div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><a id="addAll" href="javascript: moveSelected('foundMultipleTemp', 'foundMultiple', true);">Add All</a></div><div class="Right">&nbsp;</div></div>
+</td></tr
+</table>
+</td>
+<td>
+<select name="foundMultiple" multiple="multiple" size="12" style="width: 150px;" class="InputField" id="foundMultiple"></select>
+<input type="hidden" name="userids" value=""/>
+</td>
+<td align="center" style="padding: 0px;">
+<table style="padding: 0px;" align="center">
+<tr><td nowrap><div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><a href="javascript: moveSelected('foundMultiple', null, false);">Remove</a></div><div class="Right">&nbsp;</div></div>
+</td></tr>
+<tr><td nowrap><div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><a href="javascript: moveSelected('foundMultiple', null, true);">Remove All</a></div><div class="Right">&nbsp;</div></div>
+</td></tr>
+</table>
+</td>
+</tr>
+</table>
+
+@Html.ActionLink("Download Text File", "ExportEditFile", "ManageDB")

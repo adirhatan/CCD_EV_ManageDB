@@ -1,0 +1,38 @@
+﻿@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using System.Web;
+@using CCD_EV_ManageDB.Models;
+@{
+    ViewBag.Title = "Live Indicators";
+}
+
+<h2>Live Indicators</h2>
+<link href="@Url.Content("~/Content/LiveIndicators.css")" rel="stylesheet" type="text/css" />
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+
+    <script type="text/JavaScript">
+        $(document).ready(function () {
+            setInterval(function () {
+                window.location.reload() ;
+            }, 300000);
+        });
+    </script>
+
+<p>
+    Project: <b>@ViewBag.proj @ViewBag.phase</b>   &nbsp;&nbsp;(Last Refresh:@ViewBag.date)
+</p>
+<br />
+<table>
+    <tr>
+        <!--<td><img src="/content/Images/'+ imgName + '" width="' + img_width + '" height="' + _img_length + 'px" alt="try"/></td>-->
+        @{
+            string SummaryByArea = "SummaryByArea_" + ViewBag.proj + "_" + ViewBag.phase;
+            string Graph = "Graph_" + ViewBag.proj + "_" + ViewBag.phase;
+       
+        <td><img src="@Url.Action("RenderImage", new { name = Graph })"   alt="Indicators Summary Graph"/></td>
+        <td><img src="@Url.Action("RenderImage", new { name = SummaryByArea })"   alt="Indicators Summary by Area"/></td>
+        }
+    </tr>
+</table>

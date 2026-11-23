@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- One interface's XML file conatians all its related protocols definitions-->
+<SessionsManageConf>
+	<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->
+	<ProtocolConf>
+		<protocol>CIO_TX</protocol>
+		<proj>MR</proj>
+		<phase>B0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>TBT3_Legacy_Gen2_Tx</table>
+		<table>TBT3_Legacy_Gen3_Tx</table>
+		<table>CIO_Rounded_Gen2_Tx</table>
+		<table>CIO_Rounded_Gen3_Tx</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field>Skew</field>
+		<field alias="FW">FW version</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>PA,PB</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>L0,L1</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>PA,PB</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData-->
+		<SRTemplate>PABL01</SRTemplate>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options areequals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="TBT3 Legacy Gen2" tname="TBT3_Legacy_Gen2_Tx">
+			<table_div_line dname="Active_Jitters" DivNumOfTests="6" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,Jiiter</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_ACCM" DivNumOfTests="1" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,ACCM</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_RT/FT" DivNumOfTests="2" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,Time</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_SSC" DivNumOfTests="7" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,SSC</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_Presets" DivNumOfTests="33" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,preset</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_EyeMask" DivNumOfTests="5" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,EyeMask</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_Impedance" DivNumOfTests="1" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,Impedance</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Passive_EyeMask" DivNumOfTests="5" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case2,EyeMask</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Passive_Jitters" DivNumOfTests="3" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case2,Jiiter</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="TBT3 Legacy Gen3" tname="TBT3_Legacy_Gen3_Tx">
+			<table_div_line dname="Active_Jitters" DivNumOfTests="6" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,Jiiter</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_ACCM" DivNumOfTests="1" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,ACCM</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_RT/FT" DivNumOfTests="2" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,Time</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_SSC" DivNumOfTests="7" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,SSC</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_Presets" DivNumOfTests="33" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,preset</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_EyeMask" DivNumOfTests="5" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,EyeMask</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_Impedance" DivNumOfTests="1" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,Impedance</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Passive_EyeMask" DivNumOfTests="5" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case2,EyeMask</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Passive_Jitters" DivNumOfTests="3" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case2,Jiiter</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="CIO Rounded Gen2" tname="CIO_Rounded_Gen2_Tx">
+			<table_div_line dname="Active_Jitters" DivNumOfTests="6" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,Jiiter</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_ACCM" DivNumOfTests="1" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,ACCM</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_RT/FT" DivNumOfTests="2" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,Time</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_SSC" DivNumOfTests="7" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,SSC</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_Presets" DivNumOfTests="33" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,preset</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_EyeMask" DivNumOfTests="5" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,EyeMask</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_Impedance" DivNumOfTests="1" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,Impedance</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Passive_EyeMask" DivNumOfTests="5" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case2,EyeMask</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Passive_Jitters" DivNumOfTests="3" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case2,Jiiter</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="CIO Rounded Gen3" tname="CIO_Rounded_Gen3_Tx"  SRreportId="dlior20190711213129">
+			<table_div_line dname="Active_Jitters" DivNumOfTests="6" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,Jiiter</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_ACCM" DivNumOfTests="1" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,ACCM</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_RT/FT" DivNumOfTests="2" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,Time</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_SSC" DivNumOfTests="7" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,SSC</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_Presets" DivNumOfTests="33" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,preset</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_EyeMask" DivNumOfTests="5" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,EyeMask</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Active_Impedance" DivNumOfTests="1" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case1,Impedance</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Passive_EyeMask" DivNumOfTests="5" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case2,EyeMask</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Passive_Jitters" DivNumOfTests="3" trials="1" >
+				<table_div_field fname="SpecTestName" condition="contains">Case2,Jiiter</table_div_field>
+			</table_div_line>
+		</table_div>
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+			<!-- skew:skew (FF/TYP/SS)-->
+			<!-- type:Board configuration (first letter upper case)-->
+			<!-- setup:Setup (first letter upper case)-->
+			<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+			<skew>SS</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+		</units>
+	</ProtocolConf>
+	<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->
+	<ProtocolConf>
+		<protocol>CIO_RX</protocol>
+		<proj>MR</proj>
+		<phase>B0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>TBT3_Legacy_Gen2_Rx</table>
+		<table>TBT3_Legacy_Gen3_Rx</table>
+		<table>CIO_Rounded_Gen2_Rx</table>
+		<table>CIO_Rounded_Gen3_Rx</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field>Skew</field>
+		<field alias="FW">FW version</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>PA,PB</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>L0,L1</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>PA,PB</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>PABL01</SRTemplate>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options areequals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="TBT_Legacy_Gen2" tname="TBT3_Legacy_Gen2_Rx" SRreportId="naty20190731160306">
+			<table_div_line dname="1M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">1MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="50M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">50MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+						<table_div_line dname="100M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">100MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<reportId>naty20190801180510</reportId>
+		</table_div>
+		<table_div tdname="TBT_Legacy_Gen3" tname="TBT3_Legacy_Gen3_Rx" SRreportId="naty20190805134608">
+			<table_div_line dname="1M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">1MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="50M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">50MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+						<table_div_line dname="100M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">100MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<reportId>naty20190805134928</reportId>
+		</table_div>
+		<table_div tdname="CIO Rounded Gen2" tname="CIO_Rounded_Gen2_Rx" SRreportId="">
+			<table_div_line dname="1M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">1MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="50M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">50MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="100M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">100MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<reportId>naty20190805134928</reportId>
+		</table_div>
+		<table_div tdname="CIO Rounded Gen3" tname="CIO_Rounded_Gen3_Rx" SRreportId="naty20190805134608">
+			<table_div_line dname="1M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">1MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="50M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">50MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<table_div_line dname="100M" DivNumOfTests="1" trials="5">
+				<table_div_field fname="SpecTestName" condition="contains">100MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Margin</table_div_field>
+			</table_div_line>
+			<reportId>naty20190805134928</reportId>
+		</table_div>
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+			<!-- skew:skew (FF/TYP/SS)-->
+			<!-- type:Board configuration (first letter upper case)-->
+			<!-- setup:Setup (first letter upper case)-->
+			<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+		</units>
+		<!--CR end-->
+	</ProtocolConf>
+
+	<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->
+	<ProtocolConf>
+		<protocol>CIO_RL</protocol>
+		<proj>MR</proj>
+		<phase>B0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>CIO-RL</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field>Skew</field>
+		<field alias="FW">FW version</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>PA,PB</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>L0,L1,L2,L3</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>PA,PB</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>PABL03</SRTemplate>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options areequals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="CIO RL Gen2" tname="CIO-RL" SRreportId="">
+			<table_div_line dname="CIO_RL_GEN2" DivNumOfTests="4" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">_10G_</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="CIO RL Gen3" tname="CIO-RL" SRreportId="">
+			<table_div_line dname="CIO_RL_GEN3" DivNumOfTests="4" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">_20G_</table_div_field>
+			</table_div_line>
+		</table_div>
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+			<!-- skew:skew (FF/TYP/SS)-->
+			<!-- type:Board configuration (first letter upper case)-->
+			<!-- setup:Setup (first letter upper case)-->
+			<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+		</units>
+	</ProtocolConf>	
+	
+
+</SessionsManageConf>

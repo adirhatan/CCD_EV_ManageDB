@@ -1,0 +1,190 @@
+﻿@model Board
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+
+@{
+    ViewBag.Title = "Edit Calibration line";
+}
+
+  @if (!String.IsNullOrWhiteSpace(Model.id))
+  {
+    <h2>Edit Board line</h2>
+  }
+  else
+  {
+    <h2>Board details</h2>
+  }
+
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+  <script type="text/JavaScript">
+
+      $(function () {
+          $("#dialog").dialog();
+          if ($("#dialog").dialog("isOpen")) $("#dialog").dialog("close");
+      });
+     </script>
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+ @using (Html.BeginForm("EditBoardLineExec", "ManageDB", FormMethod.Post, new { @id = "LineForm", @name = "LineForm" }))
+ {
+     string disabledStr = "";
+     if (!string.IsNullOrEmpty(Model.id))
+     {
+         disabledStr = "disabled=\"disabled\"";
+     }
+     <p>
+         <input type="hidden" id="_id" name="_id" value="@Model.id" />
+         <!-- Spec CTS Station  Project Phase Rate Setup, Interface Valid File User Execution Date()-->
+         Name:
+         <input type="text" id="_Name" name="_Name" @disabledStr value="@Model.Name" style="width: 100px" /> 
+             
+        Project:
+        <select id="_Project" name="_Project" @disabledStr>
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == Model.Project)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Phase:
+        <select id="_Phase" name="_Phase" @disabledStr>
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == Model.Phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+
+        UnitId:
+        <input type="text" id="_UnitId" name="_UnitId" @disabledStr value="@Model.UnitId" style="width: 100px" />
+        Skew:
+         <select id="_Skew" name="_Skew" @disabledStr>
+            @foreach (var skew in new List<string>(new string[] { "","FF", "TYP", "SS" }))
+            {
+                if (skew.ToString() == Model.Skew)
+                {
+                    <option value="@skew.ToString()" selected="selected"> @skew.ToString()</option>
+                }
+                else
+                {
+                    <option value="@skew.ToString()"> @skew.ToString()</option>
+                }
+            }
+         </select>
+
+        Sigma:
+        <input type="text" id="_Sigma" name="_Sigma" value="@Model.Sigma" style="width: 100px" />
+        Fuse:
+        <input type="text" id="_Fuse" name="_Fuse"  value="@Model.Fuse" style="width: 100px" />
+        Interface:
+                <select id="_Interface" name="_Interface" @disabledStr>
+            @foreach (var ii in new List<string>(new string[] { "","CIO", "USB", "DP","Power","Crystal","PCIE","LAN" }))
+            {
+                if (ii.ToString() == Model.Interface)
+                {
+                    <option value="@ii.ToString()" selected="selected"> @ii.ToString()</option>
+                }
+                else
+                {
+                    <option value="@ii.ToString()" > @ii.ToString()</option>
+                }
+            }
+        </select> 
+        <br /><br />
+        New Comment:
+        <input type="text" id="_CommentText" name="_CommentText" style="width: 200px" />
+        User:
+        <input type="text" id="_CommentUser" name="_CommentUser" value="@User.Identity.Name" style="width: 100px" />
+        <br /><br />
+
+        Last Comment:
+        <input type="text" id="_LastCommentText"  disabled="disabled" name="_LastCommentText" value="@Model.LastCommentText" style="width: 200px" />
+        User
+        <input type="text" id="_LastCommentUser" disabled="disabled" name="LastCommentUser" value="@Model.LastCommentUser" style="width: 100px" />
+        Date:
+        <input type="text" id="_LastCommentDate" disabled="disabled" name="LastCommentDate" value="@Model.LastCommentDate" style="width: 100px" />
+        <input type="button" value="D" title="Delete Line" class="button" onclick="GenLocatioAction_id_ConfirmAction('@Model.id','@Url.Action("DeleteBoardLineComment", "ManageDB")','Are you sure you want to delete comment?')" />
+
+        @{
+            int i = Model.SavedComments.Count;
+            while (i > 0)
+            {
+            <br /><br />
+                <span>
+                    Comment:
+                    <input type="text"  disabled="disabled" name="_LastCommentText" value="@Model.SavedComments[i - 1].text" style="width: 200px" />
+                    User
+                    <input type="text"  disabled="disabled" name="LastCommentUser" value="@Model.SavedComments[i - 1].user" style="width: 100px" />
+                    Date:
+                    <input type="text"  disabled="disabled" name="LastCommentDate" value="@Model.SavedComments[i - 1].commentDate" style="width: 100px" />
+                     <input type="button" value="D" title="Delete Line" class="button" onclick="GenLocatioConfirmAction('@Url.Action("DeleteBoardLineOldComment", "ManageDB", new RouteValueDictionary(new { _id = Model.id, desc = i - 1 }))','Are you sure you want to delete comment?')" />
+                </span>
+             i--;
+         }
+        }
+        <br /><br />
+        
+
+        <input type="button" value="Save" class="button" onclick="FormConfirmAction('LineForm','@Url.Action("EditBoardLineExec", "ManageDB")','Have you filled all fields for saving?')"/>
+        <input type="button" value="Back to list" title="Cancel" class="button" onclick="GenLocatioAction('@Url.Action("BoardsLines", "ManageDB")')" />
+    </p>
+    
+}
+
+<br /><br />
+
+@if (Model.Valid=="Y")
+{
+    using (Html.BeginForm("ValidationBoardLineUpdate", "ManageDB", FormMethod.Post, new { @id = "tForm", @name = "tForm" }))
+    {
+        <p>
+            <input type="hidden" id="_tid" name="_id" value="@Model.id" />
+            <input type="hidden" id="_tv" name="v" value="false" />
+            Validation: Valid
+            &nbsp;&nbsp;
+            <input type="button" class="button" value="Invalidate" title="Invalidate Calibration" onclick="FormConfirmAction('tForm','@Url.Action("ValidationBoardLineUpdate", "ManageDB")','Are you sure you want to invalidate board?')"/>
+            Comment:
+            <input type="text" id="_tCommentText" name="_CommentText" style="width: 200px" />
+            User:
+            <input type="text" id="_tCommentUser" name="_CommentUser" value="@User.Identity.Name" style="width: 100px" />
+        </p>
+    }
+}
+else
+{
+    using (Html.BeginForm("ValidationBoardLineUpdate", "ManageDB", FormMethod.Post, new { @id = "fForm", @name = "fForm" }))
+    {
+        <p>
+            <input type="hidden" id="_fid" name="_id" value="@Model.id" />
+            <input type="hidden" id="_fv" name="v" value="true" />
+            Validation: <span style="background-color:Red"> Invalid </span>
+            &nbsp;&nbsp;
+            <input type="button" class="button" value="Validate" title="Validate Calibration" onclick="FormConfirmAction('fForm','@Url.Action("ValidationBoardLineUpdate", "ManageDB")','Are you sure you want to validate board?')" />
+            Comment:
+            <input type="text" id="_fCommentText" name="_CommentText" style="width: 200px" />
+            User:
+            <input type="text" id="_fCommentUser" name="_CommentUser" value="@User.Identity.Name" style="width: 100px" />
+        </p>
+    
+    }
+}
+    
+ 
+
+

@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "ViewExportFile";
+}
+
+<h2>ViewExportFile</h2>
+     @{ var ExportedFile = TempData["ExportedFileNAme"];
+        if (ExportedFile != null)
+        {
+             <script type="text/JavaScript">
+                 $(document).ready(function () {
+                     var url = '@Url.Action("ViewExportFile", "ManageDB", new { filename = TempData["ExportedFileNAme"] })';
+                     $(location).attr('href', url);
+                 });
+             </script>
+        }
+     }
+     <p>See browser's downlowds</p>

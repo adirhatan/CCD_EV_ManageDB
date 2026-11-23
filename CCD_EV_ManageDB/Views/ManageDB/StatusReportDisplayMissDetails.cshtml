@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "StatusReportDisplayMissDetails";
+}
+
+<h2>Status Report Display Missing Details</h2>
+
+<p>@ViewBag.testDetails</p>
+<table>
+<thead>
+<tr>
+<th>Corner ;
+@foreach (string f in ViewBag.fieldsArr)
+{
+    @f <text>;</text>
+}
+</th>
+<th>Status &nbsp;</th>
+</tr>
+</thead>
+<tbody>
+@{ foreach (string perm in ViewBag.permutations)
+   {
+       string []Dperms = perm.Split(';');
+       <tr>
+       <td>@Dperms[0] &nbsp;</td>
+       <td>@Dperms[1]</td>
+       </tr>
+   }
+}
+</tbody>
+</table>

@@ -1,0 +1,36 @@
+﻿@model CCD_EV_ManageDB.Models.LogicUnitLinks
+
+@{
+    ViewBag.Title = "Logic Unit Links";
+}
+
+<h2>Logic Unit Links</h2>
+
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+<p> Protocol: <b>@Model.Protocol</b> &nbsp; Project: <b>@Model.Project</b> &nbsp; Phase:<b> @Model.Phase</b> &nbsp; Table: <b>@Model.Table</b></p><br />
+<p> The following links/files are available for logic unit: @Model.Unit <br />
+    @if (string.IsNullOrEmpty(Model.TMPQuery))
+    {
+        <a>No TMP Query (Generated for PRM only)</a><br />
+    }
+    else
+    {
+        <a href="@Model.TMPQuery" target="_blank">TMP Query</a><br />
+    }
+    @if (string.IsNullOrEmpty(Model.PRMQuery))
+    {
+        <a>No PRM Query (Generated for TMP only)</a><br />
+    }
+    else
+    {
+        <a href="@Model.PRMQuery" target="_blank">PRM Query</a><br />
+    }
+    
+    <a href="@Url.Action("ViewExportBGFile", "ManageDB", new { filename = Model.SRFile })" style="color:Green; text-decoration:underline; font-weight:bold">Status Report File</a><br />
+    <a href="@Url.Action("ViewExportBGFile", "ManageDB", new { filename = Model.CustomExecFile })" style="color:Green; text-decoration:underline; font-weight:bold">CustomExec File</a><br />
+ </p>
+  <br />
+

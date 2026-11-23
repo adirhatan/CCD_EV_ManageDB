@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<MarkCornersFailConf>
+	<CornersConf proj="BB" phase="A3">
+		<corner>
+			<name>HVHT</name>
+			<tmpr>110</tmpr>
+			<svr>0.9</svr>
+			<v3>3.5</v3>
+		</corner>
+		<corner>
+			<name>LVHT</name>
+			<tmpr>110</tmpr>
+			<svr>0.9</svr>
+			<v3>3</v3>
+		</corner>
+		<corner>
+			<name>NOMN</name>
+			<tmpr>25</tmpr>
+			<svr>0.9</svr>
+			<v3>3.3</v3>
+		</corner>
+		<corner>
+			<name>HVLT</name>
+			<tmpr>0</tmpr>
+			<svr>0.9</svr>
+			<v3>3.5</v3>
+		</corner>
+		<corner>
+			<name>LVLT</name>
+			<tmpr>0</tmpr>
+			<svr>0.9</svr>
+			<v3>3</v3>
+		</corner>
+	</CornersConf>
+
+</MarkCornersFailConf>

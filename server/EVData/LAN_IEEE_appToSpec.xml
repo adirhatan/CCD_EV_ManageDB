@@ -1,0 +1,314 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<AppToSpec>
+
+<Test name="1000 Base-T Point A Peak Output Voltage(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base_T_Point_A_Peak_Output_Voltage</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Point B Peak Output Voltage(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base_T_Point_B_Peak_Output_Voltage</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Difference A B Peak Output Voltage(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base-T_Difference_A_B_Peak_Output_Voltage</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Point C Peak Output Voltage(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base_Point_C_Peak_Output_Voltage</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Point D Peak Output Voltage(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base-T_Point_D_Peak_Output_Voltage</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Point A Template Test(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base_T_Point_A_Template_Test</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Point B Template Test(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base_T_Point_B_Template_Test</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Point C Template Test(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base_T_Point_C_Template_Test</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Point D Template Test(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base_T_Point_D_Template_Test</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Point F Template Test(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base_T_Point_F_Template_Test</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Point H Template Test(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base_T_Point_H_Template_Test</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Point G Droop Test(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base_T_Point_G_Droop_Test</SpecTestName>
+	</Test>
+
+
+<Test name="1000 Base-T Point J Droop Test(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base_T_Point_J_Droop_Test</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Transmitter Distortion(w/o Disturbing Signal)" >
+		<SpecTestName>1000_Base_T_Transmitter_Distortion</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T MDI Common Mode Output Voltage" >
+		<SpecTestName>1000_Base_T_MDI_Common_Mode_Output_Voltage</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Jitter MASTER Filtered (w/o TX_TCLK)" >
+		<SpecTestName>1000_Base_T_Jitter_MASTER_Filtered</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Jitter MASTER Unfiltered (w/o TX_TCLK)" >
+		<SpecTestName>1000_Base_T_Jitter_MASTER_Unfiltered</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Jitter SLAVE Filtered (w/o TX_TCLK)" >
+		<SpecTestName>1000_Base_T_Jitter_SLAVE_Filtered</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T Jitter SLAVE Unfiltered (w/o TX_TCLK)	" >
+		<SpecTestName>1000_Base_T_Jitter_SLAVE_Unfiltered</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T MDI Return Loss	" >
+		<SpecTestName>1000_Base_T_MDI_Return_Loss</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX UTP +Vout Differential Output Voltage" >
+		<SpecTestName>100_Base_TX_UTP_+Vout_Differential_Output_Voltage	</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX UTP -Vout Differential Output Voltage" >
+		<SpecTestName>100_Base_TX_UTP_-Vout_Differential_Output_Voltage	</SpecTestName>
+	</Test>
+
+
+<Test name="100 Base-TX Transmitter Return Loss" >
+		<SpecTestName>100_Base_TX_Transmitter_Return_Loss</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX Receiver Return Loss" >
+		<SpecTestName>100_Base_TX_Receiver_Return_Loss</SpecTestName>
+	</Test>
+
+
+<Test name="100 Base-TX UTP Signal Amplitude Symmetry	" >
+		<SpecTestName>100_Base_TX_UTP_Signal_Amplitude_Symmetry</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX +Vout Overshoot" >
+		<SpecTestName>100_Base_TX_+Vout_Overshoot</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX -Vout Overshoot" >
+		<SpecTestName>100_Base_TX_-Vout_Overshoot</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX UTP AOI Template" >
+		<SpecTestName>100_Base_TX_UTP_AOI_Template</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX AOI +Vout Rise Time" >
+		<SpecTestName>100_Base_TX_AOI_+Vout_Rise_Time	</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX AOI +Vout Fall Time" >
+		<SpecTestName>100_Base_TX_AOI_+Vout_Fall_Time	</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX AOI +Vout Rise/Fall Symmetry" >
+		<SpecTestName>100_Base_TX_AOI_+Vout_Rise/Fall_Symmetry	</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX AOI -Vout Rise Time" >
+		<SpecTestName>100_Base_TX_AOI_-Vout_Rise_Time	</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX AOI -Vout Fall Time" >
+		<SpecTestName>100_Base-TX_AOI_-Vout_Fall_Time	</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX AOI -Vout Rise/Fall Symmetry" >
+		<SpecTestName>100_Base_TX_AOI_-Vout_Rise/Fall_Symmetry	</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX AOI Overall Rise/Fall Symmetry" >
+		<SpecTestName>100_Base_TX_AOI_Overall_Rise/Fall_Symmetry</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX Transmit Jitter" >
+		<SpecTestName>100_Base_TX_Transmit_Jitter</SpecTestName>
+	</Test>
+
+<Test name="100 Base-TX Duty Cycle Distortion" >
+		<SpecTestName>100_Base_TX_Duty_Cycle_Distortion</SpecTestName>
+	</Test>
+	
+<Test name="100 Base-T EEE Quiet Time" >
+	<SpecTestName>100M_Base_T_EEE_Quit_Time</SpecTestName>
+</Test>
+
+<Test name="100 Base-T EEE Refresh Time" >
+		<SpecTestName>100M_Base_T_EEE_Refresh_Time</SpecTestName>
+</Test>
+
+<Test name="100 Base-T EEE Transmitter Timing Jitter" >
+	<SpecTestName>100M_Base_T_EEE_Transmitter_Timing Jitter</SpecTestName>
+</Test>
+
+
+
+<Test name="10 Base-Te Harmonic Content" >
+		<SpecTestName>10M_Base_Te_Harmonic_Content</SpecTestName>
+	</Test>
+
+<Test name="10 Base-T Receiver Return Loss" >
+		<SpecTestName>10M_Base_T_Receiver_Return_Loss</SpecTestName>
+	</Test>
+
+<Test name="10 Base-T Transmitter Return Loss" >
+		<SpecTestName>10M_Base_T_Transmitter_Return_Loss</SpecTestName>
+	</Test>
+
+<Test name="10 Base-Te Jitter without TPM" >
+		<SpecTestName>10M_Base_Te_TP_IDL_Jitter_wo/TPM</SpecTestName>
+	</Test>
+
+<Test name="10 Base-Te Link Test Pulse with TPM" >
+		<SpecTestName>10M_Base_Te_Link_Test_Pulse_w/TPM</SpecTestName>
+	</Test>
+
+<Test name="10 Base-Te TP_IDL Template with TPM (last bit CD0)" >
+		<SpecTestName>10M_Base_Te_TP_IDL_Template_w/TPM_LBCD0</SpecTestName>
+	</Test>
+
+<Test name="10 Base-Te TP_IDL Template with TPM (last bit CD1)" >
+		<SpecTestName>10M_Base_Te_TP_IDL_Template_w/TPM_LBCD1</SpecTestName>
+	</Test>
+
+<Test name="10 Base-Te MAU Template" >
+		<SpecTestName>10M_Base_Te_MAU Template</SpecTestName>
+	</Test>
+
+<Test name="10 Base-Te Jitter with TPM" >
+		<SpecTestName>10M_Base_Te_Jitter_w/TPM</SpecTestName>
+	</Test>
+
+<Test name="10 Base-Te Link Test Pulse without TPM" >
+		<SpecTestName>10M_Base_Te_Link_Test_Pulse_wo/TPM</SpecTestName>
+	</Test>
+
+<Test name="10 Base-Te TP_IDL Template without TPM (last bit CD0)" >
+		<SpecTestName>10M_Base_Te_TP_IDL_Template_wo/TPM_LBCD0</SpecTestName>
+	</Test>
+
+<Test name="10 Base-Te TP_IDL Template without TPM (last bit CD1)" >
+		<SpecTestName>10M_Base_Te_TP_IDL_Template_wo/TPM_LBCD1</SpecTestName>
+	</Test>
+
+<Test name="10 Base-Te Peak Differential Voltage" >
+		<SpecTestName>10M_Base_Te_TP_IDL_Peak_Differential_Voltage</SpecTestName>
+	</Test>
+
+<Test name="10 Base-Te Common Mode Output Voltage" >
+		<SpecTestName>10M_Base_Te_Common_Mode_Output_Voltage</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T EEE Quiet Time" >
+		<SpecTestName>1G_Base_T_EEE_Quit_Time</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T EEE Refresh Time (Master)" >
+		<SpecTestName>1G_Base_T_EEE_Refresh_Time_Master</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T EEE Refresh Time (Slave)" >
+		<SpecTestName>1G_Base_T_EEE_Refresh_Time_Slave</SpecTestName>
+	</Test>
+
+<Test name="1000 Base-T EEE Transmitter Timing Jitter (Master)" >
+		<SpecTestName>1G_Base_T_EEE_Transmitter_Timing Jitter</SpecTestName>
+	</Test>
+
+<Test name="Transmitter Timing Jitter (Master)" >
+		<SpecTestName>2.5G_Base_T_Transmitter_Timing_Jitter_(MASTER)_Test</SpecTestName>
+	</Test>
+
+<Test name="Transmit Clock Frequency" >
+		<SpecTestName>2.5G_Base_T_Transmit_Clock_Frequency</SpecTestName>
+	</Test>
+
+<Test name="Maximum Output Droop Positive" >
+		<SpecTestName>2.5G_Base_T_Maximum_Output_Droop_Positive</SpecTestName>
+	</Test>
+
+<Test name="Maximum Output Droop Negative" >
+		<SpecTestName>2.5G_Base_T_Maximum_Output_Droop_Negative</SpecTestName>
+	</Test>
+
+<Test name="Transmitter Power Spectral Density" >
+		<SpecTestName>2.5G_Base_T_Transmitter_Power_Spectral_Density</SpecTestName>
+	</Test>
+
+<Test name="Transmitter Timing Jitter (Slave)" >
+		<SpecTestName>2.5G_Base_T_Transmitter_Timing_Jitter_(SLAVE) Test</SpecTestName>
+	</Test>
+
+<Test name="Two Tone Frequency Pair 1" >
+		<SpecTestName>2.5G_Base_T_Two_Tone_Frequency_Pair_1_Linearity</SpecTestName>
+	</Test>
+
+<Test name="Two Tone Frequency Pair 2" >
+		<SpecTestName>2.5G_Base_T_Two_Tone_Frequency_Pair_2_Linearity</SpecTestName>
+	</Test>
+
+<Test name="Two Tone Frequency Pair 3" >
+		<SpecTestName>2.5G_Base_T_Two_Tone_Frequency_Pair_3_Linearity</SpecTestName>
+	</Test>
+
+<Test name="Two Tone Frequency Pair 4" >
+		<SpecTestName>2.5G_Base_T_Two_Tone_Frequency_Pair 4_Linearity</SpecTestName>
+	</Test>
+
+<Test name="Two Tone Frequency Pair 5" >
+		<SpecTestName>2.5G_Base_T_Two_Tone_Frequency_Pair_5_Linearity</SpecTestName>
+	</Test>
+
+<Test name="MDI Return Loss" >
+		<SpecTestName>2.5G_Base_T_MDI_Return_Loss</SpecTestName>
+	</Test>
+
+<Test name="Power Level" >
+		<SpecTestName>2.5G_Base_T_Power_Level_Test</SpecTestName>
+	</Test>
+
+<Test name="Two Tone Frequency Pair 1 Transmitter Nonlinear Distortion" >
+		<SpecTestName>2.5G_Base_T_Two_Tone_Frequency_Pair_1_Non-Linear</SpecTestName>
+	</Test>
+
+<Test name="Two Tone Frequency Pair 2 Transmitter Nonlinear Distortion" >
+		<SpecTestName>2.5G_Base_T_Two_Tone_Frequency_Pair_2_Non-Linear</SpecTestName>
+	</Test>
+
+<Test name="Two Tone Frequency Pair 3 Transmitter Nonlinear Distortion" >
+		<SpecTestName>2.5G_Base_T_Two_Tone_Frequency_Pair_3_Non-Linear</SpecTestName>
+	</Test>
+
+<Test name="Two Tone Frequency Pair 4 Transmitter Nonlinear Distortion" >
+		<SpecTestName>2.5G_Base_T_Two_Tone_Frequency_Pair_4_Non-Linear</SpecTestName>
+	</Test>
+
+<Test name="Two Tone Frequency Pair 5 Transmitter Nonlinear Distortion" >
+		<SpecTestName>2.5G_Base_T_Two_Tone_Frequency_Pair_5_Non-Linear</SpecTestName>
+	</Test>
+
+</AppToSpec>

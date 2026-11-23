@@ -1,0 +1,189 @@
+﻿@model List<SessionsManage>
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+@{
+    ViewBag.Title = "Session Manage Edit";
+}
+
+<h2>SessinManage Edit</h2>
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+ <script type="text/JavaScript">
+    function GenSubmitFormActionCheckComment(formName, action) {
+        debugger;
+        if ((document.getElementById("Sessions_TMP_not_valid").value != null) && (document.getElementById("Sessions_TMP_not_valid").value != "")) {
+            if ((document.getElementById("Comment_TMP_not_valid").value == null) || (document.getElementById("Comment_TMP_not_valid").value == ""))
+            {
+                alert ("Assigning Sessions in 'TMP_not_valid' status,requires comment. Please add comment");
+                return;
+            }
+        }
+        var x = document.getElementById(formName);
+        x.action = action;
+        x.submit();
+    }
+ </script>
+
+   @using (Html.BeginForm("SessionsManageEditExec", "GeneralDB", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+   {
+     <input type="hidden" id="_id" name="_id" value="@Model.First()._id" />
+     <input type="hidden" id="spec" name="spec" value="@Model.First().spec" />
+     <p>
+        Edit Board: <b>@Model.First().board_id </b>&nbsp; Unit: <b>@Model.First().unit_id </b>&nbsp; Table: <b>@Model.First().table</b> &nbsp; Project:<b>@Model.First().project</b>  &nbsp; Phase:<b>@Model.First().phase</b>  
+        &nbsp; LogicUnit:
+            <!--<input type="text" id="logicunit" name="logicunit" value="@Model.First().logicUnit" /> -->
+            <select id="logicunit" name="logicunit">
+            @foreach (var lu in ViewBag.logicUnitsOptional)
+            {
+                if (lu.ToString() == Model.First().logicUnit)
+                {
+                    <option value="@lu.ToString()" selected="selected"> @lu.ToString()</option>
+                }
+                else
+                {
+                    <option value="@lu.ToString()"> @lu.ToString()</option>
+                }
+            }
+        </select>       
+    </p>
+       <br />
+       if (!string.IsNullOrEmpty(ViewBag.infodocMessage))
+       {
+           <b>Notice missing session info:</b> @ViewBag.infodocMessage
+       }
+       
+              <script type="text/JavaScript">
+
+     $(document).ready(function () {
+         $('#fsTables').dataTable({
+             //        "deferRender": true,
+              "columns": [
+                                null,
+                                null,
+                                null,
+                                //{
+                                //    "render": function(data, type, row){
+                                //        return data.split(",  ").join("<br/>");
+                                //    }
+                                //},
+                                null
+                            ],
+             "iDisplayLength": -1,
+             "bPaginate": true,
+             "iCookieDuration": 60,
+             "bStateSave": false,
+             "bAutoWidth": true,
+             "bScrollAutoCss": true,
+             "bProcessing": true,
+             "bRetrieve": true,
+             "bSort": false,
+             "bJQueryUI": true,
+             "dom": '<"H"CTrf><"toolbar">t',
+             //"sDom": '<"H"CTrf>t<"F"lip>',
+             //"sDom": '<"H"CTrif>t<"F"CTrif>',
+             //"aLengthMenu": [[10, 20, 100, -1], [10, 20, 100, "All"]],
+             "sScrollX": "100%",
+             //"sScrollY": "700px",
+             //"sScrollY": "100%",
+             "sScrollY": (0.8 * $(window).height()),
+             "bScrollCollapse": true,
+             "fnInitComplete": function () {
+                 this.css("visibility", "visible");
+             }
+         });
+         $("div.toolbar").html('<b>@Model.First().table</b>');
+     });
+
+</script>
+        <table id="fsTables" class="display">
+        <thead>
+            <tr>
+                <th >
+                    Validation
+                </th>
+                <th >
+                    Board
+                </th>
+                <th >
+                    Sessions                                                                                                            
+                </th>
+                <th>
+                    Comment
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @{
+       int cnt = 0;
+
+       foreach (SessionsManage SM in Model)
+       {
+           string _id = SM._id.ToString();
+           string Sessions_id = "Sessions_" + SM.validation;
+           string Comment_id = "Comment_" + SM.validation;
+           string sessionsRowsNum = "2";
+                     <tr id="@_id"  @{string st = "style=background-color:Orange"; if ((SM.validation == General.SessionValidationStatus.Pending_review) && (SM.Sessions.Count > 0))
+                                      { @st;
+                                      }}>
+                        <td>
+                            @SM.validation.ToString()
+                        </td>
+                        <td>
+                            @(SM.board_id + "_" + SM.unit_id)
+                        </td>
+                        <td>
+                            @{
+                                      string sessions = "";
+                                      int cntS = 0;
+                                      foreach (string session in SM.Sessions)
+                                      {
+                                          cntS++;
+                                          sessions += session + ", ";
+                                          if (cntS % 5 == 0) { sessions += "\n"; }
+                                      }
+                                      sessionsRowsNum = (((int)(cntS / 5)) + 1).ToString();
+                            }
+                            @{if ((!User.IsInRole("CCD_EV_GB")))
+                              {
+                                <textarea rows="@sessionsRowsNum" cols="90" id="@Sessions_id" name="@Sessions_id" style="vertical-align: bottom; border: 1px solid #8A8575">@sessions</textarea>
+                              }
+                              else
+                              {
+                                  if ((SM.validation != General.SessionValidationStatus.PRM_not_valid) && (SM.validation != General.SessionValidationStatus.PRM_valid))
+                                  {
+                                      <textarea rows="@sessionsRowsNum" cols="90" id="@Sessions_id" name="@Sessions_id" style="vertical-align: bottom; border: 1px solid #8A8575">@sessions</textarea>
+                                  }
+                                  else
+                                  {
+                                      <textarea rows="@sessionsRowsNum" cols="90" id="@Sessions_id" name="@Sessions_id" style="vertical-align: bottom; border: 1px solid #8A8575" disabled="disabled">@sessions</textarea>
+                                  }
+                                }
+                              }
+                        </td>
+                        <td>
+                            <input type="text" value = "@SM.comment" id="@Comment_id" name="@Comment_id" />
+                        </td>
+                    </tr>
+           cnt++;
+       }
+         }
+    </tbody>
+    </table>
+   <br /><br />
+
+          <input type="button" value="Save" class="button" onclick="GenSubmitFormActionCheckComment('myForm','@Url.Action("SessionsManageEditExec", "GeneralDB")')"/>
+          <input type="hidden" id="proj" name="proj" value="@Model.First().project" />
+          <input type="hidden" id="phase" name="phase" value="@Model.First().phase" />
+          <input type="hidden" id="protocol" name="protocol" value="@ViewBag.protocol" />
+          <input type="button" value="Cancel" class="button" onclick="GenSubmitFormAction('myForm','@Url.Action("SessionsManageList", "GeneralDB")')"/>
+       
+       }
+
+
+
+   
+

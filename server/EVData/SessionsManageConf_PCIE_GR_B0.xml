@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- One interface's XML file conatians all its related protocols definitions -->
+<SessionsManageConf>
+	<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->
+	<ProtocolConf>
+		<protocol>PCIE_TX</protocol>
+		<proj>GR</proj>
+		<phase>B0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>PCIE-TX</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>L0,L1,L2,L3</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>NA</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>L0,L1,L2,L3</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>NPL03</SRTemplate>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+			<!-- SRreportId: report id that is used for LogicUnit status report (optional) -->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options are equals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="Gen1" tname="PCIE-TX" SRreportId="naty20190814173459">
+			<table_div_line dname="HostGen1" DivNumOfTests="11" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen1</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Gen1TxEyeLS</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Gen1 LS" tname="PCIE-TX" SRreportId="naty20190814173459">
+			<table_div_line dname="HostGen1LS" DivNumOfTests="7" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen1TxEyeLS</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Gen2" tname="PCIE-TX" SRreportId="naty20190814173459">
+			<table_div_line dname="HostGen2" DivNumOfTests="24" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen2</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Gen2TxEyeLS</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Gen2 LS" tname="PCIE-TX" SRreportId="naty20190814173459">
+			<table_div_line dname="HostGen2LS" DivNumOfTests="10" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen2TxEyeLS</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Gen3" tname="PCIE-TX" SRreportId="naty20190814173459">
+			<table_div_line dname="HostGen3" DivNumOfTests="24" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen3</table_div_field>
+			</table_div_line>
+		</table_div>
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+			<!-- skew:skew (FF/TYP/SS)-->
+			<!-- type:Board configuration (first letter upper case)-->
+			<!-- setup:Setup (first letter upper case)-->
+			<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+		</units>
+	</ProtocolConf>
+	
+	<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->	
+	<ProtocolConf>
+		<protocol>PCIE_RX</protocol>
+		<proj>GR</proj>
+		<phase>B0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>PCIE-RX</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>L0,L1,L2,L3</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>NA</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>L0,L1,L2,L3</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>NPL03</SRTemplate>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+			<!-- SRreportId: report id that is used for LogicUnit status report (optional) -->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options are equals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="BER Gen1" tname="PCIE-RX" SRreportId="">
+			<table_div_line dname="HostGen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">BER_GEN1</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="BER Gen2" tname="PCIE-RX" SRreportId="">
+			<table_div_line dname="HostGen2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">BER_GEN2</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="BER Gen3 SV Short" tname="PCIE-RX" SRreportId="">
+			<table_div_line dname="HostGen3Short" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">BER_GEN3_SV_SHORT</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="BER Gen3 SV Medium" tname="PCIE-RX" SRreportId="">
+			<table_div_line dname="HostGen3Med" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">BER_GEN3_SV_MEDIUM</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="BER Gen3 SJ" tname="PCIE-RX" SRreportId="">
+			<table_div_line dname="HostGen3SJ" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">BER_GEN3_SJ</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Squelch Gen1" tname="PCIE-RX" SRreportId="">
+			<table_div_line dname="HostGen1SQLS" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">SQUELCH_GEN1</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Squelch Gen2" tname="PCIE-RX" SRreportId="">
+			<table_div_line dname="HostGen2SQLS" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">SQUELCH_GEN2</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Squelch Gen3" tname="PCIE-RX" SRreportId="">
+			<table_div_line dname="HostGen3SQLS" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">SQUELCH_GEN3</table_div_field>
+			</table_div_line>
+		</table_div>
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+			<!-- skew:skew (FF/TYP/SS)-->
+			<!-- type:Board configuration (first letter upper case)-->
+			<!-- setup:Setup (first letter upper case)-->
+			<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+		</units>
+	</ProtocolConf>
+	
+	<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->	
+	<ProtocolConf>
+		<protocol>PCIE_PLL</protocol>
+		<proj>GR</proj>
+		<phase>B0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>PCIE-PLL</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>L0,L1,L2,L3</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>NA</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>L0,L1,L2,L3</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>NPL03</SRTemplate>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+			<!-- SRreportId: report id that is used for LogicUnit status report (optional) -->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options are equals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="Gen1" tname="PCIE-PLL" SRreportId="">
+			<table_div_line dname="HostGen1" DivNumOfTests="2" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen1</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Gen2" tname="PCIE-PLL" SRreportId="">
+			<table_div_line dname="HostGen2" DivNumOfTests="2" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen2</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Gen3" tname="PCIE-PLL" SRreportId="">
+			<table_div_line dname="HostGen3" DivNumOfTests="2" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen3</table_div_field>
+			</table_div_line>
+		</table_div>
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+			<!-- skew:skew (FF/TYP/SS)-->
+			<!-- type:Board configuration (first letter upper case)-->
+			<!-- setup:Setup (first letter upper case)-->
+			<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+		</units>
+	</ProtocolConf>
+	
+	<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->	
+	<ProtocolConf>
+		<protocol>PCIE_DC</protocol>
+		<proj>GR</proj>
+		<phase>B0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>PCIE-DC</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>L0,L1,L2,L3</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>NA</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>L0,L1,L2,L3</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>NPL03</SRTemplate>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+			<!-- SRreportId: report id that is used for LogicUnit status report (optional) -->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options are equals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="Gen1" tname="PCIE-DC" SRreportId="naty20200129113303">
+			<table_div_line dname="HostGen1" DivNumOfTests="5" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen1</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Gen2" tname="PCIE-DC" SRreportId="">
+			<table_div_line dname="HostGen2" DivNumOfTests="11" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen2</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Gen3" tname="PCIE-DC" SRreportId="">
+			<table_div_line dname="HostGen3" DivNumOfTests="6" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen3</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Rx" tname="PCIE-DC" SRreportId="">
+			<table_div_line dname="HostRx" DivNumOfTests="9" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Zrx</table_div_field>
+			</table_div_line>
+		</table_div>
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+		</units>
+		<!--CR end-->
+	</ProtocolConf>
+	<ProtocolConf>
+	<protocol>PCIE_RL</protocol>
+		<proj>GR</proj>
+		<phase>B0</phase>
+		<table>PCIE-RL</table>
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<!--CR start-->
+		<ports>L0,L1,L2,L3</ports>
+		<lanes>NA</lanes>
+		<excelPorts>L0,L1,L2,L3</excelPorts>
+		<SRTemplate>NPL03</SRTemplate>
+		<table_div tdname="Tx Gen1" tname="PCIE-RL" SRreportId="">
+			<table_div_line dname="HostTxGen1" DivNumOfTests="2" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen1_Tx</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Tx Gen2" tname="PCIE-RL" SRreportId="">
+			<table_div_line dname="HostTxGen2" DivNumOfTests="2" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen2_Tx</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Tx Gen3" tname="PCIE-RL" SRreportId="">
+			<table_div_line dname="HostTxGen3" DivNumOfTests="2" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen3_Tx</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Rx Gen1" tname="PCIE-RL" SRreportId="">
+			<table_div_line dname="HostRxGen1" DivNumOfTests="2" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen1_Rx</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Rx Gen2" tname="PCIE-RL" SRreportId="">
+			<table_div_line dname="HostRxGen2" DivNumOfTests="2" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen2_Rx</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="Rx Gen3" tname="PCIE-RL" SRreportId="">
+			<table_div_line dname="HostRxGen3" DivNumOfTests="2" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Gen3_Rx</table_div_field>
+			</table_div_line>
+		</table_div>
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+			<!-- skew:skew (FF/TYP/SS)-->
+			<!-- type:Board configuration (first letter upper case)-->
+			<!-- setup:Setup (first letter upper case)-->
+			<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+		</units>
+	</ProtocolConf>
+</SessionsManageConf>

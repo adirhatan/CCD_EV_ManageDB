@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<AppToSpec>
+	<Test name="EL_3 Data Eye and Mask Test">
+		<SpecTestName>EL_3 High Speed Data Eye</SpecTestName>
+	</Test>
+	<Test name="EL_6 Host Rise Time">
+		<SpecTestName>EL_6 High Speed Host Rise Time</SpecTestName>
+	</Test>
+	<Test name="EL_6 Host Fall Time">
+		<SpecTestName>EL_6 High Speed Host Fall Time</SpecTestName>
+	</Test>
+	<Test name="EL_7 Host Non-Monotonic Edge Test">
+		<SpecTestName>EL_7 High-Speed Monotonic Data Transitions</SpecTestName>
+	</Test>
+	<Test name="EL_21 Sync Field Length Test">
+		<SpecTestName>EL_21 SYNC Pattern Symbol Count</SpecTestName>
+	</Test>
+	<Test name="EL_25 EOP Length Test">
+		<SpecTestName>EL_25 EOP Delimiter Length</SpecTestName>
+	</Test>
+	<Test name="EL_23 Inter-packet Gap Between First 2 Packets Test">
+		<SpecTestName>EL_23 Interpacket first two Packets</SpecTestName>
+	</Test>
+	<Test name="EL_22 Inter-packet Gap Between Host And Device Packet Test">
+		<SpecTestName>EL_22 Interpacket Device Packet</SpecTestName>
+	</Test>
+	<Test name="EL_55 SOF EOP Width Test">
+		<SpecTestName>EL_55 SOF EOP Delimiter Width</SpecTestName>
+	</Test>
+	<Test name="EL_33 CHIRP Timing Response">
+		<SpecTestName>EL_33 CHIRP Timing Response</SpecTestName>
+	</Test>
+	<Test name="EL_34 CHIRP K Width">
+		<SpecTestName>EL_34 CHIRP K Width</SpecTestName>
+	</Test>
+	<Test name="EL_34 CHIRP J Width">
+		<SpecTestName>EL_34 CHIRP J Width</SpecTestName>
+	</Test>
+	<Test name="EL_35 SOF Timing Response">
+		<SpecTestName>EL_35 SOF Timing Response</SpecTestName>
+	</Test>
+	<Test name="EL_39 Suspend Timing Response">
+		<SpecTestName>EL_39 Suspend Timing Response</SpecTestName>
+	</Test>
+	<Test name="EL_41 Resume Timing Response">
+		<SpecTestName>EL_41 Resume Timing Response</SpecTestName>
+	</Test>
+	<Test name="EL_8 Host J Test">
+		<SpecTestName>EL_8 Host J State</SpecTestName>
+	</Test>
+	<Test name="EL_8 Host K Test">
+		<SpecTestName>EL_8 Host K State</SpecTestName>
+	</Test>
+	<Test name="EL_9 Host SE0_NAK Test">
+		<SpecTestName>EL_9 Host SE0_NAK</SpecTestName>
+	</Test>
+	<Test name="Host Full Speed Signal Quality Test">
+		<SpecTestName>Host Full Speed Signal Quality</SpecTestName>
+	</Test>
+	<Test name="Host Full Speed Rise Time Test (information only)">
+		<SpecTestName>Host Full Speed - Rise Time</SpecTestName>
+	</Test>
+	<Test name="Host Full Speed Fall Time Test (information only)">
+		<SpecTestName>Host Full Speed - Fall Time</SpecTestName>
+	</Test>
+	<Test name="Host Low Speed Signal Quality Test">
+		<SpecTestName>Host Low Speed Signal Quality</SpecTestName>
+	</Test>
+	<Test name="Host Low Speed Rise Time Test (information only)" >
+		<SpecTestName>Host Low Speed - Rise Time</SpecTestName>
+	</Test>
+	<Test name="Host Low Speed Fall Time Test (information only)" >
+		<SpecTestName>Host Low Speed - Fall Time</SpecTestName>
+	</Test>
+	<Test name="Host and Self-Powered Hubs Droop Test" >
+		<SpecTestName>Host and Self Powered Hubs - Droop</SpecTestName>
+	</Test>
+	<Test name="Host and Self-Powered Hubs Drop Test" >
+		<SpecTestName>Host and Self Powered Hubs - Drop</SpecTestName>
+	</Test>
+	<Test name="EL_20 HS Thru. Impedance" >
+		<SpecTestName>EL_20 High Speed Thru Impedance</SpecTestName>
+	</Test>
+	<Test name="EL_19 HS Diff. Input Impedance">
+		<SpecTestName>EL_19 High Speed Differential Input Impedance</SpecTestName>
+	</Test>
+	<Test name="EL_19_1 HS Diff. Output Impedance">
+		<SpecTestName>EL_19 High Speed Differential Output Impedance</SpecTestName>
+	</Test>
+</AppToSpec>

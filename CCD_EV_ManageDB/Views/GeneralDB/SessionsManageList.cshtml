@@ -1,0 +1,547 @@
+﻿@model SessionsManageDisplay
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using MongoDB.Bson.Serialization;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+
+@{
+    ViewBag.Title = "Sessions List";
+}
+
+
+     <!-- Excel export dialog -->
+      <script>
+          $(function () {
+              var dialog, form;
+
+              function addUser() {
+                  form.submit();
+              }
+
+              dialog = $("#dialog-form").dialog({
+                  autoOpen: false,
+                  height: 275,
+                  width: 350,
+                  modal: true
+              });
+
+              form = $("#ExpForm");
+
+              $("#ExpCancel").button().on("click", function () {
+                  form[0].reset();
+                  dialog.dialog("close");
+              });
+
+          });
+
+          function ShowExpDialog(dialog,_table) {
+
+              //debugger;
+              $("#table").val(_table);
+              var td = "#" + dialog;
+              $(td).dialog();
+              $(td).dialog("option", "width", 350);
+              $(td).dialog("option", "length", 275);
+              $(td).dialog("option", "modal", true);
+              $(td).dialog("open");
+
+          };
+
+
+  </script>
+
+        <!-- SpecLimitsConflicts dialog start-->
+    <script type="text/JavaScript">
+        $(function () {
+            var dialog;
+
+
+            dialog = $("#dialogSpecLimitsConflicts-form").dialog({
+                autoOpen: false,
+                height: 400,
+                width: 600,
+                modal: true
+            });
+
+
+        });
+        function ShowSCLDialog(dialog) {
+
+            //debugger;
+            var td = "#" + dialog;
+            $(td).dialog();
+            $(td).dialog("option", "width", 600);
+            $(td).dialog("option", "length", 400);
+            $(td).dialog("option", "modal", true);
+            $(td).dialog("open");
+
+        };
+
+
+  </script>
+
+     @{ bool conflictsFound = false;
+        foreach (SessionsManageOfTable SMOT in Model.SessionsManageOfTables)
+        {
+            if (SMOT.SpecLimitsConflictSessions.Count>0)
+            {
+                conflictsFound = true;
+                break;
+            }
+        }
+        if (conflictsFound)
+        {
+        <script type="text/JavaScript">
+            $(document).ready(function () {
+                ShowSCLDialog('dialogSpecLimitsConflicts-form');
+            });
+        </script>
+        }
+    }
+     
+<h2>Sessions List</h2>
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>     
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+      @using (Html.BeginForm("IndicatorsList", "GeneralDB", FormMethod.Post, new { @id = "allForm", @name = "allForm" }))
+      {
+     <p>
+        Select Project: 
+        <select id="all_proj" name="proj" onchange="GenSubmitFormAction('allForm','@Url.Action("SessionsManageList", "GeneralDB")')">
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="all_phase" name="phase" onchange="GenSubmitFormAction('allForm','@Url.Action("SessionsManageList", "GeneralDB")')">
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+        Select Protocol: 
+        <select id="all_protocol" name="protocol" class="wselect" onchange="GenSubmitFormAction('allForm','@Url.Action("SessionsManageList", "GeneralDB")')">
+            @if (string.IsNullOrEmpty(ViewBag.protocol))
+            {
+                <option value="" ></option>
+            }
+            @foreach (var protocol in ViewBag.protocollist)
+            {
+                if (protocol.ToString() == ViewBag.protocol)
+                {
+                    <option value="@protocol.ToString()" selected="selected"> @protocol.ToString()</option>
+                }
+                else
+                {
+                    <option value="@protocol.ToString()" > @protocol.ToString()</option>
+                }
+            }
+        </select> 
+        
+        &nbsp;&nbsp;&nbsp;
+        @{  string checkedStr = "";
+            if (Model.FilterSessionsView == "Valid_Pending")
+            {
+                checkedStr = "checked=\"checked\"";
+            }
+        <input type="radio" name="FilterSessions" id="ViewFilter_v" value="Valid_Pending" @checkedStr onclick="GenLocatioAction('@Url.Action("SessionsManageList", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, @FilterSessions = "Valid_Pending", @_UnifyNVM = ViewBag.UnifyNVM })')"/>
+        }
+        <label for="name">Sessions: Valid, Pending only.</label>
+        @{  
+            checkedStr = "";
+            if (Model.FilterSessionsView == "ALL")
+            {
+                checkedStr = "checked=\"checked\"";
+            }
+        <input type="radio" name="FilterSessions" id="ViewFilter_a" value="ALL" @checkedStr onclick="GenLocatioAction('@Url.Action("SessionsManageList", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, @FilterSessions = "ALL", @_UnifyNVM = ViewBag.UnifyNVM })')"/>
+        }
+        <label for="name">Sessions: All</label>
+        &nbsp;&nbsp;&nbsp;
+        @{
+            string checkedNVM = "";
+            if (ViewBag.UnifyNVM == "Y")
+            {
+                checkedNVM = "checked=\"checked\"";
+            }
+        <input id="UnifyNVM" name="UnifyNVM" type="checkbox" @checkedNVM value="true" onclick = "GenLocatioAction('@Url.Action("SessionsManageList", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, @FilterSessions = Model.FilterSessionsView, @_UnifyNVM = ViewBag.NVMrequest })')" />
+        }
+        Unify NVM ("E,Q" actions disabled)&nbsp;&nbsp;&nbsp;
+        <input type="button" value="Reload" title="Reload clear page" class="button" onclick="GenLocatioAction('@Url.Action("SessionsManageList", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj })')" />
+        @if (Model.Conf.separateCSRperTable != "Y")
+        {
+            <text>&nbsp; &nbsp; &nbsp;</text><input type="button" value="Generate" title="Generate Cycle Status report" class="button" onclick="ShowExpDialog('dialog-form','')" />
+        }
+        @if (Model.SessionsManageOfTables.Count > 0)
+        {
+            if (Model.Conf.useNewCSR != "Y")
+            {
+            <input type="button"  style="float: right;" value="Configure" title="Configure Cycle Status report" class="button" onclick="GenLocatioAction('@Url.Action("CSRConfigure", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj })')" />
+            }
+            <input type="button"  style="float: right;" value="F. Missing" title="Find sessions exist in DB but not in SM" class="button" onclick="GenLocatioAction('@Url.Action("ReportMissingSessionsInSM", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj })')" />
+        }
+    </p>
+
+      }
+
+@{
+    string customCols = "null";
+    int i = 1;
+    while (i < Model.Conf.fields.Count)
+    {
+        i++;
+        customCols += ",null";
+    }
+       <script type="text/JavaScript">
+
+     $(document).ready(function () {
+         $('table.display').dataTable({
+             //        "deferRender": true,
+             "ordering": true,
+             "columnDefs": [
+                { "orderable": false, "targets": 2 },
+                { "orderable": false, "targets": 3 },
+                { "orderable": false, "targets": 7 }
+                ],
+              "columns": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                {
+                                    "render": function(data, type, row){
+                                        return data.split("ppp").join("<br/>");
+                                    }
+                                },
+                                null,
+                                @(customCols)
+                                //null,
+                                //null
+                            ],
+             "iDisplayLength": -1,
+             "bPaginate": true,
+             "iCookieDuration": 60,
+             "bStateSave": false,
+             "bAutoWidth": true,
+             "bScrollAutoCss": true,
+             "bProcessing": true,
+             "bRetrieve": true,
+             "bSort": false,
+             "bJQueryUI": true,
+             "dom": '<"H"CTrif><"toolbar">t',
+             //"sDom": '<"H"CTrf>t<"F"lip>',
+             //"sDom": '<"H"CTrif>t<"F"CTrif>',
+             //"aLengthMenu": [[10, 20, 100, -1], [10, 20, 100, "All"]],
+             "sScrollX": "100%",
+             //"sScrollY": "700px",
+             //"sScrollY": "100%",
+             "sScrollY": (0.8 * $(window).height()),
+             "bScrollCollapse": true,
+             "fnInitComplete": function () {
+                 this.css("visibility", "visible");
+             }
+         });
+         //$("div.toolbar").html('<b>SMOT.table</b>');
+     });
+
+</script>
+}
+    @{foreach (SessionsManageOfTable SMOT in Model.SessionsManageOfTables)
+      {
+          string formName = "form" + SMOT.table;
+          string _checkAllName = "_checkAll" + SMOT.table;
+          List<SessionsManage> SMOT_Filtered_Sessions = new List<SessionsManage>();
+     <p><br /><b>@SMOT.table</b>
+        @if (Model.Conf.separateCSRperTable == "Y")
+        {
+           <text> &nbsp; &nbsp; &nbsp;</text><input type="button" value="Generate" title="Generate Cycle Status report" class="button" onclick="ShowExpDialog('dialog-form','@SMOT.table')" />
+        }
+     </p>
+        using (Html.BeginForm("ValidatePendingItems", "GeneralDB", FormMethod.Post, new { @id = formName, @name = formName }))
+        {
+        <input id="@_checkAllName" name="_checkAll" type="checkbox" onclick = "ValidateCheckAllGen('@formName','@_checkAllName')" value="true"/>
+        <input type="submit"class="button" value="Validate checked items" onclick = "return confirm('Are you sure you want to validate checked items?\n(LogicUnit must be assigned for all checked items)')"/>
+     <table id="" class="display">
+    <thead>
+    <tr>
+        <th >
+            Validation
+        </th>
+        <th >
+            LogicUnit
+        </th>
+        <th >
+            Edit
+        </th>
+        <th >
+            Query
+        </th>
+        <th >
+            board
+        </th>
+        <th >
+            Type
+        </th>
+        <td>
+            NVM
+        </td>
+        <th >
+            Comment
+        </th>
+        <th >
+            Sessions
+        </th>
+        <th >
+            Results
+        </th>
+        @foreach (var fieldAlias in Model.Conf.fieldsAliases)
+        {
+            <th >
+                @fieldAlias
+            </th>  
+        }
+    </tr> 
+
+    </thead>
+    <tbody>
+
+    @if (Model.FilterSessionsView == "Valid_Pending")
+    {
+        foreach (SessionsManage SM in SMOT.Sessions)
+        {
+            if ((SM.validation != General.SessionValidationStatus.PRM_not_valid) && (SM.validation != General.SessionValidationStatus.TMP_not_valid))
+            {
+                SMOT_Filtered_Sessions.Add(SM);
+            }
+        }
+    }
+    else
+    {
+        SMOT_Filtered_Sessions = SMOT.Sessions;
+    }
+    @foreach (SessionsManage SM in SMOT_Filtered_Sessions)
+    {
+        string c_id = "_cb" + SM._id;
+     <!--tr @{string s = "style=background-color:Orange"; if (string.IsNullOrEmpty(SM.logicUnit))
+              { @s;
+              }}-->
+     <tr @{string st = "style=background-color:Orange"; if (SM.validation == General.SessionValidationStatus.Pending_review)
+           { @st;
+           }}>
+        <td @{string std = "style=background-color:Orange"; if (SM.validation == General.SessionValidationStatus.Pending_review)
+              { @std;
+              }}>
+        @if (SM.validation == General.SessionValidationStatus.Pending_review)
+        {<input id="@c_id" name="@c_id" type="checkbox" />}
+           @SM.validation.ToString()
+        </td> 
+        <td>
+            @SM.logicUnit
+        </td> 
+        @{
+        if (ViewBag.UnifyNVM == "Y")
+        {
+            <td>
+                <input type="button" value="E"  disabled="disabled" title="Not allowed in unified NVM view" class="button" onclick="GenLocatioAction('@Url.Action("SessionsManageEdit", "GeneralDB", new { @_id = SM._id, @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj })')" />
+             
+            </td>
+            <td>
+                <input type="button" value="Q" disabled="disabled" title="Not allowed in unified NVM view" class="button"  onclick="GenLocatioAction_id('@SM._id','@Url.Action("SessionsManageQueryDB", "GeneralDB")')" />
+            </td>
+        }
+        else
+        {
+            <td>
+                <input type="button" value="E" title="Edit record" class="button" onclick="GenLocatioAction('@Url.Action("SessionsManageEdit", "GeneralDB", new { @_id = SM._id, @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj })')" />
+             
+            </td>
+            <td>
+                <input type="button" value="Q" title="Query record" class="button"  onclick="GenLocatioAction_id('@SM._id','@Url.Action("SessionsManageQueryDB", "GeneralDB")')" />
+            </td>
+        }
+        }
+        <td>
+        @(SM.board_id + "_" + SM.unit_id)
+        </td> 
+        @{
+        string tmpType = SM.Data.GetValue("sType", "").ToString();
+        <td>
+            @tmpType
+        </td>
+        }
+        <td>
+            @SM.NVM
+        </td>
+        <td>
+            @SM.comment  
+        </td> 
+        <td>
+            @{
+        string eol = "ppp";
+        int cnt = 0;
+        string resultsNum = "";
+        string status = "Pass";
+        string style = "style=color:Green";
+        int ResultsSum = 0;
+
+        foreach (string session in SM.Sessions)
+        {
+            if ((SM.validation == General.SessionValidationStatus.TMP_valid) || (SM.validation == General.SessionValidationStatus.TMP_not_valid) || (SM.validation == General.SessionValidationStatus.Pending_review))
+            {
+                resultsNum = SMOT.SessionStartInfoDictionary[session].GetValue("TMP results", "").ToString();
+                status = SMOT.SessionStartInfoDictionary[session].GetValue("TMP results status", "").ToString();
+            }
+            if (SM.validation == General.SessionValidationStatus.PRM_valid)
+            {
+                resultsNum = SMOT.SessionStartInfoDictionary[session].GetValue("PRM results inc", "").ToString();
+                status = SMOT.SessionStartInfoDictionary[session].GetValue("PRM results inc status", "").ToString();
+            }
+            if (SM.validation == General.SessionValidationStatus.PRM_not_valid)
+            {
+                resultsNum = SMOT.SessionStartInfoDictionary[session].GetValue("PRM results exc", "").ToString();
+                status = SMOT.SessionStartInfoDictionary[session].GetValue("PRM results exc status", "").ToString();
+            }
+            if (status == "Fail")
+            {
+                style = "style=color:Red";
+            }
+            else
+            {
+                style = "style=color:Green";
+            }
+            ResultsSum += Convert.ToInt32(resultsNum);
+            cnt++;
+            if (cnt % 5 == 0)
+            {
+                        <span title="@SMOT.SessionStartInfoDictionary[@session].GetValue("UserComment", "")" @style>@session (@resultsNum),</span> @eol
+            }
+            else
+            {
+                        <span title="@SMOT.SessionStartInfoDictionary[@session].GetValue("UserComment", "")" @style>@session (@resultsNum),</span>
+            }
+
+        }
+                 
+            }
+        </td>
+        <td>
+         <span title="results number"> @ResultsSum</span>
+        </td>
+        @foreach (var field in Model.Conf.fields)
+        {
+            string data = SM.Data.GetValue(field, "").ToString();
+            <td>
+                @data
+            </td>
+        }
+
+    </tr>
+    }
+    </tbody>
+</table>
+        }
+      }
+}
+
+<div id="dialog-form" title="Cycle Status options">
+  <p class="validateTips">Filter Cycle Status content.</p>
+ 
+  <form action='@Url.Action("ExecCycleReportBG", "GeneralDB")' id="ExpForm">
+        <input type="hidden" name="protocol" id="protocol" value="@ViewBag.protocol" />
+        <input type="hidden" name="phase" id="phase" value="@ViewBag.phase" />
+        <input type="hidden" name="proj" id="proj" value="@ViewBag.proj" />
+        <input type="hidden" name="table" id="table" value="" />
+    <fieldset>
+        <input type="radio" name="CSR_DB" id="CSR_DB_A" value="TMP,PRM" checked="checked"/>
+        <label for="name">TMP (Valid only) & PRM DB</label><br />
+        <input type="radio" name="CSR_DB" id="CSR_DB_TP" value="TMP,PRM,Pending" />
+        <label for="name">TMP (Valid & Pending) & PRM DB</label><br />
+        <input type="radio" name="CSR_DB" id="CSR_DB_T" value="TMP" />
+        <label for="name">TMP (Valid only) DB</label><br />
+        <input type="radio" name="CSR_DB" id="CSR_DB_P" value="PRM" />
+        <label for="name">PRM DB</label><br />
+        ===================<br />
+        @{ string checkedStrDialog = "";
+           if (Model.FilterSessionsView == "Valid_Pending")
+           {
+               checkedStrDialog = "checked=\"checked\"";
+           }
+        <input type="radio" name="FilterSessions" id="Filter_v" value="Valid_Pending" @checkedStrDialog />
+        }
+        <label for="name">Sessions: Valid, Pending only.</label><br />
+        @{ checkedStrDialog = "";
+           if (Model.FilterSessionsView == "ALL")
+           {
+               checkedStrDialog = "checked=\"checked\"";
+           }
+        <input type="radio" name="FilterSessions" id="Filter_a" value="ALL" @checkedStrDialog />
+        }
+        <label for="name">Sessions: All</label><br />
+      <input type="submit" class="button"/>
+    </fieldset>
+  </form>
+</div>
+
+<div id="dialogSpecLimitsConflicts-form" title="Spec Limis Conflicts">
+  <p class="validateTips">View Session's Spec Limits Conflicts.</p>
+     
+     @{foreach (SessionsManageOfTable SMOT in Model.SessionsManageOfTables)
+       {
+           string formName = "SpecLimitsConflictsForm" + SMOT.table;
+           string conflictSessions = "";
+           if (SMOT.SpecLimitsConflictSessions.Count > 0) 
+           {
+              <form action='@Url.Action("ViewSpecLimitsConflicts", "GeneralDB")' id="@formName" name="@formName">
+                    <input type="hidden" name="phase" id="SLCphase" value="@ViewBag.phase" />
+                    <input type="hidden" name="proj" id="SLCproj" value="@ViewBag.proj" />
+                    <input type="hidden" name="table" id="SLCtable" value="@SMOT.table" />
+                <fieldset>
+                    <label for="name">Warning: The following sessions (Table: <b>@SMOT.table</b>) contain Spec Limits Conflicts: </label><br />
+                     @{
+                        int cnt = 0;
+                        foreach (string  conflictSession in SMOT.SpecLimitsConflictSessions)
+                        {
+                            cnt++;
+                            conflictSessions += conflictSession + ",";
+                            if (cnt % 3 == 0) 
+                            {
+                                <b style="color:Red">@conflictSessions</b>
+                                <br />
+                                conflictSessions = "";
+                            }
+                        }  
+                       if (cnt % 3 != 0) 
+                       {
+                           <b style="color:Red">@conflictSessions</b>
+                       }
+                     }
+                  <br /><input type="submit" value="View" class="button"/>
+                </fieldset>
+              </form>
+           }
+       }
+     }
+</div>

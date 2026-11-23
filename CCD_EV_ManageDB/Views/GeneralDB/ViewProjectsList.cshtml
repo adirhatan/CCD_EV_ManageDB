@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "ViewProjectList";
+}
+
+<h2>ViewProjectList</h2>
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+   @using (Html.BeginForm("ProjectListAction", "GeneralDB", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+   {
+     <p>
+        Select table: 
+        <select id="col" name="col" >
+            @foreach (var col in ViewBag.collist)
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        </select>  
+        Select Project: 
+        <select id="proj" name="proj" >
+            @foreach (var proj in ViewBag.projlist)
+            {
+                <option value="@proj.ToString()"> @proj.ToString()</option>
+            }
+        </select> 
+        Select Action: 
+        <select id="action" name="action" >
+                <option value="archive">archive</option>
+                <option value="dearchive">de-archive</option>
+        </select>
+
+          <input type="button" value="Execute" class="button" onclick="ProjectsListConfirmAction('myForm','@Url.Action("ProjectListAction", "GeneralDB")','Are you sure you want to execute the following:','action','col','proj')"/>
+    </p>
+   }
+

@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- One interface's XML file conatians all its related protocols definitions -->
+<SessionsManageConf>
+<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->
+	<ProtocolConf>
+		<protocol>USB3_RX</protocol>
+		<proj>MR</proj>
+		<phase>B0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>USB3.1_GEN1_GEN2_RX</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<field alias="Channel">Test Channel</field>
+		<field>Test Mode</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>PA,PB</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>L0,L1</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>NONE</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>PABL01</SRTemplate>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+			<!-- SRreportId: report id that is used for LogicUnit status report (optional) -->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options are equals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="USB3.1 GEN1 Rx" tname="USB3.1_GEN1_GEN2_RX" SRreportId="">
+			<table_div_line dname="0.5M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">0.5MHz,GEN1</table_div_field>
+			</table_div_line>
+			<table_div_line dname="1M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">1MHz,GEN1</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz,GEN1</table_div_field>
+			</table_div_line>
+			<table_div_line dname="4.9M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">4.9MHz,GEN1</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz,GEN1</table_div_field>
+			</table_div_line>
+			<table_div_line dname="20M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">20MHz,GEN1</table_div_field>
+			</table_div_line>
+			<table_div_line dname="33M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">33MHz,GEN1</table_div_field>
+			</table_div_line>
+			<table_div_line dname="50M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">50MHz,GEN1</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="USB3.1 GEN2 Rx" tname="USB3.1_GEN1_GEN2_RX" SRreportId="">
+			<table_div_line dname="0.5M Gen2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">0.5MHz,GEN2</table_div_field>
+			</table_div_line>
+			<table_div_line dname="1M Gen2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">1MHz,GEN2</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M Gen2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz,GEN2</table_div_field>
+			</table_div_line>
+			<table_div_line dname="4M Gen2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">4MHz,GEN2</table_div_field>
+			</table_div_line>
+			<table_div_line dname="7.5M Gen2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">7.5MHz,GEN2</table_div_field>
+			</table_div_line>
+			<table_div_line dname="15M Gen2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">15MHz,GEN2</table_div_field>
+			</table_div_line>
+			<table_div_line dname="30M Gen2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">30MHz,GEN2</table_div_field>
+			</table_div_line>
+			<table_div_line dname="50M Gen2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">50MHz,GEN2</table_div_field>
+			</table_div_line>
+			<table_div_line dname="100M Gen2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">100MHz,GEN2</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="USB3.1 GEN1 Rx LFPS" tname="USB3.1_GEN1_GEN2_RX" SRreportId="">
+			<table_div_line dname="setup1_800mv_DC_50" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_GEN1_RX_LFPS</table_div_field>
+				<table_div_field fname="Setup" condition="equals">setup1_800mv_DC_50</table_div_field>
+			</table_div_line>
+			<table_div_line dname="setup2_1200mv_DC_50" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_GEN1_RX_LFPS</table_div_field>
+				<table_div_field fname="Setup" condition="equals">setup2_1200mv_DC_50</table_div_field>
+			</table_div_line>
+			<table_div_line dname="setup3_1000mv_DC_40" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_GEN1_RX_LFPS</table_div_field>
+				<table_div_field fname="Setup" condition="equals">setup3_1000mv_DC_40</table_div_field>
+			</table_div_line>
+			<table_div_line dname="setup4_1000mv_DC_60" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_GEN1_RX_LFPS</table_div_field>
+				<table_div_field fname="Setup" condition="equals">setup4_1000mv_DC_60</table_div_field>
+			</table_div_line>
+			<table_div_line dname="setup5_100mv_DC_50" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_GEN1_RX_LFPS</table_div_field>
+				<table_div_field fname="Setup" condition="equals">setup5_100mv_DC_50</table_div_field>
+			</table_div_line>
+			<table_div_line dname="setup7_300mv_DC_50" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_GEN1_RX_LFPS</table_div_field>
+				<table_div_field fname="Setup" condition="equals">setup7_300mv_DC_50</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="USB3.1 RxDetect Disconnect True" tname="USB3.1_GEN1_GEN2_RX" SRreportId="">
+			<table_div_line dname="8Kohm TF" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_RxDetect_AC_Cap</table_div_field>
+			</table_div_line>
+		</table_div>
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+		<!-- skew:skew (FF/TYP/SS)-->
+		<!-- type:Board configuration (first letter upper case)-->
+		<!-- setup:Setup (first letter upper case)-->
+		<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+		</units>
+		<!--CR end-->
+	</ProtocolConf>
+
+	<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->
+	<ProtocolConf>
+		<protocol>USB3_TX</protocol>
+		<proj>MR</proj>
+		<phase>B0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>USB3.1_GEN1_GEN2_TX</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<field alias="Channel">Test Channel</field>
+		<field>Test Mode</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>PA,PB</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>L0,L1</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>NONE</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>PABL01</SRTemplate>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+			<!-- SRreportId: report id that is used for LogicUnit status report (optional) -->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- setup_numOfTests: this overwites "DivNumOfTests" when there are different tests per setup (optional)-->
+			<!-- setup: first letter of unit setup -->
+			<!-- tests: number of tests (overwites "DivNumOfTests") -->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options are equals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="USB3.1 GEN1 Tx" tname="USB3.1_GEN1_GEN2_TX" SRreportId="">
+			<table_div_line dname="Host GEN1" DivNumOfTests="17" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">GEN1</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="USB3.1 GEN2 Tx" tname="USB3.1_GEN1_GEN2_TX"   SRreportId="">
+			<table_div_line dname="Host GEN2" DivNumOfTests="33" trials="1">	
+				<setup_numOfTests setup="L" tests="33"/>
+				<setup_numOfTests setup="S" tests="31"/>
+				<table_div_field fname="SpecTestName" condition="contains">GEN2</table_div_field>
+			</table_div_line>
+		</table_div>
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+		<!-- skew:skew (FF/TYP/SS)-->
+		<!-- type:Board configuration (first letter upper case)-->
+		<!-- setup:Setup (first letter upper case)-->
+		<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+		</units>
+		<!--CR end-->
+	</ProtocolConf>
+	<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->
+	<ProtocolConf>
+		<protocol>USB2_TX</protocol>
+		<proj>MR</proj>
+		<phase>B0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>USB2.0_TX</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<field alias="Channel">Test Channel</field>
+		<field>Test Mode</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>PA</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>NA</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>NONE</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>PABLNA</SRTemplate>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+			<!-- SRreportId: report id that is used for LogicUnit status report (optional) -->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- setup_numOfTests: this overwites "DivNumOfTests" when there are different tests per setup (optional)-->
+			<!-- setup: first letter of unit setup -->
+			<!-- tests: number of tests (overwites "DivNumOfTests") -->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options are equals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="USB2.0 HS Tx" tname="USB2.0_TX" SRreportId="">
+			<table_div_line dname="Host HSTx" DivNumOfTests="17" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">EL_</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">EL_20 High Speed Thru Impedance,EL_19 High Speed Differential Output Impedance,EL_19 High Speed Differential Input Impedance,EL_3 High Speed Data Eye</table_div_field>
+				<table_div_field fname="UserComment" condition="notContains">Apple</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Host HSTx trials" DivNumOfTests="1" trials="3">
+				<table_div_field fname="SpecTestName" condition="equals">EL_3 High Speed Data Eye</table_div_field>
+				<table_div_field fname="UserComment" condition="notContains">Apple</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="USB2.0 HS Tx Apple" tname="USB2.0_TX" SRreportId="">
+			<table_div_line dname="Host HSTx Apple" DivNumOfTests="17" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">EL_</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">EL_20 High Speed Thru Impedance,EL_19 High Speed Differential Output Impedance,EL_19 High Speed Differential Input Impedance,EL_3 High Speed Data Eye</table_div_field>
+				<table_div_field fname="UserComment" condition="contains">Apple</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Host HSTx trials Apple" DivNumOfTests="1" trials="3">
+				<table_div_field fname="SpecTestName" condition="equals">EL_3 High Speed Data Eye</table_div_field>
+				<table_div_field fname="UserComment" condition="contains">Apple</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="USB2.0 Impedance Tx" tname="USB2.0_TX" SRreportId="">
+			<table_div_line dname="Host Impedance" DivNumOfTests="3" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">EL_20 High Speed Thru Impedance,EL_19 High Speed Differential Output Impedance,EL_19 High Speed Differential Input Impedance</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="USB2.0 FS/LS Tx" tname="USB2.0_TX" SRreportId="">
+			<table_div_line dname="Host FS_LSTx" DivNumOfTests="4" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">Host Low Speed - Rise Time,Host Low Speed - Fall Time,Host Full Speed - Rise Time,Host Full Speed - Fall Time</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Host FS_LSTx trials" DivNumOfTests="2" trials="3">
+				<table_div_field fname="SpecTestName" condition="equals">Host Low Speed Signal Quality,Host Full Speed Signal Quality</table_div_field>
+			</table_div_line>
+		</table_div>
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+		<!-- skew:skew (FF/TYP/SS)-->
+		<!-- type:Board configuration (first letter upper case)-->
+		<!-- setup:Setup (first letter upper case)-->
+		<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+		</units>
+	</ProtocolConf>
+	
+</SessionsManageConf>

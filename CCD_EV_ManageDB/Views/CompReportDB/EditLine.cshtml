@@ -1,0 +1,186 @@
+﻿@model DBTmpl
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+
+@{
+    ViewBag.Title = "Edit CompReports line";
+}
+
+<h2>Edit CompReports line</h2>
+
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+ <script type="text/JavaScript">
+     function changedTable(selectTables, selectFields1, selectFields2, selectFields3) {
+         //debugger;
+         //var selectFields = elem.nextSibling.nextSibling;
+
+         var output = [];
+         var length = ngon.dictionaryFields[selectTables.value].length;
+         output[0] = '<option value=""></option>';
+         for (var i = 0; i < length; i++) {
+             output[i+1] = '<option value="' + ngon.dictionaryFields[selectTables.value][i] + '">' + ngon.dictionaryFields[selectTables.value][i] + '</option>';
+         }
+
+         selectFields1.innerHTML = output.join('');
+         selectFields2.innerHTML = output.join('');
+         selectFields3.innerHTML = output.join('');
+
+     }
+</script>
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+ @using (Html.BeginForm("EditLineExec", "CompReportDB", FormMethod.Post, new { @id = "LineForm", @name = "LineForm" }))
+ {
+     <input type="hidden" id="_id" name="_id" value="@Model.name" />
+ <p>Edit line: name:
+    <input type="text" id="lName" name="lName" style="width: 300px" value="@Model.name" /> <br /><br />
+    Query:
+    <input type="text" id="lQuery" name="lQuery" style="width: 1073px" value="@Model.query"/><br /><br />
+    Current Comp query:@ViewBag.CurQueryDisplay <br /><br />
+    Table:&nbsp;
+    <select id="tableName" class="wselect" name="tableName" onchange="changedTable(this,document.getElementById('Field1'),document.getElementById('Field2'),document.getElementById('Field3'))">
+        @foreach (var col in ViewBag.collist)
+        {
+            if (col == Model.table)
+            {
+                <option value="@col.ToString()" selected="selected"> @col.ToString()</option>
+            }
+            else
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        }
+    </select>
+    <br /><br />
+    Field1:
+    <select id="Field1" name="Field1" class="wselect">
+        <option value=""></option>
+        @{
+        //foreach (string field in Model.TableFields)
+        foreach (string field in ViewBag.defFieldsList)
+        {
+            if (field == Model.field1)
+            {
+                <option value="@field" selected="selected"> @field</option>
+            }
+            else
+            {
+                <option value="@field"> @field</option>
+            }
+        }
+        }
+    </select>
+    Format1:
+    <select id="disp1" name="disp1" >
+        @foreach (var disp in ViewBag.disp)
+        {
+            if (disp == Model.disp1)
+            {
+                <option value="@disp.ToString()" selected="selected"> @disp.ToString()</option>
+            }
+            else
+            {
+                <option value="@disp.ToString()"> @disp.ToString()</option>
+            }
+
+        }
+    </select>
+    <br /><br />
+    Field2:
+    <select id="Field2" name="Field2" class="wselect">
+        <option value=""></option>
+        @{
+        //foreach (string field in Model.TableFields)
+        foreach (string field in ViewBag.defFieldsList)
+        {
+            if (field == Model.field2)
+            {
+                <option value="@field" selected="selected"> @field</option>
+            }
+            else
+            {
+                <option value="@field"> @field</option>
+            }
+        }
+        }
+    </select>
+
+    Format2:
+    <select id="disp2" name="disp2" >
+        @foreach (var disp in ViewBag.disp)
+        {
+            if (disp == Model.disp2)
+            {
+                <option value="@disp.ToString()" selected="selected"> @disp.ToString()</option>
+            }
+            else
+            {
+                <option value="@disp.ToString()"> @disp.ToString()</option>
+            }
+
+        }
+    </select>
+    <br /><br />
+    Field3:
+    <select id="Field3" name="Field3" class="wselect">
+        <option value=""></option>
+        @{
+        //foreach (string field in Model.TableFields)
+        foreach (string field in ViewBag.defFieldsList)
+        {
+            if (field == Model.field3)
+            {
+                <option value="@field" selected="selected"> @field</option>
+            }
+            else
+            {
+                <option value="@field"> @field</option>
+            }
+        }
+        }
+    </select>
+
+    Format3:
+    <select id="disp3" name="disp3" >
+        @foreach (var disp in ViewBag.disp)
+        {
+            if (disp == Model.disp3)
+            {
+                <option value="@disp.ToString()" selected="selected"> @disp.ToString()</option>
+            }
+            else
+            {
+                <option value="@disp.ToString()"> @disp.ToString()</option>
+            }
+
+        }
+    </select>
+    <br /><br />
+    Results:
+    <select id="results" name="results" >
+        @foreach (var results in ViewBag.results)
+        {
+            if (results == Model.results)
+            {
+                <option value="@results.ToString()" selected="selected"> @results.ToString()</option>
+            }
+            else
+            {
+                <option value="@results.ToString()"> @results.ToString()</option>
+            }
+        }
+    </select> 
+    <br /><br />
+    <input type="hidden" name="tab" value="@ViewBag.tab" />
+    <input type="submit" value="Save" />
+    <input type="button" value="Cancel" title="Cancel" class="button" onclick="GenLocatioAction('@Url.Action("CompReportsEdit", "CompReportDB")')" />
+</p>
+ }
+ <br />
+
+
+

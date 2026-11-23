@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<AppToSpec>
+	<Test name="5G SSC Modulation Rate" >
+		<SpecTestName>SSC Modulation Rate_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G SSC Slew Rate" >
+		<SpecTestName>SSC Slew Rate_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G TSSC-Freq-Dev-Max" >
+		<SpecTestName>SSC Frequency Deviation Maximun_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G TSSC-Freq-Dev-Min" >
+		<SpecTestName>SSC Frequency Deviation Minimum_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G Far End Total Jitter at BER-12 (CTLE ON)" >
+		<SpecTestName>Far-End Total Jitter_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G Far End Maximum Deterministic Jitter (CTLE ON)" >
+		<SpecTestName>Far-End Deterministic Jitter_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G Random Jitter (CTLE ON)" >
+		<SpecTestName>Far-End Random Jitter_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G Far End Differential Output Voltage (CTLE ON)" >
+		<SpecTestName>Far-End Differential Output Voltage_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G Far End Template Test (CTLE ON)" >
+		<SpecTestName>Far-End Eye Template Test_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G Short Channel Total Jitter at BER-12" >
+		<SpecTestName>Short Channel Total Jitter_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G Short Channel Maximum Deterministic Jitter" >
+		<SpecTestName>Short Channel Deterministic Jitter_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G Short Channel Random Jitter" >
+		<SpecTestName>Short Channel Random Jitter_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G Short Channel Differential Output Voltage" >
+		<SpecTestName>Short Channel Differential Output Voltage_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G Short Channel Template Test" >
+		<SpecTestName>Short Channel Eye Template Test_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G LFPS Peak-Peak Differential Output Voltage" >
+		<SpecTestName>LFPS Peak to Peak Differential Output Voltage_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G LFPS Period (tPeriod)" >
+		<SpecTestName>LFPS Period_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G LFPS Burst Width (tBurst)" >
+		<SpecTestName>LFPS Burst Width_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G LFPS Repeat Time Interval (tRepeat)" >
+		<SpecTestName>LFPS Repeat Time Interval_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G LFPS Rise Time" >
+		<SpecTestName>LFPS Rise Time_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G LFPS Fall Time" >
+		<SpecTestName>LFPS Fall Time_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G LFPS Duty cycle" >
+		<SpecTestName>LFPS Duty Cycle_GEN1</SpecTestName>
+	</Test>
+	<Test name="5G LFPS AC Common Mode Voltage" >
+		<SpecTestName>LFPS AC Common Mode Voltage_GEN1</SpecTestName>
+	</Test>
+	<Test name="10G SSC Modulation Rate" >
+		<SpecTestName>SSC Modulation Rate_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G SSC df/dt" >
+		<SpecTestName>SSC Df/Dt_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G TSSC-Freq-Dev-Max" >
+		<SpecTestName>SSC Frequency Deviation Maximun_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G TSSC-Freq-Dev-Min" >
+		<SpecTestName>SSC Frequency Deviation Minimum_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G Far End Total Jitter at BER-12 (CTLE ON)" >
+		<SpecTestName>Far-End Total Jitter_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G Far End Maximum Deterministic Jitter (CTLE ON)" >
+		<SpecTestName>Far-End Deterministic Jitter_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G Random Jitter (CTLE ON)" >
+		<SpecTestName>Far-End Random Jitter_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G Far End Template Test (CTLE ON)" >
+		<SpecTestName>Far-End Eye Template Test_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G Short Channel Differential Output Voltage" >
+		<SpecTestName>Short Channel Differential Output Voltage_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G Short Channel Template Test" >
+		<SpecTestName>Short Channel Eye Template Test_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G Short Channel Minimum Eye Width" >
+		<SpecTestName>Short Channel Minimum Eye Width_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G Short Channel Extrapolated Eye Height" >
+		<SpecTestName>Short Channel Extrapolated Eye Height_GEN2</SpecTestName>
+	</Test>
+	<Test name="Minimum Eye Width" >
+		<SpecTestName>Far-End Minimum Eye Width_GEN2</SpecTestName>
+	</Test>
+	<Test name="Extrapolated Eye Height" >
+		<SpecTestName>Far-End Extrapolated Eye Height_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G LFPS Rise Time" >
+		<SpecTestName>LFPS Rise Time_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G LFPS Fall Time" >
+		<SpecTestName>LFPS Fall Time_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G LFPS AC Common Mode Voltage" >
+		<SpecTestName>LFPS AC Common Mode Voltage_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G LFPS Peak-Peak Differential Output Voltage" >
+		<SpecTestName>LFPS Peak to Peak Differential Output Voltage_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G LFPS Duty cycle" >
+		<SpecTestName>LFPS Duty Cycle_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G LFPS Repeat Time Interval (tRepeat)" >
+		<SpecTestName>LFPS Repeat Time Interval_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G LFPS Burst Width (tBurst)" >
+		<SpecTestName>LFPS Burst Width_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G LFPS Period (tPeriod)" >
+		<SpecTestName>LFPS Period_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G SCD Common Mode Voltage" >
+		<SpecTestName>SCD AC Common Mode Voltage_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G SCD Differential Voltage" >
+		<SpecTestName>SCD Peak to Peak Differential Output Voltage_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G SCD tBurst" >
+		<SpecTestName>SCD Burst Width_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G SCD tRepeat" >
+		<SpecTestName>SCD Repeat Time Interval_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G SCD Period" >
+		<SpecTestName>SCD Period_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G SCD Duty Cycle" >
+		<SpecTestName>SCD Duty Cycle_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G SCD Fall Time" >
+		<SpecTestName>SCD Fall Time_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G SCD Rise Time" >
+		<SpecTestName>SCD Rise Time_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G SuperSpeedPlus Capability Declaration (SCD1)" >
+		<SpecTestName>Super Speed Capability Declaration SCD1_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G SuperSpeedPlus Capability Declaration (SCD2)" >
+		<SpecTestName>Super Speed Capability Declaration SCD2_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G LBPS tLFPS_1" >
+		<SpecTestName>LBPS Logic '1' Transition bits Duration_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G LBPS tLFPS_0" >
+		<SpecTestName>LBPS Logic '0' Transition bits Duration_GEN2</SpecTestName>
+	</Test>
+	<Test name="10G LBPS tPWM" >
+		<SpecTestName>LBPS Logic bit Duration_GEN2</SpecTestName>
+	</Test>
+	<Test name="Preshoot" >
+		<SpecTestName>Preshoot_GEN2</SpecTestName>
+	</Test>
+	<Test name="Deemphasis" >
+		<SpecTestName>De-Emphasis_GEN2</SpecTestName>
+	</Test>
+	<Test name="GEN1_Impedance_Test">
+		<SpecTestName>DC differential impedance_GEN1</SpecTestName>
+	</Test>
+	<Test name="GEN2_Impedance_Test">
+		<SpecTestName>DC differential impedance_GEN2</SpecTestName>
+	</Test>
+</AppToSpec>

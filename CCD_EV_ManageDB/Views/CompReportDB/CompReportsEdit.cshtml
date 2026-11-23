@@ -1,0 +1,363 @@
+﻿@model List<DBTmpl>
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+
+@{
+    ViewBag.Title = "CompReports Edit";
+}
+
+<h2>CompReports Edit</h2>
+
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+ <script type="text/JavaScript">
+     $(document).ready(function () {
+         //debugger;
+         $('#rTables').dataTable({
+             "iDisplayLength": -1,
+             "columns": [
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": true },
+            { "orderable": true },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false }
+          ],
+             "autoWidth": true,
+             "jQueryUI": true,
+             //        //"sDom": '<"H"CTrf>t<"F"lip>',
+             "dom": '<"F"CTrif>t<"F"CTrif>',
+             "scrollX": "100%",
+             //"sScrollY": "700px",
+             "scrollY": (0.8 * $(window).height()),
+             "scrollCollapse": true
+         });
+     });
+
+     function changedBoardNumber(selectBoardBumber, selectBioses, selectNvms) {
+         //debugger;
+         //var selectFields = elem.nextSibling.nextSibling;
+
+         var output = [];
+         var length = ngon.dictionaryBioses[selectBoardBumber.value].length;
+         output[0] = '<option value=""></option>';
+         for (var i = 0; i < length; i++) {
+             output[i + 1] = '<option value="' + ngon.dictionaryBioses[selectBoardBumber.value][i] + '">' + ngon.dictionaryBioses[selectBoardBumber.value][i] + '</option>';
+         }
+
+         var output1 = [];
+         var length1 = ngon.dictionaryNvms[selectBoardBumber.value].length;
+         output1[0] = '<option value=""></option>';
+         for (var i = 0; i < length1; i++) {
+             output1[i + 1] = '<option value="' + ngon.dictionaryNvms[selectBoardBumber.value][i] + '">' + ngon.dictionaryNvms[selectBoardBumber.value][i] + '</option>';
+         }
+
+
+         selectBioses.innerHTML = output.join('');
+         selectNvms.innerHTML = output1.join('');
+
+     }
+     function changedTable(selectTables, selectFields1, selectFields2, selectFields3) {
+         //debugger;
+         //var selectFields = elem.nextSibling.nextSibling;
+
+         var output = [];
+         var length = ngon.dictionaryFields[selectTables.value].length;
+         output[0] = '<option value=""></option>';
+         for (var i = 0; i < length; i++) {
+             output[i+1] = '<option value="' + ngon.dictionaryFields[selectTables.value][i] + '">' + ngon.dictionaryFields[selectTables.value][i] + '</option>';
+         }
+
+         selectFields1.innerHTML = output.join('');
+         selectFields2.innerHTML = output.join('');
+         selectFields3.innerHTML = output.join('');
+
+     }
+</script>
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+  @using (Html.BeginForm("RunReportBG", "CompReportDB", FormMethod.Post, new { @id = "RunCopmReportDBForm", @name = "RunCopmReportDBForm" }))
+  {
+    <p>Run report. 
+            <select id="boardNumber" name="boardNumber" class="wselect" onchange="changedBoardNumber(this,document.getElementById('BIOS'),document.getElementById('NVM'))">
+            <option value=""></option>
+            @foreach (var col in ViewBag.boardNumbers)
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        </select>
+        <!--new: BIOSES -->
+         BIOS (optional):
+        <select id="BIOS" name="BIOS" >
+               <option value=""></option>
+       </select> 
+        NVM (optional):
+       <select id="NVM" name="NVM" >
+               <option value=""></option>
+       </select> 
+    Select template:
+        <select id="templ" name="templ" class="wselect">
+            @foreach (var col in ViewBag.tmplates)
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        </select>
+        <input type="submit" value="Submit" />
+        <input type="button" value="Validate" title="Validate report completeness" class="button" onclick="GenSubmitFormAction('RunCopmReportDBForm','@Url.Action("ValidateCompReport", "CompReportDB")')" />
+    </p>
+  }
+  <br />
+
+ @using (Html.BeginForm("CreateLine", "CompReportDB", FormMethod.Post, new { @id = "NewLineForm", @name = "NewLineForm" }))
+ {
+ <p>Create new line. name:
+    <input type="text" id="lName" name="lName" style="width: 200px" />
+    Query:
+    <input type="text" id="lQuery" name="lQuery" style="width: 350px" />
+    Table:
+    <select id="tableName" name="tableName" onchange="changedTable(this,document.getElementById('Field1'),document.getElementById('Field2'),document.getElementById('Field3'))">
+        @foreach (var col in ViewBag.collist)
+        {
+            <option value="@col.ToString()"> @col.ToString()</option>
+        }
+    </select> 
+    Field1:
+    <select id="Field1" name="Field1" class="wselect">
+        <option value=""></option>
+        @{
+        foreach (string field in ViewBag.defFieldsList)
+        {
+            <option value="@field"> @field</option>
+        }
+        }
+    </select>
+    Format1:
+    <select id="disp1" name="disp1" >
+        @foreach (var disp in ViewBag.disp)
+        {
+            <option value="@disp.ToString()"> @disp.ToString()</option>
+        }
+    </select>
+    Field2:
+    <select id="Field2" name="Field2" class="wselect">
+        <option value=""></option>
+        @{
+        foreach (string field in ViewBag.defFieldsList)
+        {
+            <option value="@field"> @field</option>
+        }
+        }
+    </select> 
+    Format2:
+    <select id="disp2" name="disp2" >
+        @foreach (var disp in ViewBag.disp)
+        {
+            <option value="@disp.ToString()"> @disp.ToString()</option>
+        }
+    </select>
+    Field3:
+    <select id="Field3" name="Field3" class="wselect">
+        <option value=""></option>
+        @{
+        foreach (string field in ViewBag.defFieldsList)
+        {
+            <option value="@field"> @field</option>
+        }
+        }
+    </select> 
+    Format3:
+    <select id="disp3" name="disp3" >
+        @foreach (var disp in ViewBag.disp)
+        {
+            <option value="@disp.ToString()"> @disp.ToString()</option>
+        }
+    </select> 
+    Results:
+    <select id="results" name="results" >
+        @foreach (var results in ViewBag.results)
+        {
+            <option value="@results.ToString()"> @results.ToString()</option>
+        }
+    </select> 
+    <input type="submit" value="Submit" />
+</p>
+ }
+ <br />
+    <p>Replicate Port A lines to Port B
+        <input type="button" value="Copy PA PB" title="Replicate Port A lines to Port B" class="button" onclick="GenLocatioAction('@Url.Action("CopyLinesPA2PB", "CompReportDB")')" />
+    </p>
+  <br />
+
+  @using (Html.BeginForm("CompReportsEdit", "CompReportDB", FormMethod.Post, new { @id = "InterfaceForm", @name = "InterfaceForm" }))
+  {
+      bool allChecked = (ViewBag.tab == ".*");
+      bool tbtTXChecked = (ViewBag.tab == "TBT_TX");
+      bool tbtRXChecked = (ViewBag.tab == "TBT_RX");
+      bool tbtRLChecked = (ViewBag.tab == "TBT-RL-");
+      bool dpChecked = (ViewBag.tab == "DP-");
+      bool dppChecked = (ViewBag.tab == "DPpp-");
+      bool usb31tChecked = (ViewBag.tab == "USB31-TX-");
+      bool usb31rChecked = (ViewBag.tab == "USB31-RX");
+      bool usb20tChecked = (ViewBag.tab == "USB20-TX-");
+      bool hdmiChecked = (ViewBag.tab == "HDMI");
+ <p> Choose Interface for editing: 
+    @Html.RadioButton("tab", ".*", allChecked, new { @onclick = "document.getElementById('InterfaceForm').submit()" }) All &nbsp;
+    @Html.RadioButton("tab", "TBT_TX", tbtTXChecked, new { @onclick = "document.getElementById('InterfaceForm').submit()" }) TBT_TX &nbsp;
+    @Html.RadioButton("tab", "TBT-RX-", tbtRXChecked, new { @onclick = "document.getElementById('InterfaceForm').submit()" }) TBT_RX &nbsp;
+    @Html.RadioButton("tab", "TBT-RL-", tbtRLChecked, new { @onclick = "document.getElementById('InterfaceForm').submit()" }) TBT_RL &nbsp;
+    @Html.RadioButton("tab", "DP-", dpChecked, new { @onclick = "document.getElementById('InterfaceForm').submit()" }) DP &nbsp;
+    @Html.RadioButton("tab", "DPpp-", dppChecked, new { @onclick = "document.getElementById('InterfaceForm').submit()" }) DPpp &nbsp;
+    @Html.RadioButton("tab", "USB31-TX-", usb31tChecked, new { @onclick = "document.getElementById('InterfaceForm').submit()" }) USB31_TX &nbsp;
+    @Html.RadioButton("tab", "USB31-RX-", usb31rChecked, new { @onclick = "document.getElementById('InterfaceForm').submit()" }) USB31_RX &nbsp;
+    @Html.RadioButton("tab", "USB20-TX-", usb20tChecked, new { @onclick = "document.getElementById('InterfaceForm').submit()" }) USB20_TX &nbsp;
+    @Html.RadioButton("tab", "HDMI", hdmiChecked, new { @onclick = "document.getElementById('InterfaceForm').submit()" }) HDMI &nbsp;
+    </p>
+  }
+
+ <p>Current Comp query: @ViewBag.CurQueryDisplay</p>
+  <table id="rTables" class="display">
+    <thead>
+    <tr>
+        <th >
+            Edit
+        </th>
+        <th >
+            Del
+        </th>
+        <th >
+            Test
+        </th>
+        <th >
+            Copy
+        </th>
+        <th >
+            Name
+        </th>
+        <!--<th >
+            Rename
+        </th>
+        <th >
+            Query
+        </th>-->
+        <th >
+            Table
+        </th>
+        <th >
+            Results
+        </th>
+        <th >
+            Field1
+        </th>
+        <th >
+            Disp1
+        </th>
+        <th >
+            Field2
+        </th>
+        <th >
+            Disp2
+        </th>
+        <th >
+            Field3
+        </th>
+        <th >
+            Disp3
+        </th>
+        <th >
+            Query
+        </th>
+    </tr> 
+
+    </thead>
+    <tbody>
+    @foreach (DBTmpl line in Model)
+    {
+        string SaveName = "SaveName" + line.name;
+     <tr>
+        <td>
+        @{using (Html.BeginForm("EditLine", "CompReportDB", FormMethod.Post, new { @id = "eForm", @name = "eForm" }))
+          {
+                <input type="submit" value="E" title="Edit line" class="button" />
+                <input type="hidden" id="_id" name="_id" value="@line.name" />
+                <input type="hidden" id="stab" name="tab" value="@ViewBag.tab" />         
+          }
+        }
+        </td>  
+        <td>
+        @{using (Html.BeginForm("DeleteLine", "CompReportDB", FormMethod.Post, new { @id = "dForm", @name = "dForm" }))
+          {
+                <input type="submit" value="D" title="Delete line" class="button" />
+                <input type="hidden" id="did" name="_id" value="@line.name" />
+                <input type="hidden" id="dtab" name="tab" value="@ViewBag.tab" />         
+          }
+        }
+        </td>  
+        <td>
+            @using (Html.BeginForm("RunTestEditLine", "CompReportDB", FormMethod.Post, new { @id = "testLineForm", @name = "testLineForm" }))
+            {
+            <input type="submit" value="R" title="Test line query (insert UnitId)" class="button" />
+            <input type="text" id="tunitId" name="unitId" style="width: 80px" title="Test unitId" />
+            <input type="hidden" id="l_id" name="_id" value="@line.name" />
+            }
+         </td>
+        <td>
+            <!--<input type="button" value="C" title="Copy Line" class="button" onclick="GenLocatioAction_id('@line.name','@Url.Action("CopyLine", "CompReportDB")')" />-->
+            @{using (Html.BeginForm("CopyLine", "CompReportDB", FormMethod.Post, new { @id = "cForm", @name = "cForm" }))
+              {
+                <input type="submit" value="C" title="Copy line" class="button" />
+                <input type="hidden" id="cid" name="_id" value="@line.name" />
+                <input type="hidden" id="ctab" name="tab" value="@ViewBag.tab" />         
+              }
+            }
+        </td>
+        <td id="@line.name">
+        @line.name
+        </td>
+        <!--<td>
+            <input type="text" id="@SaveName" name="@SaveName" style="width: 120px" />
+            <input type="button" value="M" title="Rename Report" class="button" onclick="GenAjaxRenameElem_id('@SaveName','@line.name','@Url.Action("RenameLine", "CompReportDB")')" />
+        </td>-->
+        <td >
+             @line.table
+        </td>
+        <td >
+             @line.results
+        </td>
+        <td >
+             @line.field1
+        </td>
+        <td >
+             @line.disp1
+        </td>
+        <td >
+             @line.field2
+        </td>
+        <td >
+             @line.disp2
+        </td>
+        <td >
+             @line.field3
+        </td>
+        <td >
+             @line.disp3
+        </td>
+        <td >
+             @line.query
+        </td>
+
+    </tr>
+    }
+    </tbody>
+</table>
+

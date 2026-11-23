@@ -1,0 +1,672 @@
+﻿@model CCD_EV_ManageDB.Models.DBsearch
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "SearchTMP";
+}
+
+<h2>Search TMP DB</h2>
+     @{ if (Model.jumpBottom)
+        {
+             <script type="text/JavaScript">
+                 $(document).ready(function () {
+                     location.hash = "#" + "pageBottom";
+                 });
+             </script>
+        }
+     }
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+ <script type="text/JavaScript">     function getForm(sourceDoc, formId) { return sourceDoc.getElementById(formId); }
+     function getFormElement(sourceForm, elementName) { return sourceForm[elementName]; for (var i = 0; i < sourceForm.elements.length; i++) { var theElement = sourceForm.elements[i]; if (theElement.name == elementName) { return theElement; } } }
+     function moveSelected(sourceElementId, targetElementId, moveAll,source) {
+         var sourceElement = document.getElementById(sourceElementId); var targetElement = null; if (targetElementId != null) { targetElement = document.getElementById(targetElementId); }
+         if (sourceElement == null || sourceElement.tagName != "SELECT" || (targetElement != null && targetElement.tagName != "SELECT")) { return; }
+         var unselectedOptions = new Array(); for (var i = 0; i < sourceElement.length; i++) {
+             var option = sourceElement.options[i]; if (option.selected || moveAll) {
+                 if (targetElement != null) {
+                     var alreadyExists = false; for (var j = 0; j < targetElement.length; j++) { if (targetElement.options[j].value == option.value) { alreadyExists = true; break; } }
+                     if (!alreadyExists) { targetElement.options[targetElement.length] = new Option(option.text, option.value); }
+                 } else { sourceElement.options[i] = null; i--; }
+             }
+             option.selected = false;
+         }
+         if (source == "sessions") { updateHiddenFormSessions() };
+         if (source == "Visualization") { updateHiddenFormVisualization() };
+     }
+     //function updateHiddenForm() { var sourceElement = document.getElementById('foundMultiple'); var theForm = sourceElement.form; var useridEl = theForm.elements['userids']; useridEl.value = ""; $("#submitButtonId").attr("disabled", "disabled"); for (var i = 0; i < sourceElement.length; i++) { var option = sourceElement.options[i]; var val = option.value; var ind = val.indexOf(","); useridEl.value += option.value.substr(0, ind); $("#submitButtonId").removeAttr("disabled"); if (i + 1 < sourceElement.length) { useridEl.value += ','; } } }
+     function updateHiddenFormSessions() { var sourceElement = document.getElementById('foundMultiple'); var theForm = sourceElement.form; var useridEl = theForm.elements['userids']; useridEl.value = ""; $("#submitButtonId").attr("disabled", "disabled"); $("#QueryButtonId").attr("disabled", "disabled"); $("#LogButtonId").attr("disabled", "disabled"); $("#DeleteButtonId").attr("disabled", "disabled"); for (var i = 0; i < sourceElement.length; i++) { var option = sourceElement.options[i]; var val = option.value; var ind = val.indexOf(","); useridEl.value += option.value.substr(0, ind); $("#submitButtonId").removeAttr("disabled"); $("#QueryButtonId").removeAttr("disabled"); $("#LogButtonId").removeAttr("disabled"); $("#DeleteButtonId").removeAttr("disabled"); if (i + 1 < sourceElement.length) { useridEl.value += ','; } } }
+     function updateHiddenFormVisualization() {debugger;  sourceElement = document.getElementById('VisFieldsList'); var theForm = sourceElement.form; var useridEl = theForm.elements['visFields']; useridEl.value = "";  for (var i = 0; i < sourceElement.length; i++) { var option = sourceElement.options[i]; useridEl.value += option.value; if (i + 1 < sourceElement.length) { useridEl.value += ','; } } }
+     function clearSelect(formId, elementId) { var formElement = document.getElementById(formId).elements[elementId]; formElement.selectedIndex = -1; }
+
+     $(document).ready(function () {
+         $("#submitButtonId").attr("disabled", "disabled");
+         $("#QueryButtonId").attr("disabled", "disabled");
+         $("#LogButtonId").attr("disabled", "disabled");
+         $("#DeleteButtonId").attr("disabled", "disabled");
+         $("#fieldsInput").hide();
+     });
+
+</script>
+     @{ var ExportedFile = TempData["ExportedFileNAme"];
+        if (ExportedFile != null)
+        {
+             <script type="text/JavaScript">
+                 $(document).ready(function () {
+                     var url = '@Url.Action("ViewExportFile", "ManageDB", new { filename = TempData["ExportedFileNAme"] })';
+                     $(location).attr('href', url);
+                 });
+             </script>
+        }
+     }
+
+     <!-- Excel export dialog -->
+      <script>
+          $(function () {
+              var dialog, form;
+
+              function addUser() {
+                  form.submit();
+              }
+
+              dialog = $("#dialog-form").dialog({
+                  autoOpen: false,
+                  height: 200,
+                  width: 350,
+                  modal: true
+              });
+
+              form = $("#ExpForm");
+
+              $("#ExpCancel").button().on("click", function () {
+                  form[0].reset();
+                  dialog.dialog("close");
+              });
+
+          });
+
+          function ShowExpDialog(dialog) {
+
+            //debugger;
+              var td = "#" + dialog;
+            $(td).dialog();
+            $(td).dialog("option", "width", 350);
+            $(td).dialog("option", "length", 200);
+            $(td).dialog("option", "modal", true);
+            $(td).dialog("open");
+
+            };
+
+
+  </script>
+
+
+  <!-- Excel export dialog -->
+
+       <!-- Visualization export dialog start-->
+      <script>
+          $(function () {
+              var dialog, form;
+
+              function addUser() {
+                  form.submit();
+              }
+
+              dialog = $("#vis-dialog-form").dialog({
+                  autoOpen: false,
+                  height: 500,
+                  width: 1000,
+                  modal: true
+              });
+
+              form = $("#VisForm");
+
+              $("#VisCancel").button().on("click", function () {
+                  form[0].reset();
+                  dialog.dialog("close");
+              });
+
+          });
+
+          function ShowVisDialog(dialog) {
+
+              //debugger;
+              var td = "#" + dialog;
+              $(td).dialog();
+              $(td).dialog("option", "width", 1000);
+              $(td).dialog("option", "length", 500);
+              $(td).dialog("option", "modal", true);
+              $(td).dialog("open");
+
+          };
+
+
+  </script>
+
+
+  <!-- Visualization export dialog end-->
+
+   @using (Html.BeginForm("SearchTMP", "ManageDB", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+   {
+       <!--TODO: "test" need to be taken -->
+        <input type="hidden" id="db" name="db" value="@Model.db" />
+     <p>Select table: 
+        <select id="col" name="col" class="wselect" onchange="changeTMPCol('@Url.Action("SwitchTable", "ManageDB")')">
+        @foreach (var col in ViewBag.collist)
+        {
+            if (col.ToString() == Model.col)
+            {
+            <option value="@col.ToString()" selected="selected"> @col.ToString()</option>   
+            }
+            else
+            {
+            <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        }
+        </select> 
+    </p>
+    <!--Enter DB Query --> @Html.Hidden("Query", Model.Query)
+    <!--Enter DB OP --> @Html.Hidden("SearchOP", Model.SearchOP) 
+    <!--Enter DB Fields --> @Html.Hidden("FieldsStr", Model.FieldsStr)
+    <!--Enter DB Sort --> //@Html.Hidden("SortStr", Model.SortStr)@Html.Hidden("SortDirection", Model.SortDirection)
+
+        foreach (var triplet in Model.QueryTriplets)
+        {
+            string[] tarr = triplet.ToString().Split(new Char[] { ';' });
+    <div id="queryInput">
+        <p>Enter DB Query :
+        <select id="_Query0" name="_Query0">
+        @foreach (var op in ViewBag.q0list)
+        {
+            if (op.ToString() == tarr[0])
+            {
+                <option value="@op.ToString()" selected="selected" >@op.ToString()</option>
+            }
+            else
+            {
+                <option value="@op.ToString()">@op.ToString()</option>
+            }
+        } 
+        </select> 
+        <select id="_Query1" name="_Query1">
+        @{
+            foreach (var field in Model.TableFields)
+        {
+            if (field.ToString() == tarr[1])
+            {
+                <option value="@field.ToString()" selected="selected"> @field.ToString()</option>   
+            }
+            else
+            {
+                <option value="@field.ToString()"> @field.ToString()</option>
+            }
+        }
+        }
+        </select> 
+        @Html.TextBox("_Query2", tarr[2], new { @id = "_Query2" })
+        @{if ((User.IsInRole("CCD_EV_GB")) && ((tarr[1]=="ProjectName") || (tarr[1]=="Phase")))
+          {
+              <text></text>
+          }else
+          {
+               <input type="button" value="Remove" class="button" onclick="removeElem(this.parentNode)" />
+          }
+         }
+         </p>
+    </div>
+        }
+    <div id="queryEnd"></div>
+    <input type="button" value="add query" class="button" onclick="fnClone('queryInput','queryEnd')"/>
+    <input type="button" value="Clear query" class="button" title="Reload table with empty query" onclick="changeTMPCol('@Url.Action("SwitchTable", "ManageDB")')" />
+    <!--<input type="submit" value="Submit query" onclick="FormToStr()" /> -->
+       
+       
+    <p>Specify Fields: Inc @Html.RadioButton("FieldsIncExc", "Inc", Model.FieldsInc) Exc @Html.RadioButton("FieldsIncExc", "Exc", Model.FieldsExc)
+    @{  if (Model.FieldsStr == null) { Model.FieldsStr = ""; }
+        string[] fieldsStr = Model.FieldsStr.Split(new Char[] { ';' });
+        foreach (string strField in fieldsStr)
+        {
+			<select id="_Fields1" name="_Fields1">
+            <option value=""></option>
+			@{
+            foreach (var field in Model.TableFields)
+            {
+                if (field.ToString() == strField)
+                {
+						<option value="@field.ToString()" selected="selected"> @field.ToString()</option>   
+                }
+                else
+                {
+						<option value="@field.ToString()"> @field.ToString()</option>
+                }
+            }
+			}
+			</select> 
+        }
+   }
+    <input type="button" value="add field" class="button" onclick="fnClone('fieldsInput','fieldsInputEnd')"/>
+    <input type="button" value="all fields" class="button" onclick="AllFields()"/>
+    </p>
+    <div id="fieldsInput" style="position:relative; left: 179px;">
+		<select id="_Fields2" name="_Fields2">
+        <option value=""></option>
+		@{
+        foreach (var field in Model.TableFields)
+        {
+		        <option value="@field.ToString()"> @field.ToString()</option>
+        }
+		}
+		</select> 
+        <input type="button" value="Remove" class="button" onclick="removeElem(this.parentNode)" />
+     </div>     
+    <div id="fieldsInputEnd"></div>     
+    <input type="hidden" id="Skip" name="Skip" value="0" />
+    <input type="hidden" id="jumpBottom" name="jumpBottom" value="true" />
+           <p>Sort Field: 
+    <select id="SortStr" name="SortStr">
+        @{
+        foreach (var field in Model.TableFields)
+        {
+            if (field.ToString() == Model.SortStr)
+            {
+                <option value="@field.ToString()" selected="selected"> @field.ToString()</option>   
+            }
+            else
+            {
+                <option value="@field.ToString()"> @field.ToString()</option>
+            }
+        }
+        }
+    </select>
+    <select id="SortDirection" name="SortDirection">
+        @{
+        if (Model.SortDirection == "ASC")
+        {
+            <option value="ASC" selected="selected">ASC</option>
+            <option value="DES">DES</option>   
+        }
+        else
+        {
+            <option value="ASC" selected="selected">ASC</option>
+            <option value="DES" selected="selected">DES</option>  
+        }
+        }
+    </select>
+    <!-- Query logic operator: AND @Html.RadioButton("SearchOP", "AND", (Model.SearchOP == "AND")) OR @Html.RadioButton("SearchOP", "OR", (Model.SearchOP == "OR")) -->
+    &nbsp;
+    <input type="submit" value="Submit query" style="background-color:rgb(120, 46, 33)" onclick="FormToStr()" /> 
+    <input type="submit" value="Submit query in PRM" onclick="FormToStr('@Url.Action("SearchPRM", "ManageDB")','perm')" />
+       </p>
+   }  
+ 
+    <!-- LoadToPARM Sessions choose boxes start-->
+           @using (Html.BeginForm("LoadToPRM", "ManageDB", FormMethod.Post, new { @id = "loadForm", @name = "loadForm" }))
+           { 
+         <table id="sessionsTable" style="border:none">
+         <thead>
+         <tr>
+         <th style="background-color: #e6e6e6;color: #555555">Query Sessions</th>
+         <th style="background-color: #e6e6e6;color: #555555"></th>
+         <th style="background-color: #e6e6e6;color: #555555">Selected Sessions</th>
+         <th style="background-color: #e6e6e6;color: #555555"></th>
+         <th style="background-color: #e6e6e6;color: #555555">Selected Actions</th>
+         </tr>
+         </thead>
+    <tbody>
+    <tr>
+    <td>
+ 
+        <select id="foundMultipleTemp" name="foundMultipleTemp" multiple="multiple" size="12" style="width: 350px;" class="wselect">
+        @{
+               //var DBS = ((FullSession)System.Web.HttpContext.Current.Session["FS"]).TmpSearch as DBsearch;
+               //foreach (var ses in DBS.Sessions)
+               foreach (var ses in Model.Sessions)
+               {
+                   if (ses == Model.uSession)
+                   {
+                <option value="@ses.ToString()" selected="selected"> @ses.ToString()</option>   
+                   }
+                   else
+                   {
+                <option value="@ses.ToString()"> @ses.ToString()</option>
+                   }
+               }
+        }
+        </select> 
+           </td>
+    
+
+    <td nowrap>
+        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="add" class="button" onclick="javascript: moveSelected('foundMultipleTemp', 'foundMultiple', false,'sessions');" value="Add"/></div><div class="Right">&nbsp;</div></div>
+        <div class="Button">
+            <div class="Left">&nbsp;</div>
+            <div class="Middle"><input type="button" id="addAll" class="button" value="Add All" onclick="javascript: moveSelected('foundMultipleTemp', 'foundMultiple', true,'sessions');"/></div>
+            <div class="Right">&nbsp;</div>
+        </div>
+    </td>
+
+<td>
+<select name="foundMultiple" multiple="multiple" size="12" style="width: 350px;" class="InputField" id="foundMultiple"></select>
+<input type="hidden" name="userids" value=""/>
+<input type="hidden" name="load" value="yes"/>
+</td>
+
+<td nowrap>
+    <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="rem" class="button" onclick="javascript: moveSelected('foundMultiple', null, false,'sessions');" value="Remove"/></div><div class="Right">&nbsp;</div></div>
+    <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="remAll" class="button" onclick="javascript: moveSelected('foundMultiple', null, true,'sessions');" value="Remove All"/></div><div class="Right">&nbsp;</div></div>
+</td>
+<td>
+   <input type="hidden" name="col" value="@Model.col"/>     
+   @if ((User.IsInRole("CCD_EV")))
+   {
+   <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="submitButtonId" name="submitButtonId" value="Load to PRM"  onclick="SessionsConfirmAction('loadForm','@Url.Action("LoadToPRM", "ManageDB")','Are you sure you want to load to PRM the following sessions:\n','userids','yellow')" class="button" disabled="disabled"/></div><div class="Right">&nbsp;</div></div>
+   }
+   <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="QueryButtonId" name="QueryButtonId" value="Query Selected" onclick="javascript: QuerySessions('loadForm','@Url.Action("QuerySessions", "ManageDB", new { _db = "TMP" })')" class="button" disabled="disabled"/></div><div class="Right">&nbsp;</div></div>
+   <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="LogButtonId" name="LogButtonId" value="View Log Selected" onclick="javascript: QuerySessions('loadForm','@Url.Action("LogSessions", "ManageDB", new { _db = "TMP" })')" class="button" disabled="disabled"/></div><div class="Right">&nbsp;</div></div>
+   <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="DeleteButtonId" name="QueryButtonId" value="Delete Selected" onclick="javascript: SessionsConfirmAction('loadForm','@Url.Action("DeleteSessions", "ManageDB", new { _db = "TMP" })','Are you sure you want to delete the following sessions:\n','userids','red')" class="button" disabled="disabled"/></div><div class="Right">&nbsp;</div></div>
+</td>
+</tr>
+</tbody>
+    </table>
+
+           }
+<!-- LoadToPARM Sessions choose boxes end-->
+
+
+@using (Html.BeginForm("Delete", "ManageDB", FormMethod.Post, new { @id = "tForm", @name = "tForm" }))
+{
+
+  
+<div>     
+    <input type="submit" value="Delete checked results" onclick = "return confirm('Are you sure you want to delete checked results?')"/>
+    <input type="button" value="Delete query results" class="button" onclick="FormConfirmAction('tForm','@Url.Action("DeleteMatchedRecs", "ManageDB")','Are you sure you want to delete all query results?\nQuery contains @ViewBag.numberOfResults results.')"/>
+    <input type="button" value="Export report query results" class="button" id="ExportReport" onclick="ShowExpDialog('dialog-form')"/>
+   @if ((User.IsInRole("CCD_EV")))
+   {
+    <input type="button" value="Export edit query results" class="button" onclick="FormConfirmAction('tForm','@Url.Action("ExportEditFileBG", "ManageDB")','Are you sure you want export result to Excel?\nResults will be removed from DB. Query contains @ViewBag.numberOfResults results.')"/>
+   }
+    @if ((User.IsInRole("CCD_EV_ADM")))
+    {
+        <input type="button" value="Visualize query results" class="button" id="ExportVisualization" onclick="ShowVisDialog('vis-dialog-form')"/>
+    }
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   @if ((User.IsInRole("CCD_EV")))
+   {
+    <input type="button" value="load exported file" class="button" onclick="location.href='@Url.Action("LoadFile", "ManageDB", new { _db = "TMP" })'"/>
+   }
+      <p>TMP DB, Table:"@Model.col" Query: "@Model.Query" Results num: <b>@ViewBag.numberOfResults </b> 
+     @{
+    int DataTableLimit = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["DataTableLimit"]);
+    int resNum = Convert.ToInt32(ViewBag.numberOfResults);
+    string text = "showing first ";
+    if (resNum > DataTableLimit)
+    {           
+                @text <select id="_Skip" name="_Skip" onchange="changeSkip()">
+			    @{
+        for (int i = 0; i * DataTableLimit < resNum; i++)
+        {
+            int last = (i + 1) * DataTableLimit;
+            if (last > resNum) { last = resNum; }
+            if (Model.Skip == (i * DataTableLimit))
+            {
+						    <option value="@(i * DataTableLimit)" selected="selected"> @((i * DataTableLimit) + 1) - @last</option>   
+            }
+            else
+            {
+						    <option value="@(i * DataTableLimit)"> @((i * DataTableLimit) + 1) - @last</option>
+            }
+        }
+			    }
+			    </select> 
+    }
+
+   }
+   </p>
+</div>
+    <p> 
+    <select id="_SortStr" name="_SortStr">
+        @{
+    foreach (var field in Model.TableFields)
+    {
+        if (field.ToString() == Model.SortStr)
+        {
+                <option value="@field.ToString()" selected="selected"> @field.ToString()</option>   
+        }
+        else
+        {
+                <option value="@field.ToString()"> @field.ToString()</option>
+        }
+    }
+        }
+    </select>
+    <select id="_SortDirection" name="_SortDirection">
+        @{
+    if (Model.SortDirection == "ASC")
+    {
+            <option value="ASC" selected="selected">ASC</option>
+            <option value="DES">DES</option>   
+    }
+    else
+    {
+            <option value="ASC" selected="selected">ASC</option>
+            <option value="DES" selected="selected">DES</option>  
+    }
+        }
+    </select>
+    &nbsp;
+    <input type="button" value="Sort" title="Sort" class="button" onclick="QuickSort('_SortStr','_SortDirection','@Model.Query')" />
+    &nbsp;
+    <input type="text" id="SaveQName" style="width: 150px" value="DefaultName" /> <input type="button" value="Save" title="Save query" class="button" onclick="SaveQuery('@Url.Action("SaveQuery", "ManageDB")','@Model.db')" />
+    </p>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+<table id="table_id" class="display">
+    <thead>
+    <tr>
+        <th >
+            Select
+        </th>
+     @foreach (var field in Model.Fields)
+     {
+        <th id="@field.ToString()">
+        @{  
+         if ((field.ToString() == Model.SortStr))
+         {
+             if ((Model.SortDirection == "DES"))
+             {
+                <span title="Sort up" onclick="sortField('@field.ToString()','ASC','@Model.Query')">@field.ToString() &nbsp;</span> 
+                <img src=@Url.Content("~/content/Images/sort_up.gif") title="Sort up" onclick="sortField('@field.ToString()','ASC','@Model.Query')"/>
+             }
+             if ((Model.SortDirection == "ASC"))
+             {
+                <span title="Sort down" onclick="sortField('@field.ToString()','DES','@Model.Query')">@field.ToString() &nbsp;</span> 
+                <img src=@Url.Content("~/content/Images/sort_down.gif") title="Sort down" onclick="sortField('@field.ToString()','DES','@Model.Query')"/>
+             }
+
+         }
+         else
+         {
+                <span title="Sort down" onclick="sortField('@field.ToString()','DES','@Model.Query')">@field.ToString() &nbsp;</span>
+            <img src=@Url.Content("~/content/Images/sort_up_down.gif") title="Sort down" onclick="sortField('@field.ToString()','DES','@Model.Query')"/>
+         }
+
+         }                                                                                
+        </th>
+     }
+    </tr> 
+
+    </thead>
+    <tbody>
+    @foreach (BsonDocument item in Model.ResCursor)
+    {
+        string r_id = item.AsBsonDocument.GetElement("_id").ToString();
+        string _r_id = item.AsBsonDocument.GetElement("_id").Value.ToString().Replace(" ", "_");
+        string _r_id_tr = _r_id + "_line";
+     <tr id="@_r_id_tr">  
+        <td>
+                 
+                 
+            <input id="@r_id" name="@r_id" type="checkbox" />
+            <input id="@_r_id" name="@_r_id" class="button" value="m" type="button" onclick="markLine('@_r_id_tr')"/>
+            
+        </td>
+        @foreach (var field in Model.Fields)
+        {
+        <td >
+            @{ 
+            if ((field.ToString().Length > 3) && (field.ToString().Substring(0, 4).ToUpper() == "FILE") && (@item.GetValue(field.ToString(), "") != "") ||
+                (field.ToString().Length > 5) && (field.ToString().Substring(0, 6).ToUpper() == "FOLDER") && (@item.GetValue(field.ToString(), "") != ""))
+            {
+                string fname = item.GetValue(field.ToString()).ToString();
+                    <a href="file:////@item.GetValue(field.ToString(), "")" class="fileLinkRes">@System.Text.RegularExpressions.Regex.Replace(fname, ".*\\\\", "")</a>
+            }
+            else
+            {
+                @item.GetValue(field.ToString(), "");
+            }
+            }
+        </td>
+        }
+    </tr>
+    }
+    </tbody>
+</table>
+}
+
+<div id="dialog-form" title="Export report query results">
+  <p class="validateTips">Edit Excel report content.</p>
+ 
+  <form action='@Url.Action("ExportReportFileBG", "ManageDB")' id="ExpForm">
+    <fieldset>
+      <label for="name">All fields</label>
+      <input type="radio" name="fields" id="fieldsA" value="all" checked="checked"/>
+      <label for="name">Query fields</label>
+      <input type="radio" name="fields" id="fieldsQ" value="query" /> 
+      <br />
+      <label for="name">One sheet</label>
+      <input type="radio" name="sheets" id="sheetsO" value="one" checked="checked"/>
+      <label for="name">Separated Sheets</label>
+      <input type="radio" name="sheets" id="sheetsT" value="tests" />
+      <br />
+      <label for="name">Special template:</label>
+      <!-- <input type="text" name="TestNameField" id="TestNameField" value="TestName" /> -->
+      	<select id="template" name="template">
+				    <option value="" selected="selected"> none</option>   
+				    <option value="CIO_RX_exportRepTmpl"> CIO_RX</option>
+                    <option value="USB3.1_Rx_exportRepTmpl"> USB3.1_RX</option>
+                    <option value="CIO_RL_exportRepTmpl"> CIO_RL [DIFF only]</option> 
+                    <option value="CIO_RL_exportRepTmpl_DiffNComm"> CIO_RL [DIFF, Common]</option> 
+                    <option value="PCIe_RL_exportRepTmpl"> PCIe_RL</option> 
+                    <option value="DP_RL_exportRepTmpl"> DP_RL</option> 
+                    <option value="DV_TxFFE_exportRepTmpl"> DV_TxFFE</option>
+                    <option value="Power_Consumption_1UnitSummary_exportRepCellQueryTmpl"> Power_Consumption_1UnitSummary</option>   
+                    <option value="SVR_Efficiency_Summary_exportRepCellQueryTmpl">SVR_Efficiency_Summary</option> 
+                    <option value="Power_Profiling_exportRepTmpl">Power_Profiling Summary</option>  
+                    <option value="Power_SVR_code2values_10_ALL_units_exportRepCellQueryTmpl_PreProcess">SVR_code2values_10_ALL_units</option>  
+                    <option value="HotCornerStats_exportRepTmpl_Graph">HotCornerStats</option>            
+	    </select> 
+        <br />
+      <label for="name">Separator field:</label>
+      <!-- <input type="text" name="TestNameField" id="TestNameField" value="TestName" /> -->
+      	<select id="TestNameField" name="TestNameField">
+        <option value=""></option>
+	    @{
+            foreach (var field in Model.TableFields)
+            {
+                if (field.ToString() == "TestName")
+                {
+				    <option value="@field.ToString()" selected="selected"> @field.ToString()</option>   
+                }
+                else
+                {
+				    <option value="@field.ToString()"> @field.ToString()</option>
+                }
+            }
+	    }
+	    </select> 
+      <br />
+      <input type="submit" class="button"/>
+    </fieldset>
+  </form>
+</div>
+ 
+
+
+<div id="vis-dialog-form" title="Visualise results">
+  <p class="validateTips">Define visualization contenet</p>
+ 
+  <form action='@Url.Action("ExportVisualizationFileBG", "ManageDB")' id="VisForm">
+    <fieldset>
+      <label for="name">Group by:</label>
+      	<select id="group" name="group">
+				    <option value="" selected="selected"> </option>   
+				    <option value="ProjectName"> Project</option>
+                    <option value="Phase"> Phase</option>
+                    <option value="Skew"> Skew</option>
+                    <option value="Corner"> Corner</option> 
+                    <option value="Port"> Port</option> 
+                    <option value="Lane"> Lane</option> 
+                    <option value="Gen"> Gen</option> 
+                    <option value="Test Channel"> Channel</option>               
+	    </select> 
+        <br />
+      <label for="name">Results fields:</label>
+         <table id="VisFieldsTable" style="border:none">
+             <thead>
+             <tr>
+             <th style="background-color: #e6e6e6;color: #555555">Query fields</th>
+             <th style="background-color: #e6e6e6;color: #555555"></th>
+             <th style="background-color: #e6e6e6;color: #555555">Selected fields</th>
+             <th style="background-color: #e6e6e6;color: #555555"></th>
+             </tr>
+             </thead>
+             <tbody>
+                <tr>
+                    <td>
+ 
+                        <select id="VisFieldsListTmp" name="VisFieldsListTmp" multiple="multiple" size="12" style="width: 350px;" class="wselect">
+                        @{
+                            foreach (var field in Model.TableFields)
+                            {
+                                <option value="@field.ToString()"> @field.ToString()</option>
+                            }
+                        }
+                         </select> 
+                    </td>
+    
+
+                    <td nowrap>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="vis_add" class="button" onclick="javascript: moveSelected('VisFieldsListTmp', 'VisFieldsList', false,'Visualization');" value="Add"/></div><div class="Right">&nbsp;</div></div>
+                        <div class="Button">
+                            <div class="Left">&nbsp;</div>
+                            <div class="Middle"><input type="button" id="vis_addAll" class="button" value="Add All" onclick="javascript: moveSelected('VisFieldsListTmp', 'VisFieldsList', true,'Visualization');"/></div>
+                            <div class="Right">&nbsp;</div>
+                        </div>
+                    </td>
+
+                    <td>
+                    <select name="VisFieldsList" multiple="multiple" size="12" style="width: 350px;" class="InputField" id="VisFieldsList"></select>
+                    <input type="hidden" name="visFields" value=""/>
+                    <input type="hidden" name="load" value="yes"/>
+                    </td>
+
+                    <td nowrap>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="vis_rem" class="button" onclick="javascript: moveSelected('VisFieldsList', null, false,'Visualization');" value="Remove"/></div><div class="Right">&nbsp;</div></div>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="vis_remAll" class="button" onclick="javascript: moveSelected('VisFieldsList', null, true,'Visualization');" value="Remove All"/></div><div class="Right">&nbsp;</div></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      <br />
+      <input type="submit" class="button"/>
+    </fieldset>
+  </form>
+</div>
+
+
+<br />
+
+<a name="pageBottom"></a>

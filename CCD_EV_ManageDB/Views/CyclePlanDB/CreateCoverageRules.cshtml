@@ -1,0 +1,396 @@
+﻿@model List<CyclePlanCoverageRule>
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using MongoDB.Bson.Serialization;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "Create Coverage Rules";
+}
+
+<h2>Create Coverage Rules</h2>
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>    
+
+ <script type="text/JavaScript">
+     $(document).ready(function () {
+         //debugger;
+         $('#SpecSupSets').dataTable({
+             "iDisplayLength": -1,
+             "columns": [
+            { "orderable": true },
+            { "orderable": true },
+            { "orderable": true },
+            { "orderable": true },
+            { "orderable": true },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false }
+          ],
+             "autoWidth": true,
+             "jQueryUI": true,
+             //        //"sDom": '<"H"CTrf>t<"F"lip>',
+             "dom": '<"F"CTrif>t<"F"CTrif>',
+             "scrollX": "100%",
+             //"sScrollY": "700px",
+             "scrollY": (0.8 * $(window).height()),
+             "scrollCollapse": true
+         });
+     });
+
+</script>
+
+   <!-- Edit dialog start-->
+    <script type="text/JavaScript">
+          $(function () {
+              var dialog, form;
+
+              function addUser() {
+                  form.submit();
+              }
+
+              dialog = $("#Edit-dialog-form").dialog({
+                  autoOpen: false,
+                  height: 400,
+                  width: 500,
+                  modal: true
+              });
+
+              form = $("#FormEdit");
+
+          });
+
+          function ShowEditDialog(dialog, inputFormId) {
+
+              //debugger;
+              var x = document.getElementById(inputFormId);
+              var y = document.getElementById("FormEdit");
+              //y.elements.namedItem("Board").value = x.elements.namedItem("Board").value;
+              var selectTableForm = document.getElementById("addForm");
+              var selectTable = selectTableForm.elements.namedItem("col");
+              selectTableForm.elements.namedItem("col").value = x.elements.namedItem("col").value;
+              changedTableSelect(selectTable, 'editSetUpType');
+
+              for (var i = 0; i < x.length; i++) {
+                  if (y.elements.namedItem(x.elements[i].name) != null) {
+                      y.elements.namedItem(x.elements[i].name).value = x.elements[i].value;
+                  }
+              }
+              var td = "#" + dialog;
+              $(td).dialog();
+              $(td).dialog("option", "width", 500);
+              $(td).dialog("option", "length", 400);
+              $(td).dialog("option", "modal", true);
+              $(td).dialog("open");
+
+          };
+
+
+  </script>
+
+
+  <!-- Edit dialog end-->
+
+ <script type="text/JavaScript">
+     function validateAddCoverageRule(formName) {
+    //debugger;
+         var x = document.getElementById(formName);
+    //do some validation for example:
+    var name = "";
+    for (var i = 0; i < x.length; i++) {
+        if (x.elements[i].name.match("name.*")){
+            name = x.elements[i].value;
+        }
+    }
+    //txt = txt.substr(0, txt.length - 1);
+    if (name == "") {
+        alert("Name is mandatory");
+        return;
+    }
+    else {
+    
+        x.submit();
+    }
+}
+
+function changedTableSelect(selectTable, SetupTypeId) {
+    return;
+    // no need for setup type
+    var selectSetupType = document.getElementById(SetupTypeId);
+    var output = [];
+    var length = ngon.dictionarySetupTypes[selectTable.value].length;
+    for (var i = 0; i < length; i++) {
+        output[i] = '<option value="' + ngon.dictionarySetupTypes[selectTable.value][i] + '">' + ngon.dictionarySetupTypes[selectTable.value][i] + '</option>';
+        if (selectSetupType.value === ngon.dictionarySetupTypes[selectTable.value][i]) {
+            output[i] = '<option value="' + ngon.dictionarySetupTypes[selectTable.value][i] + '"' + ' selected="selected">' + ngon.dictionarySetupTypes[selectTable.value][i] + '</option>';
+        }
+    }
+
+    selectSetupType.innerHTML = output.join('');
+}
+  </script>
+
+  <!-- Visualization export dialog end-->
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+
+      @using (Html.BeginForm("CreateCoverageRules", "CyclePlanDB", FormMethod.Post, new { @id = "allForm", @name = "allForm" }))
+      {
+     <p>
+        Select Project: 
+        <select id="all_proj" name="proj" onchange="GenSubmitFormAction('allForm','@Url.Action("CreateCoverageRules", "CyclePlanDB")')">
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="all_phase" name="phase" onchange="GenSubmitFormAction('allForm','@Url.Action("CreateCoverageRules", "CyclePlanDB")')">
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+        Select Protocol: 
+        <select id="all_protocol" name="protocol" class="wselect" onchange="GenSubmitFormAction('allForm','@Url.Action("CreateCoverageRules", "CyclePlanDB")')">
+            @foreach (var protocol in ViewBag.protocollist)
+            {
+                if (protocol.ToString() == ViewBag.protocol)
+                {
+                    <option value="@protocol.ToString()" selected="selected"> @protocol.ToString()</option>
+                }
+                else
+                {
+                    <option value="@protocol.ToString()" > @protocol.ToString()</option>
+                }
+            }
+        </select> 
+        &nbsp; <input type="button" value="Cycle Plan Main" title="back to Cycle Plan Main" class="button" onclick="GenLocatioAction('@Url.Action("Main", "CyclePlanDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj })')" />
+    </p>
+          <br />
+      }
+
+                <!--  New: copy prev project-->    
+    @if (Model.Count==0)
+    {
+        using (Html.BeginForm("CreateCoverageRules_copy_config_from", "CyclePlanDB", FormMethod.Post, new { @id = "copyForm", @name = "copyForm" }))
+        {
+            <input type="hidden" name="proj" value="@ViewBag.proj"  />
+            <input type="hidden" name="phase" value="@ViewBag.phase"  />
+            <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+     <p>
+        <b style="background-color:Yellow">Copy configuration from previous project/phase. Select Project: </b>
+        <select id="copy_from_proj" name="copy_from_proj" >
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="copy_from_phase" name="copy_from_phase" >
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+        &nbsp; <input type="submit" value="Copy" title="Copy configuration from previous project/phase" class="button" />
+    </p>
+        }
+    }
+
+     <!--  New: copy prev project-->   
+       
+                @using (Html.BeginForm("CreateCoverageRulesAdd", "CyclePlanDB", FormMethod.Post, new { @id = "addForm", @name = "addForm" }))
+                {
+                <input type="hidden" name="proj" value="@ViewBag.proj"  />
+                <input type="hidden" name="phase" value="@ViewBag.phase"  />
+                <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+     <p>   
+        <u>Create new Coverage Rule:</u>
+         <br /><br /> Name   : &nbsp; <input id="name" name="name" type="text" value="" /> (Short descriptive rule name)
+        <br /><br />  Select Table: 
+        <!--<select id="ind_col" name="col" style="width:auto" onchange="GenSubmitFormAction('addForm','@Url.Action("CreateCoverageRules", "CyclePlanDB")')">-->
+        <select id="ind_col" name="col" style="width:auto" onchange="changedTableSelect(this,'SetUpType')">
+        
+            @foreach (var col in ViewBag.IndicatorsMetalist)
+            {
+                if (ViewBag.selectedCol == col.Key)
+                {
+                    <option value="@col.Key" selected="selected"> @col.Key</option>
+                }
+                else
+                {
+                    <option value="@col.Key"> @col.Key</option>
+                }
+            }
+        </select>  
+        <br /><br />Corners: <input id="corners" name="corners" type="text" value="HVHT,LVHT,NOMN,HVLT,LVLT" /> (comma delimited)
+        <br /><br />Ports    : <input id="ports" name="ports" type="text" value="PA,PB,PC,PD" /> (comma delimited)
+        <br /><br />Lanes    : <input id="lanes" name="lanes" type="text" value="L0,L1,L2,L3" /> (comma delimited)
+        <br /><br />Trials   : <input id="trials" name="trials" type="text" value="1" /> (number, default is 1)
+        @{
+                    string dis_types = "";
+                    if (((List<string>)ViewBag.SetupTypes).Count==0) {dis_types="disabled=\"disabled\"";}
+            }
+        <!--<br /><br />Setup Type: 
+                <!--<select id="SetUpType" name="SetUpType" style="width:auto" @dis_types>  since moved to use Ngon, cannot use eerver code-->
+        <!--     <select id="SetUpType" name="SetUpType" style="width:auto">
+            @foreach (var type in ViewBag.SetupTypes)
+            {
+                    <option value="@type"> @type</option>
+            }
+        </select>    -->
+         <br /><br />   <input type="button" value="Create" class="button" id="Create" onclick="validateAddCoverageRule('addForm')"/>
+    </p>
+                }
+    <br />
+    <b>Exist Coverage Rules for @ViewBag.protocol @ViewBag.proj @ViewBag.phase: </b>
+   <table id="SpecSupSets" class="display">
+    <thead>
+    <tr>
+        <th >
+            Table
+        </th>
+        <th >
+            Name
+        </th>
+        <th >
+            Corners
+        </th>
+        <th >
+            Ports
+        </th>
+        <th >
+            Lanes
+        </th>
+        <th >
+            Trials
+        </th>
+        <th >
+            Edit
+        </th>
+        <th >
+            Delete
+        </th>
+    </tr> 
+
+    </thead>
+    <tbody>
+    @foreach (CyclePlanCoverageRule CPCoverageRule in Model)
+    {
+        string EditForm = "EditForm" + @CPCoverageRule._id;
+        string DelForm = "DelForm" + @CPCoverageRule._id;
+        string cornersStr = "";
+        foreach (string corner in CPCoverageRule.corners) { cornersStr += corner + ","; }
+        cornersStr = cornersStr.TrimEnd(',');
+        string portsStr = "";
+        foreach (string port in CPCoverageRule.ports) { portsStr += port + ","; }
+        portsStr = portsStr.TrimEnd(',');
+        string lanesStr = "";
+        foreach (string lane in CPCoverageRule.lanes) { lanesStr += lane + ","; }
+        lanesStr = lanesStr.TrimEnd(',');
+     <tr>
+        <td>
+        @CPCoverageRule.Table
+        </td> 
+        <td>
+         @CPCoverageRule.Name
+        </td> 
+         <td>
+        @cornersStr
+        </td> 
+        <td>
+        @portsStr
+        </td> 
+         <td>
+        @lanesStr
+        </td>
+        <td>
+        @CPCoverageRule.trials
+        </td> 
+        <td>
+        @using (Html.BeginForm("CreateCoverageRulesEdit", "CyclePlanDB", FormMethod.Post, new { @id = EditForm, @name = EditForm }))
+        {
+            <input type="hidden" name="id" value="@CPCoverageRule._id"  />
+            <input type="hidden" name="name" value="@CPCoverageRule.Name"  />
+            <input type="hidden" name="col" value="@CPCoverageRule.Table"  />
+            <input type="hidden" name="corners" value="@cornersStr"  />
+            <input type="hidden" name="ports" value="@portsStr"  />
+            <input type="hidden" name="lanes" value="@lanesStr"  />
+            <input type="hidden" name="trials" value="@CPCoverageRule.trials"  />
+             <!--<input type="button" value="E" title="Edit SubSet" class="button" onclick="GenSubmitFormAction('@EditForm','@Url.Action("CreateCoverageRulesEdit", "CyclePlanDB")')"/>-->
+             <input type="button" value="E" class="button" onclick="ShowEditDialog('Edit-dialog-form','@EditForm')"/>
+        }
+        </td> 
+        <td>
+        @using (Html.BeginForm("CreateCoverageRulesDel", "CyclePlanDB", FormMethod.Post, new { @id = DelForm, @name = DelForm }))
+        {
+             <input type="hidden" name="id" value="@CPCoverageRule._id"  />
+            <input type="hidden" name="col" value="@CPCoverageRule.Table"  />
+             <input type="button" value="D" title="Delete SubSet" class="button" onclick="FormConfirmAction('@DelForm','@Url.Action("CreateCoverageRulesDel", "CyclePlanDB")','Are you sure you want to delete Coverag Rule @CPCoverageRule.Name ?')"/>
+        }
+        </td> 
+
+    </tr>
+    }
+    </tbody>
+</table>
+
+
+
+<div id="Edit-dialog-form" title="Edit Coverage Rule">
+  <p class="validateTips">Edit Coverage Rule</p>
+ 
+  <form method="post" action='@Url.Action("CreateCoverageRulesEditExec", "CyclePlanDB")' id="FormEdit">
+          <input type="hidden" name="id" value=""  />
+    <fieldset>
+      <label for="name">Name:</label>
+        <input id="editname" name="name" type="text" value="" />
+        <br /><label for="name">Table:</label>
+        <!--<select id="ind_col" name="col" style="width:auto" onchange="GenSubmitFormAction('addForm','@Url.Action("CreateCoverageRules", "CyclePlanDB")')">-->
+        <input type="text" id="colEdit" name="col" value="" disabled="disabled" />
+        <br />Corners: <input id="editcorners" name="corners" type="text" value="" />
+        <br />Ports    : <input id="editports" name="ports" type="text" value="" />
+        <br />Lanes    : <input id="editlanes" name="lanes" type="text" value="" />
+        <br />Trials   : <input id="edittrials" name="trials" type="text" value="" />
+      <!--  <br />Setup Type: 
+             <select id="editSetUpType" name="SetUpType" style="width:auto">
+            @foreach (var type in ViewBag.SetupTypes)
+            {
+                    <option value="@type"> @type</option>
+            }
+        </select>   -->
+        <br />   <input type="submit" value="Submit" class="button" id="editSubmit" onclick="validateAddCoverageRule('FormEdit')"/>
+    </fieldset>
+  </form>
+</div>

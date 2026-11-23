@@ -1,0 +1,84 @@
+﻿@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "test";
+    var a = (DBsearch)Session["DBS"];
+}
+
+<h2>test</h2>
+
+<!-- IN THE HEAD SECTION -->
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#testing').dataTable({
+   "sScrollY":  ( 0.6 * $(window).height() ),
+    "bPaginate": false,
+    "bJQueryUI": true,
+    "bScrollCollapse": true,
+    "bAutoWidth": false,
+    "sScrollX": "100%",
+    "sScrollXInner": "100%"
+     });
+});
+
+//function getWeather() {
+//    var URL = "/ManageDB/FirstAjax/" + $("#Location").val();
+//    $.get(URL, function (data) {
+//        $("#Result").html(data);
+//    });
+//}
+
+function getWeather() {
+
+    var URL = "/ManageDB/FirstAjax/";
+    var posting = $.post(URL, { Location: $('#Location').val(), name: $('#name').val() });
+
+
+    posting.done(function (data) {
+        //alert('success');
+        $("#Result").html(data);
+    });
+}
+
+</script>
+
+
+<!-- some code here -->
+
+
+<!-- IN THE BODY SECTION -->
+
+
+<table id="testing" width="20%">
+    <thead>
+        <tr>
+            <th>Col 1</th>
+            <th>Col 2</th>
+            <th>Col 3</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>XXX</td>
+            <td>YYY</td>
+            <td>ZZZ</td>
+        </tr>
+        <tr>
+            <td>AAA</td>
+            <td>BBB</td>
+            <td>CCC</td>
+        </tr>
+    </tbody>
+</table>
+<div>
+<input type="text" id="Location" style="width: 325px" /> 
+<input type="text" id="name" style="width: 325px" /> 
+<input type="button" id="btnSubmit" value="Get Weather" 
+	onclick="javascript:getWeather();" /> 
+<br /> <br />
+<div id="Result"></div>
+</div>
+
+

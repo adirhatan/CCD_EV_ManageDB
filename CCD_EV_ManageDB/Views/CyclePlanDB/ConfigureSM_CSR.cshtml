@@ -1,0 +1,247 @@
+﻿@model SessionsManageProtocolConf
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using MongoDB.Bson.Serialization;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "Configure SM/CSR";
+}
+
+<h2>Configure SM/CSR Meta Data</h2>
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>    
+
+
+ <script type="text/JavaScript">
+     function validateUpdateSM_CSR(formName) {
+    //debugger;
+    var x = document.getElementById(formName);
+    //do some validation for example:
+    var name = "";
+    for (var i = 0; i < x.length; i++) {
+        if (x.elements[i].name.match("name.*")){
+            name = x.elements[i].value;
+        }
+    }
+
+    //example:
+    //if (name == "") {
+        //alert("Name is mandatory");
+        //return;
+    //}
+    //else {
+    
+        x.submit();
+    //}
+}
+
+//Reference:
+//function changedTableSelect(selectTable, SetupTypeId) {
+//    return;
+//    // no need for setup type
+//    var selectSetupType = document.getElementById(SetupTypeId);
+//    var output = [];
+//    var length = ngon.dictionarySetupTypes[selectTable.value].length;
+//    for (var i = 0; i < length; i++) {
+//        output[i] = '<option value="' + ngon.dictionarySetupTypes[selectTable.value][i] + '">' + ngon.dictionarySetupTypes[selectTable.value][i] + '</option>';
+//        if (selectSetupType.value === ngon.dictionarySetupTypes[selectTable.value][i]) {
+//            output[i] = '<option value="' + ngon.dictionarySetupTypes[selectTable.value][i] + '"' + ' selected="selected">' + ngon.dictionarySetupTypes[selectTable.value][i] + '</option>';
+//        }
+//    }
+
+//    selectSetupType.innerHTML = output.join('');
+//}
+  </script>
+
+  <!-- Visualization export dialog end-->
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+
+      @using (Html.BeginForm("ConfigureSM_CSR", "CyclePlanDB", FormMethod.Post, new { @id = "allForm", @name = "allForm" }))
+      {
+     <p>
+        Select Project: 
+        <select id="all_proj" name="proj" onchange="GenSubmitFormAction('allForm','@Url.Action("ConfigureSM_CSR", "CyclePlanDB")')">
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="all_phase" name="phase" onchange="GenSubmitFormAction('allForm','@Url.Action("ConfigureSM_CSR", "CyclePlanDB")')">
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+        Select Protocol: 
+        <select id="all_protocol" name="protocol" class="wselect" onchange="GenSubmitFormAction('allForm','@Url.Action("ConfigureSM_CSR", "CyclePlanDB")')">
+            @foreach (var protocol in ViewBag.protocollist)
+            {
+                if (protocol.ToString() == ViewBag.protocol)
+                {
+                    <option value="@protocol.ToString()" selected="selected"> @protocol.ToString()</option>
+                }
+                else
+                {
+                    <option value="@protocol.ToString()" > @protocol.ToString()</option>
+                }
+            }
+        </select> 
+        &nbsp; <input type="button" value="Cycle Plan Main" title="back to Cycle Plan Main" class="button" onclick="GenLocatioAction('@Url.Action("Main", "CyclePlanDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj })')" />
+    </p>
+          <br />
+      }
+     <p>   
+        <u><b>Notice:</b></u> This page configures acutal SM/CSR meta data of selected project/phase.
+        <br />
+    </p>
+
+          @if ((Model.table_divs.Count == 0) || (Model.table_divs[Model.tables[0]].Count == 0))
+    {
+        using (Html.BeginForm("ConfigureSM_copy_config_from", "CyclePlanDB", FormMethod.Post, new { @id = "copyForm", @name = "copyForm" }))
+        {
+            <input type="hidden" name="proj" value="@ViewBag.proj"  />
+            <input type="hidden" name="phase" value="@ViewBag.phase"  />
+            <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+            <input type="hidden" name="sourceAction" value="ConfigureSM_CSR"  />
+     <p>
+        <b style="background-color:Yellow">Copy configuration from previous project/phase. Select Project: </b>
+        <select id="copy_from_proj" name="copy_from_proj" >
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="copy_from_phase" name="copy_from_phase" >
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+        &nbsp; <input type="submit" value="Copy" title="Copy configuration from previous project/phase" class="button" />
+    </p>
+        }
+    }
+
+       
+                @using (Html.BeginForm("ConfigureSM_CSRexec", "CyclePlanDB", FormMethod.Post, new { @id = "addForm", @name = "addForm" }))
+                {
+                    int fieldsCnt = 0;
+                    int tablesCnt = 0;
+                    string PortsStr = "";
+                    foreach (string port in Model.ports)
+                    {
+                        PortsStr += port + ",";
+                    }
+                    PortsStr = PortsStr.TrimEnd(',');
+                    string LanesStr = "";
+                    foreach (string lane in Model.lanes)
+                    {
+                        LanesStr += lane + ",";
+                    }
+                    LanesStr = LanesStr.TrimEnd(',');
+
+                    string UnitsStr = "";
+                    foreach (CCD_EV_ManageDB.Models.Unit unit in Model.units)
+                    {
+                        UnitsStr += unit.ToString() + ",";
+                    }
+                    UnitsStr = UnitsStr.TrimEnd(',');
+     
+                <input type="hidden" name="proj" value="@ViewBag.proj"  />
+                <input type="hidden" name="phase" value="@ViewBag.phase"  />
+                <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+     <p>   
+        <!--<u>ConfigureSM_CSR:</u>-->
+        <br /><br /> Exist SM Tables:
+       
+            @foreach (string smTable  in Model.tables)
+            {
+                string tableName = "smTable" + tablesCnt.ToString();
+               <br /><br /> <span>SM Table:  <input name="@tableName" type="text" value="@smTable" />&nbsp;(Clear to delete)</span>
+                tablesCnt++;
+            }
+        @if (@ViewBag.TablesWarning!=null)
+        {
+        <br /><br /><span class="messageText">@ViewBag.TablesWarning</span>
+        }
+        <br /><br /> Add new SM Table:
+        <br /><br /> <span>SM Table: <!-- <input name="tableNew1" type="text" value="" />--></span>
+        <select id="tableNew1" name="tableNew1" class="wselect">
+            <option value=""></option>
+            @foreach (var col in ViewBag.ProjectColList)
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        </select> (Tables must be defined in project)
+        <br /><br />Separate CSR per Table:<select name="separateCSRperTable" style="width:40px" >
+
+                @if (Model.separateCSRperTable=="Y")
+                {
+                    <option value="N" > N</option>
+                    <option value="Y" selected="selected">Y</option>
+                }
+                else
+                {
+                    <option value="N" selected="selected"> N</option>
+                    <option value="Y" > Y</option>
+                }
+        </select> 
+         <br /><br /> Exist SM Fields: <input type="button" value="?" title="Help" class="button"  onclick="ShowHelpImgJS ( 'Help SM/CSR Configuration Example: Additinal SM fields','helpConfigure_SM_CSR_Fields.png','1240','666','1219','648')" /> 
+       
+            @foreach (string smField  in Model.fields)
+            {
+                string fieldName = "field" + fieldsCnt.ToString();
+                string fieldNameA = "fieldA" + fieldsCnt.ToString();
+               <br /><br /> <span>SM Field:  <input name="@fieldName" type="text" value="@smField" /> (Session Mangage field) &nbsp; Alias: <input name="@fieldNameA" type="text" value="@Model.fieldsAliases[fieldsCnt]" /></span>
+                fieldsCnt++;
+            }
+        <br /><br /> Add new SM Fields: (Actual data of exist SM sessions will be updated during 24 hours)
+        <br /><br /> <span>SM Field:  <input name="fieldNew1" type="text" value="" /> (Session Mangage field) &nbsp; Alias: <input name="fieldNewA1" type="text" value="" /></span>
+        <br /><br /> <span>SM Field:  <input name="fieldNew2" type="text" value="" /> (Session Mangage field) &nbsp; Alias: <input name="fieldNewA2" type="text" value="" /></span>
+        <br /><br /> <span>SM Field:  <input name="fieldNew3" type="text" value="" /> (Session Mangage field) &nbsp; Alias: <input name="fieldNewA3" type="text" value="" /></span>
+        <br /><br />Ports    : <input  name="ports" type="text" value="@PortsStr" /> (comma delimited)&nbsp;<span class="messageText">@ViewBag.PortsWarning</span>
+        <br /><br />Lanes    : <input  name="lanes" type="text" value="@LanesStr" /> (comma delimited)&nbsp;<span class="messageText">@ViewBag.LanesWarning</span>
+        <br /><br />Units    : <input  name="units" type="text" value="@UnitsStr" style="width:750px"/> (comma delimited)
+                @if (@ViewBag.UnitsWarning != null)
+        {
+        <br /><br /><span class="messageText">@ViewBag.UnitsWarning</span>
+        }
+
+         <br /><br />   <input type="button" value="Update" class="button" id="Create" onclick="validateUpdateSM_CSR('addForm')"/> <input type="button" value="Back" title="back to Cycle Plan Main" class="button" onclick="GenLocatioAction('@Url.Action("Main", "CyclePlanDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj })')" />
+    </p>
+                }
+    <br />

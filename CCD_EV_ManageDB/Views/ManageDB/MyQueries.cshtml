@@ -1,0 +1,112 @@
+﻿@model MongoDB.Driver.MongoCursor
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using MongoDB.Bson.Serialization;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "MyQueries";
+}
+
+<h2>MyQueries</h2>
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+ <script type="text/JavaScript">
+ $(document).ready(function () {
+    $('#queries').dataTable({
+        "iDisplayLength": -1,
+          "columns": [
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": true },
+            { "orderable": false },
+            { "orderable": true },
+            { "orderable": true },
+            { "orderable": false },
+            { "orderable": false }
+          ],
+        "autoWidth": true,
+        "jQueryUI": true,
+        //        //"sDom": '<"H"CTrf>t<"F"lip>',
+        "dom": '<"H"CTrf>t<"F"CTrif>',
+        "scrollX": "100%",
+        //"sScrollY": "700px",
+        "scrollY": (0.8 * $(window).height()),
+        "scrollCollapse": true
+    });
+});
+</script>
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+ @using (Html.BeginForm("Delete", "ManageDB", FormMethod.Post, new { @id = "tForm", @name = "tForm" }))
+ {
+ <table id="queries" class="display">
+    <thead>
+    <tr>
+        <th >
+            Run
+        </th>
+        <th >
+            Delete
+        </th>
+        <th >
+            Name
+        </th>
+        <th >
+            Rename
+        </th>
+         <th >
+            DB
+        </th>
+        <th >
+            Table
+        </th>
+         <th >
+            Query
+        </th>
+        <th >
+            Fields
+        </th>
+    </tr> 
+
+    </thead>
+    <tbody>
+    @foreach (BsonDocument item in Model)
+    {
+        string r_id = item.AsBsonDocument.GetElement("_id").Value.ToString();
+        string SaveQName = "SaveQName" + r_id;
+        DBsearchSave details = BsonSerializer.Deserialize<DBsearchSave>(item.AsBsonDocument.GetElement("DBS").Value.ToBsonDocument());
+     <tr>  
+        <td>
+            <input type="button" value="R" title="Run Query" class="button" onclick="SavedQueryAction('@r_id','@Url.Action("ReadSavedQuery", "ManageDB")')" />
+        </td>
+        <td>
+            <input type="button" value="D" title="Delete Query" class="button" onclick="SavedQueryAction('@r_id','@Url.Action("DeleteSavedQuery", "ManageDB")')" />
+        </td>
+        <td id="@r_id">
+        @item.AsBsonDocument.GetElement("name").Value.ToString()
+        </td>
+        <td>
+            <input type="text" id="@SaveQName" name="@SaveQName" style="width: 120px" />
+            <input type="button" value="M" title="Rename Query" class="button" onclick="RenameSavedQuery('@r_id','@Url.Action("RenameSavedQuery", "ManageDB")')" />
+        </td>
+        <td >
+            @details.db
+        </td>
+        <td >
+            @details.col
+        </td>
+         <td >
+            @details.Query
+        </td>
+        <td >
+            @details.FieldsStr
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+ }
+

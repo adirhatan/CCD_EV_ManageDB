@@ -1,0 +1,177 @@
+﻿@model List<DBTmpl>
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+
+@{
+    ViewBag.Title = "CompReports";
+}
+
+<h2>CompReports</h2>
+
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+ <script type="text/JavaScript">
+     function changedBoardNumber(selectBoardBumber, selectBioses, selectNvms, selectUnitIDS) {
+         //debugger;
+         //var selectFields = elem.nextSibling.nextSibling;
+
+         var output = [];
+         var length = ngon.dictionaryBioses[selectBoardBumber.value].length;
+         output[0] = '<option value=""></option>';
+         for (var i = 0; i < length; i++) {
+             output[i + 1] = '<option value="' + ngon.dictionaryBioses[selectBoardBumber.value][i] + '">' + ngon.dictionaryBioses[selectBoardBumber.value][i] + '</option>';
+         }
+
+         var output1 = [];
+         var length1 = ngon.dictionaryNvms[selectBoardBumber.value].length;
+         output1[0] = '<option value=""></option>';
+         for (var i = 0; i < length1; i++) {
+             output1[i + 1] = '<option value="' + ngon.dictionaryNvms[selectBoardBumber.value][i] + '">' + ngon.dictionaryNvms[selectBoardBumber.value][i] + '</option>';
+         }
+
+         var output2 = [];
+         var length2 = ngon.dictionaryUnitIDS[selectBoardBumber.value].length;
+         output2[0] = '<option value=""></option>';
+         for (var i = 0; i < length2; i++) {
+             output2[i + 1] = '<option value="' + ngon.dictionaryUnitIDS[selectBoardBumber.value][i] + '">' + ngon.dictionaryUnitIDS[selectBoardBumber.value][i] + '</option>';
+         }
+
+
+         selectBioses.innerHTML = output.join('');
+         selectNvms.innerHTML = output1.join('');
+         selectUnitIDS.innerHTML = output2.join('');
+
+         //new - 1P/2P and Host/Device templates
+         var templatesSelect = document.getElementById('templ');
+         if ((ngon.ports[selectBoardBumber.value] == "2P") && (ngon.devTypes[selectBoardBumber.value] == "Host")) {
+             templatesSelect.value = ngon.tmplH2;
+         }
+         if ((ngon.ports[selectBoardBumber.value] == "1P") && (ngon.devTypes[selectBoardBumber.value] == "Host")) {
+             templatesSelect.value = ngon.tmplH1;
+         }
+         if ((ngon.ports[selectBoardBumber.value] == "2P") && (ngon.devTypes[selectBoardBumber.value] == "Device")) {
+             templatesSelect.value = ngon.tmplD2;
+         }
+         if ((ngon.ports[selectBoardBumber.value] == "1P") && (ngon.devTypes[selectBoardBumber.value] == "Device")) {
+             templatesSelect.value = ngon.tmplD1;
+         }
+
+     }
+
+     function changedTable(selectTables, selectFields1, selectFields2, selectFields3) {
+         //debugger;
+         //var selectFields = elem.nextSibling.nextSibling;
+
+         var output = [];
+         var length = ngon.dictionaryFields[selectTables.value].length;
+         output[0] = '<option value=""></option>';
+         for (var i = 0; i < length; i++) {
+             output[i+1] = '<option value="' + ngon.dictionaryFields[selectTables.value][i] + '">' + ngon.dictionaryFields[selectTables.value][i] + '</option>';
+         }
+
+         selectFields1.innerHTML = output.join('');
+         selectFields2.innerHTML = output.join('');
+         selectFields3.innerHTML = output.join('');
+
+     }
+
+</script>
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+<!-- old -->
+  @using (Html.BeginForm("RunReportBG", "CompReportDB", FormMethod.Post, new { @id = "oldRunCopmReportDBForm", @name = "oldRunCopmReportDBForm" }))
+  {
+    <p>Run report. 
+        BoardNumber :
+        <input type="text" id="oboardNumber" name="boardNumber" style="width: 120px" />
+         template:
+        <select id="otempl" name="templ" class="wselect">
+            @foreach (var col in ViewBag.tmplates)
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        </select>
+        <input type="submit" value="Submit" />
+        <br />
+        <input type="button" value="Validate" title="Validate report completeness" class="button" onclick="GenSubmitFormAction('oldRunCopmReportDBForm','@Url.Action("ValidateCompReport", "CompReportDB")')" />
+        <!-- DP_TX,DPpp_TX,HDMI1p4_TX,HDMI2p0_TX,TBT_TX,TBT_RX,USB3p1_RX,USB3p1_TX,USB2p0_TX -->
+         All<input type="checkbox" checked="checked" name="_checkAll" id="_checkAllold" onclick="ValidateCompReportCheckAll('oldRunCopmReportDBForm','_checkAllold','vTable')"/>&nbsp;
+         TBT_TX<input type="checkbox" value="TBT_TX" checked="checked" name="vTable"/> &nbsp;
+         TBT_RX<input type="checkbox" value="TBT_RX" checked="checked" name="vTable"/> &nbsp;
+         TBT_RL<input type="checkbox" value="TBT_RL" checked="checked" name="vTable"/> &nbsp;
+         USB3p1_TX<input type="checkbox" value="USB3p1_TX" checked="checked" name="vTable"/>&nbsp;
+         USB3p1_RX<input type="checkbox" value="USB3p1_RX" checked="checked" name="vTable"/>&nbsp;
+         USB2p0_TX<input type="checkbox" value="USB2p0_TX" checked="checked" name="vTable"/>&nbsp;
+         DP_TX<input type="checkbox" value="DP_TX" checked="checked" name="vTable"/>&nbsp;
+         HDMI1p4_TX<input type="checkbox" value="HDMI1p4_TX" checked="checked" name="vTable"/>&nbsp;
+    </p>
+  }
+  <br />
+<!-- old -->
+  @using (Html.BeginForm("RunReportBG", "CompReportDB", FormMethod.Post, new { @id = "RunCopmReportDBForm", @name = "RunCopmReportDBForm" }))
+  {
+    <p>Run report. 
+    <br /><br />
+      BoardNumber :
+    <!--<input type="text" id="boardNumber" name="boardNumber" style="width: 120px" />-->
+            <select id="boardNumber" name="boardNumber" class="wselect" onchange="changedBoardNumber(this,document.getElementById('BIOS'),document.getElementById('NVM'),document.getElementById('UnitID'))">
+            <option value=""></option>
+            @foreach (var col in ViewBag.boardNumbers)
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        </select>
+        <br /><br />
+        <!--new: BIOSES -->
+         BIOS (optional):
+        <select id="BIOS" name="BIOS" >
+               <option value=""></option>
+       </select> 
+       <br /><br />
+        NVM (optional):
+       <select id="NVM" name="NVM" >
+               <option value=""></option>
+       </select> 
+       <br /><br />
+       Unit ID (optional):
+       <select id="UnitID" name="UnitID" >
+               <option value=""></option>
+       </select> 
+       <br /><br />
+     template:
+        <select id="templ" name="templ" class="wselect">
+            @foreach (var col in ViewBag.tmplates)
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        </select>
+        <br /><br />
+        <input type="submit" value="Submit" />
+        <input type="button" value="Validate" title="Validate report completeness" class="button" onclick="GenSubmitFormAction('RunCopmReportDBForm','@Url.Action("ValidateCompReport", "CompReportDB")')" />
+        <!-- DP_TX,DPpp_TX,HDMI1p4_TX,HDMI2p0_TX,TBT_TX,TBT_RX,USB3p1_RX,USB3p1_TX,USB2p0_TX -->
+         All<input type="checkbox" checked="checked" name="_checkAll" id="_checkAll" onclick="ValidateCompReportCheckAll('RunCopmReportDBForm','_checkAll','vTable')"/>&nbsp;
+         TBT_TX<input type="checkbox" value="TBT_TX" checked="checked" name="vTable"/>&nbsp;
+         TBT_RX<input type="checkbox" value="TBT_RX" checked="checked" name="vTable"/> &nbsp;
+         TBT_RL<input type="checkbox" value="TBT_RL" checked="checked" name="vTable"/> &nbsp;
+         USB3p1_TX<input type="checkbox" value="USB3p1_TX" checked="checked" name="vTable"/>&nbsp;
+         USB3p1_RX<input type="checkbox" value="USB3p1_RX" checked="checked" name="vTable"/>&nbsp;
+         USB2p0_TX<input type="checkbox" value="USB2p0_TX" checked="checked" name="vTable"/>&nbsp;
+         DP_TX<input type="checkbox" value="DP_TX" checked="checked" name="vTable"/>&nbsp;
+         HDMI1p4_TX<input type="checkbox" value="HDMI1p4_TX" checked="checked" name="vTable"/>&nbsp;
+    </p>
+  }
+  <br />
+
+
+ <br />
+    <p>Edit comp reports definitions
+        <input type="button" value="Edit Reports" title="Edit comp reports definitions" class="button" onclick="GenLocatioAction('@Url.Action("CompReportsEdit", "CompReportDB")')" />
+    </p>
+  <br />
+      <p>Edit Inventory records
+        <input type="button" value="Edit Inventory" title="Edit Inventory records" class="button" onclick="GenLocatioAction('@Url.Action("InventoryLines", "InventoryDB")')" />
+    </p>
+  <br />
+

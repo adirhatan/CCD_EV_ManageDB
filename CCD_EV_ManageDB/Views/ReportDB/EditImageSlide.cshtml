@@ -1,0 +1,180 @@
+﻿@model CCD_EV_ManageDB.Models.ReportSlideImageDetais
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using MongoDB.Bson.Serialization;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using System.Web.Script.Serialization;
+
+
+@{
+    ViewBag.Title = "Edit Report Image Slide";
+}
+
+<script type="text/JavaScript">
+    $(document).ready(function () {
+        //debugger;
+        $('#queryImageInput').hide();
+        $('#queryRefInput').hide();
+    });     
+    
+
+    function changedTestSelect(selectTests, elementsName) {
+        //debugger;
+        //var selectFields = elem.nextSibling.nextSibling;
+
+        var output = [];
+        var length = ngon.dictionaryFields[selectTests.value].length;
+        for (var i = 0; i < length; i++) {
+            output[i] = '<option value="' + ngon.dictionaryFields[selectTests.value][i] + '">' + ngon.dictionaryFields[selectTests.value][i] + '</option>';
+        }
+        var x = document.getElementsByName(elementsName);
+        var i;
+        for (i = 0; i < x.length; i++) {
+                x[i].innerHTML = output.join('');
+        }
+    }
+
+    function changedTemplateSelect() {
+        //debugger;
+        var x = document.getElementById("myForm");
+        x.elements.namedItem("TemplateChanged").value = "yes";
+        x.submit();
+    }
+    
+</script>
+ <h2>Edit Report Image Slide</h2>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+<br />
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+
+   @using (Html.BeginForm("SaveReportImageSlide", "ReportDB", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+   {
+       @Html.Hidden("imageDetailsID", Model.imageDetailsID)
+       @Html.Hidden("id", Model.ReportID)
+       @Html.Hidden("TemplateChanged", "")
+        <text> Test &nbsp;</text>
+        <!--<select id="boardNumber" name="boardNumber" class="wselect" onchange="changedBoardNumber(this,document.getElementById('BIOS'),document.getElementById('NVM'),document.getElementById('UnitID'))">-->
+        <select id="slideTest" name="slideTest" class="wselect" onchange="changedTestSelect(this,'field')">
+        @foreach (string _test in Model.Tests)
+        {
+            if (_test == Model.slideTest)
+            {
+                <option value="@_test" selected="selected" >@_test</option>
+            }
+            else
+            {
+                <option value="@_test">@_test</option>
+            }
+        } 
+        </select>
+        <text>&nbsp;Template &nbsp; </text>
+        <select id="template" name="template" class="wselect" onchange="changedTemplateSelect()">
+        @{
+        foreach (string template in Model.Templates)
+        {
+            if (!template.Contains("image")) { continue; }
+            if (Model.templateKey == template)
+            {
+                                        <option value="@template" selected="selected"> @template</option>   
+            }
+            else
+            {
+                                        <option value="@template"> @template</option>
+            }
+        }
+        }
+       </select>
+       <br /><br />
+       <text> Slide Header Text &nbsp;</text>
+       <input type="text" value="@Model.slideText" id="slideText" name="slideText" />
+       <br /><br />
+                            foreach (ImageDetails ImageDetails in Model.ImagesDetails)
+                            {
+                                //if ((!Model.Tests.Contains(ImageDetails.test) && (ImageDetails.test != "initial"))) { continue; }
+                <div id="queryInput">
+                Image @ImageDetails.order.ToString() : Field &nbsp;
+                <select id="field" name="field" class="wselect">
+                @{
+                                foreach (string field in Model.TestsFields[ImageDetails.test])
+                                {
+                                    if (ImageDetails.field == field)
+                                    {
+                        <option value="@field" selected="selected"> @field</option>   
+                                    }
+                                    else
+                                    {
+                        <option value="@field"> @field</option>
+                                    }
+                                }
+                }
+                </select> 
+  
+       
+
+
+                query &nbsp;
+                <input type="text" id="query" name="query" value="@ImageDetails.query" />
+                text &nbsp;
+                <input type="text" id="text" name="text" value="@ImageDetails.text" />
+                <!--
+                <input type="button" value="D" title="Delete" class="button" onclick="removeElem(this.parentNode)" />
+                <input type="button" value="A" title="Add next slide field" class="button" onclick="fnCloneAdj('queryRefInput',this.parentNode)"/>
+                <input type="button" value="AIm" title="Add next slide image" class="button" onclick="fnCloneAdj('queryImageInput',this.parentNode)"/>
+                -->
+            </div>
+       <br />
+                            }
+        <br />
+       <input type="submit" value="Save" class="button"/>
+       <input type="button" class="button" value="Back to Report" onclick="GenLocatioAction('@Url.Action("EditReport", "ReportDB", new RouteValueDictionary(new { _id = Model.ReportID, fromCopy = false }))')" />
+   }
+    <!-- form End -->
+    <div id="queryEnd"></div>
+
+
+       
+       
+       
+       
+       
+   <!--new-->
+
+        <div id="queryRefInput">
+        Enter field definition: Test &nbsp;
+        <select id="_FieldsSlides0" name="_FieldsSlides0" class="wselect" onchange="changedTestsSelect(this,this.nextSibling.nextSibling)">
+        @foreach (string _test in Model.Tests)
+        {
+             <option value="@_test" >@_test</option>
+        } 
+        </select> 
+        Field &nbsp;
+        <select id="_FieldsSlides1" name="_FieldsSlides1" class="wselect">
+            @foreach (string field in Model.TestsFields[Model.Tests.ElementAt(0)])
+            {
+                <option value="@field"> @field</option>
+            }
+        </select> 
+
+                Template &nbsp; 
+        <select id="_FieldsSlides2" name="_FieldsSlides2">
+        @{
+            foreach (string template in Model.Templates)
+            {
+               <option value="@template"> @template</option>
+            }
+        }
+        </select> 
+        Low limit &nbsp;
+        <input type="text" id="_FieldsSlides3" name="_FieldsSlides3" value="" style="width: 100px;"/>
+        Up limit &nbsp;
+        <input type="text" id="_FieldsSlides4" name="_FieldsSlides4" value="" style="width: 100px;"/>
+        <input type="hidden" id="_FieldsSlides5" name="_FieldsSlides5" value="@General.ReportSlideType.image.ToString()"/>
+        <input type="button" value="D" title="Delete" class="button" onclick="removeElem(this.parentNode)" />
+        <input type="button" value="A" title="Add next slide field" class="button" onclick="fnCloneAdj('queryRefInput',this.parentNode)"/>
+        <input type="button" value="AIm" title="Add next slide image" class="button" onclick="fnCloneAdj('queryImageInput',this.parentNode)"/>
+    </div>
+    <div id="queryRefEnd"></div>
+

@@ -1,0 +1,137 @@
+﻿@model CCD_EV_ManageDB.Models.DBsearch
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using  System.Collections.Generic;
+@using  System.Web.UI.WebControls;
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+  <script>
+      function FormToStr() {
+          // debugger;
+          var x = document.getElementById("myForm");
+          var txt = "";
+          for (var i = 0; i < x.length; i++) {
+              if (x.elements[i].name.match("_Query")) {
+                  txt = txt + x.elements[i].value + ";";
+              }
+          }
+          alert(txt);
+          txt = txt.substr(0, txt.length - 1);
+          alert(txt);
+          x.elements.namedItem("Query").value = txt;
+          x.submit();
+
+      }
+      function fnClone() {
+          /* the 'true' possible value specifies to clone the childNodes as well.*/
+          var oCloneNode = document.getElementById('queryInput').cloneNode(true);
+          document.getElementById('queryEnd').insertBefore(oCloneNode);
+      }
+      function removeElem(elem) {
+          elem.parentNode.removeChild(elem);
+          return false;
+      }
+
+      $(document).ready(function () {
+          $('#example').dataTable({
+              "sScrollX": "100%",
+              "sScrollXInner": "100%",
+              "bScrollCollapse": true
+          });
+      });
+
+
+
+
+      
+  </script>
+
+
+    @using (Html.BeginForm("Search", "ManageDB", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+    {
+    <p>Enter DB Query : @Html.TextBox("Query", Model.Query)</p>
+    <p>Enter DB OP : @Html.TextBox("SearchOP", Model.SearchOP)</p>
+    <p>Enter DB Fields : @Html.TextBox("FieldsStr", Model.FieldsStr)</p>
+    <p>Enter DB Sort : @Html.TextBox("SortStr", Model.SortStr)</p>
+
+      
+        foreach (var triplet in Model.QueryTriplets)
+        {
+            string[] tarr = triplet.ToString().Split(new Char[] { ';' });
+    <div id="queryInput">
+        <p>Enter DB Query :
+        <select id="_Query0" name="_Query0">
+        @foreach (var op in ViewBag.q0list)
+        {
+            if (op.ToString() == tarr[0])
+            {
+                <option value="@op.ToString()" selected="selected" >@op.ToString()</option>
+            }
+            else
+            {
+                <option value="@op.ToString()">@op.ToString()</option>
+            }
+        } 
+        </select> 
+        <select id="_Query1" name="_Query1">
+        @foreach (var field in Model.Fields)
+        {
+            if (field.ToString() == tarr[1])
+            {
+            <option value="@field.ToString()" selected="selected"> @field.ToString()</option>   
+            }
+            else
+            {
+            <option value="@field.ToString()"> @field.ToString()</option>
+            }
+        }
+        </select> 
+        @Html.TextBox("_Query2", tarr[2], new { @id = "_Query2" })
+        <input type="button" value="Remove" class="button" onclick="removeElem(this.parentNode)" /></p>
+    </div>
+        }
+    <div id="queryEnd"></div>
+    <input type="button" value="add query" class="button" onclick="fnClone()"/>
+    <input type="submit" value="Submit query" onclick="FormToStr()" />
+    }
+    <br />
+@using (Html.BeginForm("Delete", "ManageDB", FormMethod.Post, new { @id = "tForm", @name = "tmyForm" }))
+{
+<input type="submit" value="Delete checked records" />
+<table id="example">
+    <thead>
+        <tr>
+         <th >
+            Select
+        </th>
+         @foreach (var field in Model.Fields)
+         {
+            <th >
+                @field.ToString()
+            </th>
+         }
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (BsonDocument item in Model.ResCursor)
+    {
+        <tr>
+            <td>
+            @{string r_id = @item.AsBsonDocument.GetElement("_id").ToString();
+               <input id="@r_id" name="@r_id" type="checkbox" />}
+            </td>
+            @foreach (BsonElement field in item)
+            {
+                <td >
+                    @field.Value
+                </td>
+            }
+        </tr>
+    }
+    </tbody>
+</table>
+}

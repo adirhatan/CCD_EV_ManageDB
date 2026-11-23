@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<AppToSpec>
+	<Test name="Eye Diagram Test" >
+		<SpecTestName>Eye Diagram TP2</SpecTestName>
+	</Test>
+	<Test name="Eye Diagram Test" >
+		<SpecTestName>Eye Diagram TP2</SpecTestName>
+	</Test>
+</AppToSpec>

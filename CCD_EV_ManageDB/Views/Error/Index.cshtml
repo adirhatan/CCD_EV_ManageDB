@@ -1,0 +1,15 @@
+﻿@model HandleErrorInfo
+
+@{
+    ViewBag.Title = "Server Error";
+}
+
+<h2>Server Error</h2>
+
+<h2>Exception details</h2>
+<p>
+    Controller: @Model.ControllerName <br/>
+    Action: @Model.ActionName<br/>
+    Exception: @Model.Exception.Message<br/>
+    StackTrace: @Model.Exception.StackTrace
+</p>

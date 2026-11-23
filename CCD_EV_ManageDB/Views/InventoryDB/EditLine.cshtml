@@ -1,0 +1,262 @@
+﻿@model Inventory
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+
+@{
+    ViewBag.Title = "Edit CompReports line";
+}
+
+  @if (!String.IsNullOrWhiteSpace(Model.platform))
+  {
+    <h2>Edit Inventory line</h2>
+  }
+  else
+  {
+    <h2>New Inventory line</h2>
+  }
+
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+  <script type="text/JavaScript">
+
+      $(function () {
+          $("#dialog").dialog();
+          if ($("#dialog").dialog("isOpen")) $("#dialog").dialog("close");
+      });
+     </script>
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+ @using (Html.BeginForm("EditLineExec", "InventoryDB", FormMethod.Post, new { @id = "LineForm", @name = "LineForm" }))
+ {
+     <input type="hidden" id="_id" name="_id" value="@Model.platform" />
+ <p><!--string _id, string lplatform, string lUnitsNumber, string lReceptionDate, string lBIOS, string lNMV, string lLastUpdateDate, string lFinishDate-->
+     Platform Name:
+    <input type="text" id="lplatform" name="lplatform" value="@Model.platform" style="width: 200px" />
+     Vendor:
+    <input type="text" id="lVendor" name="lVendor" value="@Model.Vendor" style="width: 100px" />
+     # Units:
+    <input type="text" id="lUnitsNumber" name="lUnitsNumber" value="@Model.UnitsNumber" style="width: 20px" />
+    Reception Date(YYYYMMDD):
+    <input type="text" id="lReceptionDate" name="lReceptionDate" value="@Model.ReceptionDate" style="width: 70px" />
+    BIOS:
+    <input type="text" id="lBIOS" name="lBIOS" value="@Model.BIOS" style="width: 60px" />
+    NVM:
+    <input type="text" id="lNMV" name="lNMV" value="@Model.NVM" style="width: 60px" />
+    Project:
+    <input type="text" id="lproject" name="lproject" value="@Model.project" style="width: 60px" />
+    <br /><br />
+    
+    Unit IDS:
+    <input type="text" id="addUnitId" name="addUnitId" value="" style="width: 60px"/>
+    <input type="button" value="Add" title="Add UnitID" class="button" onclick="GenLocatioAction_par('@Url.Action("EditLineUnitId", new RouteValueDictionary(new { _id = @Model.platform, }))','UnitId','addUnitId')" />
+
+    @{if (Model.UnitIds.Count > 0)
+		{
+		  {foreach (string UnitId in Model.UnitIds)
+				{
+                    <label for="UnitId">UnitID: </label>     
+                    <input type="text" id="DUnitId" name="DUnitId" value="@UnitId" style="width: 60px" disabled="disabled"/>
+                    <input type="button" value="D" title="Delete UnitID" class="button" onclick="GenLocatioAction('@Url.Action("DeleteLineUnitId", new RouteValueDictionary(new { _id = @Model.platform, UnitId = @UnitId }))')" />
+                }
+          }
+        }
+	}
+   <br /><br />
+
+    HDMI Support:
+    @if (Model.HDMISupport)
+    {
+    <input type="checkbox" value="Y" name="HDMISupport" checked="checked"/>
+    }
+    else
+    {
+    <input type="checkbox" value="Y" name="HDMISupport"/>  
+    }
+    Preset 10G 0:
+    <input type="text" id="lPreset10G0" name="lPreset10G0" value="@Model.Preset10G0" style="width: 15px" />
+    1:
+    <input type="text" id="lPreset10G1" name="lPreset10G1" value="@Model.Preset10G1" style="width: 15px" />
+    2:
+    <input type="text" id="lPreset10G2" name="lPreset10G2" value="@Model.Preset10G2" style="width: 15px" />
+    3:
+    <input type="text" id="lPreset10G3" name="lPreset10G3" value="@Model.Preset10G3" style="width: 15px" />
+    Preset 10GAMA 0:
+    <input type="text" id="lPreset10GAMA0" name="lPreset10GAMA0" value="@Model.Preset10GAMA0" style="width: 15px" />
+    1:
+    <input type="text" id="lPreset10GAMA1" name="lPreset10GAMA1" value="@Model.Preset10GAMA1" style="width: 15px" />
+    2:
+    <input type="text" id="lPreset10GAMA2" name="lPreset10GAMA2" value="@Model.Preset10GAMA2" style="width: 15px" />
+    3:
+    <input type="text" id="lPreset10GAMA3" name="lPreset10GAMA3" value="@Model.Preset10GAMA3" style="width: 15px" />
+    Preset 20G 0:
+    <input type="text" id="lPreset20G0" name="lPreset20G0" value="@Model.Preset20G0" style="width: 15px" />
+    1:
+    <input type="text" id="lPreset20G1" name="lPreset20G1" value="@Model.Preset20G1" style="width: 15px" />
+    2:
+    <input type="text" id="lPreset20G2" name="lPreset20G2" value="@Model.Preset20G2" style="width: 15px" />
+    3:
+    <input type="text" id="lPreset20G3" name="lPreset20G3" value="@Model.Preset20G3" style="width: 15px" />
+    USB2 Amp:
+    <input type="text" id="lUSB2Amp" name="lUSB2Amp" value="@Model.USB2Amp" style="width: 30px" />
+    <br /><br />
+    Last Update:
+    <input type="text" id="lLastUpdateDate" name="lLastUpdateDate" value="@Model.LastUpdateDate" disabled="disabled" style="width: 70px" />
+    Finish Date(YYYYMMDD):
+    <input type="text" id="lFinishDate" name="lFinishDate" value="@Model.FinishDate" style="width: 70px" />
+    1P/2P
+    <select id="lPorts" name="lPorts">
+    @{if (Model.Ports == "2P")
+      {
+            <option value="1P" >1P</option>
+            <option value="2P" selected="selected" >2P</option>   
+
+      }
+      else
+      {
+            <option value="1P" selected="selected" >1P</option>
+            <option value="2P" >2P</option>   
+      }
+    }
+    </select>
+
+     Host/Device
+    <select id="lDevType" name="lDevType">
+    @{if (Model.DevType == General.DeviceType.Device.ToString())
+      {
+            <option value="@General.DeviceType.Host" >Host</option>
+            <option value="@General.DeviceType.Device" selected="selected" >Device</option>   
+      }
+      else
+      {
+            <option value="@General.DeviceType.Host" selected="selected" >Host</option>
+            <option value="@General.DeviceType.Device" >Device</option>   
+      }
+    }
+    </select>
+
+ <br /><br />
+    <input type="submit" value="Save" />
+    <input type="button" value="Cancel" title="Cancel" class="button" onclick="GenLocatioAction('@Url.Action("InventoryLinesClear", "InventoryDB")')" />
+</p>
+ }
+ <br />
+<!--
+     UnitIds:
+    @using (Html.BeginForm("EditLineUnitId", "InventoryDB", FormMethod.Post, new { @id = "AddUnitIdForm", @name = "AddUnitIdForm" }))
+    {
+        <input type="hidden" id="_uiid" name="_uiid" value="@Model.platform" />
+
+        <label for="addUnitId">Add UnitID: </label>
+        <input type="text" id="addUnitId" name="addUnitId" value="" style="width: 60px"/>
+        <input type="submit" value="Add" title="Add UnitId"/>
+    }
+
+    @{if (Model.UnitIds.Count > 0)
+      {
+          {
+              foreach (string UnitId in Model.UnitIds)
+              {
+                  using (Html.BeginForm("DeleteLineUnitId", "InventoryDB", FormMethod.Post, new { @id = "DelUnitIdForm", @name = "DelUnitIdForm" }))
+                  {
+                            <label for="UnitId">UnitID: </label>
+							<input type="text" id="UnitId" name="DUnitId" value="@UnitId" style="width: 60px" disabled="disabled"/>
+							<input type="hidden" name="_id" value="@Model.platform" />      
+							<input type="hidden" name="UnitId" value="@UnitId" />
+							<input type="submit" value="D" title="Delete Unit" class="button"  />
+                  }
+
+              }
+          }
+      }
+	}
+   <br /><br />
+   -->
+
+    @if (Model.FinishDate != "0")
+    {
+        using (Html.BeginForm("MoveToArch", "InventoryDB", FormMethod.Post, new { @id = "bForm", @name = "bForm" }))
+        {
+        <input type="hidden" id="_bid" name="_id" value="@Model.platform" />
+        }
+      <p>Archive Platform:
+        <input type="button" value="Archive" title="Move platform '@Model.platform'  to active inventory" class="button" onclick="FormConfirmAction('bForm','@Url.Action("MoveToArch", "InventoryDB")','Are you sure you want to archive platform @Model.platform results ?.')"/>
+      </p>
+      <br />
+    }
+   
+
+  @if (!String.IsNullOrWhiteSpace(Model.platform))
+  {
+      using (Html.BeginForm("EditLineReport", "InventoryDB", FormMethod.Post, new { enctype = "multipart/form-data" }))
+      {
+         <input type="hidden" id="_rid" name="_id" value="@Model.platform" />
+        <p>
+         Load/Change Report File:
+         <input type="file" name="file" />
+            <input type="submit" value="Load" title="Load Report"/>
+        </p>
+      }
+  }
+  
+ @{if (Model.Reports.Count > 0)
+   {
+    <p>Reports:</p>
+   }
+ }
+  @{foreach (string report in Model.Reports)
+    {
+        using (Html.BeginForm("DeleteLineReport", "InventoryDB", FormMethod.Post, new { @id = "DelRepoertForm", @name = "DelRepoertForm" }))
+        {
+                <a class="fileLinkRes" href="@Url.Action("ViewReportFile", "InventoryDB", new { filepath = report, _id = Model.platform })" >@Path.GetFileName(report)</a>
+                <input type="hidden" name="_id" value="@Model.platform" />      
+                <input type="hidden" name="reportPath" value="@report" />
+                <input type="submit" value="D" title="Delete report" class="button"  />
+        }
+
+    }
+   }
+
+
+
+ @{if (Model.SavedItems.Count > 0)
+   {
+       <br />
+    <p>History:</p>
+   }
+ }
+ @{foreach (InvSaved savedItems in Model.SavedItems)
+   {
+       <p>
+        BIOS:
+        <input type="text" id="sBIOS" name="sBIOS" value="@savedItems.BIOS" disabled="disabled" style="width: 60px" />
+        NVM:
+        <input type="text" id="sNMV" name="sNMV" value="@savedItems.NVM" disabled="disabled" style="width: 60px" />
+        Last Update:
+        <input type="text" id="sUpdateDate" name="sLastUpdateDate" value="@savedItems.UpdateDate" disabled="disabled" style="width: 70px" />
+        Tests Summary:
+        <input type="button" value="S" title="Summary for NVM @savedItems.NVM" class="button" onclick="AjaxShowCompSummary('dialog','@Model.platform','@savedItems.NVM','0','@Url.Action("SummaryLine", "InventoryDB")')" />
+        </p>
+     
+   }
+  }
+
+   @{if (Model.PFinishDates.Count > 0)
+     {
+    <p>Previous Finish Dates:</p>
+     }
+ 
+   foreach (string pFinishDate in Model.PFinishDates)
+   {
+       <p>
+        Finish Date:
+        <input type="text" id="pFinishDate" name="pFinishDate" value="@pFinishDate" disabled="disabled" style="width: 60px" />
+        </p>
+   }
+ }
+  <div id="dialog" title="Tests Summary">
+    <p>Now querying DB for tests summary, please wait...</p>
+  </div>
+

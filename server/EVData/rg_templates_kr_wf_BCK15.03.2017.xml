@@ -1,0 +1,604 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<ReportConfig>
+
+  <Resources>
+
+      <Template key="template_EV_HSS_Slide" >
+
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="25" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <VariabilityChart top="85" left="0" width="692" height="220" shadow="false" connectMeans="true">
+        <Source id="1" />
+        <Grouping>           
+		   <Column>Corner</Column>
+		   <Column>Lane</Column>
+		   <Column>Skew</Column>
+        </Grouping>
+		
+		<Legend>          
+		  <Column>UnitId</Column>
+        </Legend>
+      </VariabilityChart>
+	  
+	  
+      <TestStatus top="45" left="10" width="150" height="45">
+        <Source id="1"/>
+      </TestStatus>
+	  
+	  <Histogram top="335" left="5" width="700" height="140" shadow="false">
+        <Source id="1" />
+      </Histogram>
+
+    </Template>
+	
+	<Template key="template_EV_Skew_Corner_Slide" >
+
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="25" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <VariabilityChart top="85" left="0" width="692" height="220" shadow="false" connectMeans="true">
+        <Source id="1" />
+        <Grouping>           
+		   <Column>Corner</Column>
+		   <Column>Skew</Column>
+        </Grouping>
+		
+		<Legend>          
+		  <Column>UnitId</Column>
+        </Legend>
+      </VariabilityChart>
+	  
+	  
+      <TestStatus top="45" left="10" width="150" height="45">
+        <Source id="1"/>
+      </TestStatus>
+	  
+	  <Histogram top="335" left="5" width="700" height="140" shadow="false">
+        <Source id="1" />
+      </Histogram>
+
+    </Template>
+	
+	<Template key="template_EV_Skew_Lane_Port_Corner_Slide" >
+
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="25" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <VariabilityChart top="85" left="0" width="692" height="220" shadow="false" connectMeans="true">
+        <Source id="1" />
+        <Grouping>           
+		   <Column>Corner</Column>
+		   <Column>Port</Column>
+		   <Column>Lane</Column>
+		   <Column>Skew</Column>
+        </Grouping>
+		
+		<Legend>          
+		  <Column>UnitId</Column>
+        </Legend>
+      </VariabilityChart>
+	  
+	  
+      <TestStatus top="45" left="10" width="150" height="45">
+        <Source id="1"/>
+      </TestStatus>
+	  
+	  <Histogram top="335" left="5" width="700" height="140" shadow="false">
+        <Source id="1" />
+      </Histogram>
+
+    </Template>
+	
+	
+	<Template key="template_EV_BoardNumber_Skew_Lane_Port_Corner_Slide" >
+
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="25" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <VariabilityChart top="85" left="0" width="692" height="220" shadow="false" connectMeans="true">
+        <Source id="1" />
+        <Grouping>           
+		   <Column>Corner</Column>
+		   <Column>Port</Column>
+		   <Column>Lane</Column>
+		   <Column>Skew</Column>
+        </Grouping>
+		
+		<Legend>          
+		  <Column>BoardNumber</Column>
+        </Legend>
+      </VariabilityChart>
+	  
+	  
+      <TestStatus top="45" left="10" width="150" height="45">
+        <Source id="1"/>
+      </TestStatus>
+	  
+	  <Histogram top="335" left="5" width="700" height="140" shadow="false">
+        <Source id="1" />
+      </Histogram>
+
+    </Template>
+	
+	
+	<Template key="template_EV_Skew_Port_Corner_Slide" >
+
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="25" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <VariabilityChart top="85" left="0" width="692" height="220" shadow="false" connectMeans="true">
+        <Source id="1" />
+        <Grouping>           
+		   <Column>Corner</Column>
+		   <Column>Port</Column>
+		   <Column>Skew</Column>
+        </Grouping>
+		
+		<Legend>          
+		  <Column>UnitId</Column>
+        </Legend>
+      </VariabilityChart>
+	  
+	  
+      <TestStatus top="45" left="10" width="150" height="45">
+        <Source id="1"/>
+      </TestStatus>
+	  
+	  <Histogram top="335" left="5" width="700" height="140" shadow="false">
+        <Source id="1" />
+      </Histogram>
+
+    </Template>
+	
+		      <Template key="template_EV_BoardNumber_Skew_Port_Corner_Slide" >
+
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="25" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <VariabilityChart top="85" left="0" width="692" height="220" shadow="false" connectMeans="true">
+        <Source id="1" />
+        <Grouping>           
+		   <Column>Corner</Column>
+		   <Column>Port</Column>
+		   <Column>Skew</Column>
+        </Grouping>
+		
+		<Legend>          
+		  <Column>BoardNumber</Column>
+        </Legend>
+      </VariabilityChart>
+	  
+	  
+      <TestStatus top="45" left="10" width="150" height="45">
+        <Source id="1"/>
+      </TestStatus>
+	  
+	  <Histogram top="335" left="5" width="700" height="140" shadow="false">
+        <Source id="1" />
+      </Histogram>
+
+    </Template>
+	
+	
+		      <Template key="template_EV_Skew_Lane_Port_Corner_TestChannel_Slide" >
+
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="25" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <VariabilityChart top="85" left="0" width="692" height="220" shadow="false" connectMeans="true">
+        <Source id="1" />
+        <Grouping>           
+		   <Column>Corner</Column>
+			<Column>Test Channel</Column>
+			<Column>Port</Column>
+			<Column>Lane</Column>
+		   <Column>Skew</Column>
+        </Grouping>
+		
+		<Legend>          
+		  <Column>UnitId</Column>
+        </Legend>
+      </VariabilityChart>
+	  
+	  
+      <TestStatus top="45" left="10" width="150" height="45">
+        <Source id="1"/>
+      </TestStatus>
+	  
+	  <Histogram top="335" left="5" width="700" height="140" shadow="false">
+        <Source id="1" />
+      </Histogram>
+
+    </Template>
+	
+	<Template key="template_EV_PCIE_TX_Slide" >
+
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="25" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <VariabilityChart top="85" left="0" width="692" height="220" shadow="false" connectMeans="true">
+        <Source id="1" />
+        <Grouping>           
+		   <Column>Corner</Column>
+		   <Column>Lane</Column>
+		   <Column>Skew</Column>
+        </Grouping>
+		
+		<Legend>          
+		  <Column>UnitSerialNumber</Column>
+        </Legend>
+      </VariabilityChart>
+	  
+	  
+      <TestStatus top="45" left="10" width="150" height="45">
+        <Source id="1"/>
+      </TestStatus>
+	  
+	  <Histogram top="335" left="5" width="700" height="140" shadow="false">
+        <Source id="1" />
+      </Histogram>
+
+    </Template>
+<Template key="template_POWER_ULT_1V05_TJ_Slide" >
+<!--runs on power -->
+
+	<TextBlock top="15" left="5" width="700" height="30" fontSize="25" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+		<Source id="1" />
+	</TextBlock>
+
+	<VariabilityChart top="85" left="0" width="720" height="400" shadow="false" connectMeans="false">
+		<Source id="1" />
+		<Grouping>           
+			<Column>Skew</Column>
+			<Column>ULT</Column>
+			<Column>V1_05</Column> 
+			<Column>Tjunc</Column> 
+		</Grouping>
+		<Legend>          
+			<Column>V1_05</Column>        
+		</Legend>
+	</VariabilityChart>
+
+</Template>
+
+
+
+<Template key="template_POWER_UNIT_MODES" >
+<!--runs on power -->
+	<TextBlock top="15" left="5" width="700" height="30" fontSize="25" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+		<Source id="1" />
+	</TextBlock>
+
+	<VariabilityChart top="65" left="0" width="720" height="420" shadow="false" connectMeans="false">
+		<Source id="1" />
+		<Grouping>   
+			<Column>ULT</Column>
+			<Column>ChipSolution</Column>
+			<Column>Mode</Column> 
+			<Column>Tjunc</Column>
+		</Grouping>
+
+	<Legend>          
+		<Column>Corner</Column>
+	</Legend>
+	</VariabilityChart>
+
+</Template>
+
+
+
+  <Template key="template_EV_Tsensor_Slide" >
+<!--runs on Tjunc -->
+	<TextBlock top="15" left="5" width="700" height="30" fontSize="25" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+		<Source id="1" />
+	</TextBlock>
+
+	<VariabilityChart top="85" left="0" width="720" height="400" shadow="false" connectMeans="false">
+		<Source id="1" />
+		<Grouping>           
+			<Column>ULT</Column>
+		</Grouping>
+		<Legend>          
+			<Column>Thermal Sensor within range</Column>        
+		</Legend>
+	</VariabilityChart>
+
+	<TestStatus top="45" left="10" width="150" height="45">
+        <Source id="1"/>
+	</TestStatus>
+	  
+</Template>
+
+
+  <Template key="template_EV_SVRStability_Slide" >
+	<!--runs on V1_05 -->
+	<TextBlock top="15" left="5" width="700" height="30" fontSize="25" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+		<Source id="1" />
+	</TextBlock>
+
+	<VariabilityChart top="85" left="0" width="720" height="400" shadow="false" connectMeans="false">
+		<Source id="1" />
+		<Grouping>           
+			<Column>Expected 0V9</Column>
+		</Grouping>
+
+		<Legend>          
+			<Column>SVR Stability</Column>        
+		</Legend>
+	</VariabilityChart>
+
+	<TestStatus top="45" left="10" width="150" height="45">
+        <Source id="1"/>
+	</TestStatus>
+	  
+</Template>
+	
+  <Template key="template_EV_new" >
+
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="35" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <VariabilityChart top="85" left="0" width="692" height="220" shadow="false" connectMeans="true" scale="true">
+        <Source id="1" />
+        <Grouping>           
+		   <Column>Corner</Column>
+		   <Column>Lane</Column>
+        </Grouping>
+		
+		<Legend>          
+		  <Column>UnitSerialNumber</Column>
+        </Legend>
+      </VariabilityChart>
+	  
+	  
+      <TestStatus top="45" left="10" width="150" height="45">
+        <Source id="1"/>
+      </TestStatus>
+	  
+	  <Histogram top="335" left="5" width="700" height="140" shadow="false">
+        <Source id="1" />
+      </Histogram>
+
+    </Template>
+	
+	
+	  <Template key="template_EV_ALL" >
+
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="35" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <VariabilityChart top="85" left="0" width="692" height="220" shadow="false" connectMeans="true" scale="true">
+        <Source id="1" />
+        <Grouping>           
+		   <Column>Corner</Column>
+		   <Column>Lane</Column>
+        </Grouping>
+		
+		<Legend>          
+		  <Column>Skew</Column>
+        </Legend>
+      </VariabilityChart>
+	  
+	  
+      <TestStatus top="45" left="10" width="150" height="45">
+        <Source id="1"/>
+      </TestStatus>
+	  
+	  <Histogram top="335" left="5" width="700" height="140" shadow="false">
+        <Source id="1" />
+      </Histogram>
+
+    </Template>
+	
+  
+  	<Template key="template_Tabulate" >
+
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="25" foreground="DarkBlue" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <TabulateChart top="85" left="100" width="200" height="350" shadow="false" connectMeans="false">
+        <Source id="1" />
+        <Grouping>           
+		   <Column>UnitId</Column>
+		   <Column>Skew</Column>
+		   <Column>Corner</Column>
+		   <Column>Phase</Column>
+        </Grouping>
+		
+		<Legend>          
+		  <Column>UnitId</Column>
+        </Legend>
+      </TabulateChart>
+	  
+	  
+      <TestStatus top="45" left="10" width="150" height="45">
+        <Source id="1"/>
+      </TestStatus>
+	  
+
+    </Template>
+	
+    <Template key="template_var_hist" >
+
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="35" foreground="Brown" alignment="center" fontFamily="Calibri" >
+        <Source id="2" />
+      </TextBlock>
+
+      <Histogram top="70" left="5" width="700" height="160" shadow="True">
+        <Source id="2" />
+      </Histogram>
+
+      <VariabilityChart top="240" left="305" width="400" height="220" shadow="True">
+        <Source id="2" />
+        <Grouping>
+          <Column>Unit Material</Column>
+          <Column>Corner</Column>
+        </Grouping>
+      </VariabilityChart>
+
+      <TestStatus top="280" left="5" width="200" height="50">
+        <Source id="2"/>
+      </TestStatus>
+
+    </Template>
+
+
+
+    <Template key="template_baseT_charts" >
+
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="28" foreground="Brown" alignment="center" fontFamily="Calibri" >
+        <Source id="src1" />
+      </TextBlock>
+
+      <Histogram top="90" left="5" width="700" height="160" shadow="True">
+        <Source id="src1" />
+      </Histogram>
+
+      <VariabilityChart top="260" left="5" width="500" height="200" shadow="True">
+        <Source id="src1" />
+        <Grouping>
+          <Column>Port</Column>
+          <Column>type</Column>
+          <Column>Corner</Column>
+        </Grouping>
+      </VariabilityChart>
+
+      <TestStatus top="300" left="550" width="150" height="50">
+        <Source id="src1"/>
+      </TestStatus>
+
+    </Template>
+
+   <Template key="template_1image" >
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="20" foreground="Brown" alignment="center" fontFamily="Calibri" >
+        <Source id="0" />
+      </TextBlock>
+
+      <TextBlock top="80" left="5" width="230" height="20" fontSize="11" foreground="Black" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <RandomAttachments top="120" left="140" width="450" height="350">
+        <Source id="1" />
+      </RandomAttachments>
+    </Template>
+
+
+    <Template key="template_2images" >
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="28" foreground="Brown" alignment="center" fontFamily="Calibri" >
+        <Source id="0" />
+      </TextBlock>
+
+      <TextBlock top="90" left="20" width="330" height="20" fontSize="11" foreground="Black" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <RandomAttachments top="130" left="20" width="330" height="280">
+        <Source id="1" />
+      </RandomAttachments>
+
+      <TextBlock top="90" left="375" width="330" height="20" fontSize="11" foreground="Black" alignment="center" fontFamily="Calibri" >
+        <Source id="2" />
+      </TextBlock>
+
+      <RandomAttachments top="130" left="375" width="330" height="280">
+        <Source id="2" />
+      </RandomAttachments>
+
+    </Template>
+
+
+    <Template key="template_3images" >
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="28" foreground="Brown" alignment="center" fontFamily="Calibri" >
+        <Source id="0" />
+      </TextBlock>
+
+      <TextBlock top="50" left="5" width="250" height="20" fontSize="11" foreground="Black" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <RandomAttachments top="80" left="5" width="250" height="200">
+        <Source id="1" />
+      </RandomAttachments>
+
+
+      <TextBlock top="120" left="250" width="230" height="20" fontSize="11" foreground="Black" alignment="center" fontFamily="Calibri" >
+        <Source id="2" />
+      </TextBlock>
+
+      <RandomAttachments top="150" left="235" width="250" height="200">
+        <Source id="2" />
+      </RandomAttachments>
+
+
+      <TextBlock top="230" left="480" width="230" height="20" fontSize="11" foreground="Black" alignment="center" fontFamily="Calibri" >
+        <Source id="3" />
+      </TextBlock>
+
+      <RandomAttachments top="270" left="455" width="250" height="200">
+        <Source id="3" />
+      </RandomAttachments>
+
+
+    </Template>
+
+
+
+    <Template key="template_4images">
+      <TextBlock top="15" left="5" width="700" height="30" fontSize="28" foreground="Brown" alignment="center" fontFamily="Calibri" >
+        <Source id="0" />
+      </TextBlock>
+
+      <TextBlock top="130" left="40" width="60" height="20" fontSize="11" foreground="Black" alignment="center" fontFamily="Calibri" >
+        <Source id="1" />
+      </TextBlock>
+
+      <RandomAttachments top="60" left="110" width="240" height="190">
+        <Source id="1" />
+      </RandomAttachments>
+
+      <TextBlock top="130" left="610" width="60" height="20" fontSize="11" foreground="Black" alignment="center" fontFamily="Calibri" >
+        <Source id="2" />
+      </TextBlock>
+
+      <RandomAttachments top="60" left="360" width="240" height="190">
+        <Source id="2" />
+      </RandomAttachments>
+
+
+      <TextBlock top="350" left="40" width="60" height="20" fontSize="11" foreground="Black" alignment="center" fontFamily="Calibri" >
+        <Source id="3" />
+      </TextBlock>
+      
+      <RandomAttachments top="280" left="110" width="240" height="190">
+        <Source id="3" />
+      </RandomAttachments>
+
+
+      <TextBlock top="350" left="610" width="60" height="20" fontSize="11" foreground="Black" alignment="center" fontFamily="Calibri" >
+        <Source id="4" />
+      </TextBlock>
+
+      <RandomAttachments top="280" left="360" width="240" height="190">
+        <Source id="4" />
+      </RandomAttachments>
+
+    </Template>
+
+  </Resources>
+
+
+</ReportConfig>

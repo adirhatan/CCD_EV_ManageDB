@@ -1,0 +1,1373 @@
+﻿@model SessionsManageProtocolConf
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using MongoDB.Bson.Serialization;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using System.Text.RegularExpressions;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+
+@{
+    ViewBag.Title = "Configure New CSR  ";
+}
+
+<h2>Configure New CSR</h2>
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>   
+
+ <script type="text/JavaScript">     function getForm(sourceDoc, formId) { return sourceDoc.getElementById(formId); }
+     function getFormElement(sourceForm, elementName) { return sourceForm[elementName]; for (var i = 0; i < sourceForm.elements.length; i++) { var theElement = sourceForm.elements[i]; if (theElement.name == elementName) { return theElement; } } }
+     function moveSelected(sourceElementId, targetElementId, moveAll, source) {
+         var sourceElement = document.getElementById(sourceElementId); var targetElement = null; if (targetElementId != null) { targetElement = document.getElementById(targetElementId); }
+         if (sourceElement == null || sourceElement.tagName != "SELECT" || (targetElement != null && targetElement.tagName != "SELECT")) { return; }
+         var unselectedOptions = new Array(); for (var i = 0; i < sourceElement.length; i++) {
+             var option = sourceElement.options[i]; if (option.selected || (moveAll && !option.hide)) {
+                 if (targetElement != null) {
+                     var alreadyExists = false; for (var j = 0; j < targetElement.length; j++) { if (targetElement.options[j].value == option.value) { alreadyExists = true; break; } }
+                     if (!alreadyExists) { targetElement.options[targetElement.length] = new Option(option.text, option.value); }
+                 } else { sourceElement.options[i] = null; i--; }
+             }
+             option.selected = false;
+         }
+         if (source == "Create") { updateHiddenFormCreate() };
+         if (source == "Edit") { updateHiddenFormEdit() };
+     }
+     function updateHiddenFormCreate() { debugger; sourceElement = document.getElementById('FieldsList'); var theForm = sourceElement.form; var useridEl = theForm.elements['Fields']; useridEl.value = ""; for (var i = 0; i < sourceElement.length; i++) { var option = sourceElement.options[i]; useridEl.value += option.value; if (i + 1 < sourceElement.length) { useridEl.value += ','; } } }
+     function updateHiddenFormEdit() { debugger; sourceElement = document.getElementById('FieldsListEdit'); var theForm = sourceElement.form; var useridEl = theForm.elements['FieldsEdit']; useridEl.value = ""; for (var i = 0; i < sourceElement.length; i++) { var option = sourceElement.options[i]; useridEl.value += option.value; if (i + 1 < sourceElement.length) { useridEl.value += ','; } } }
+     function clearSelect(formId, elementId) { var formElement = document.getElementById(formId).elements[elementId]; formElement.selectedIndex = -1; }
+</script>
+
+ <script type="text/JavaScript">
+     $(document).ready(function () {
+         //debugger;
+         $('#TableDivLines').dataTable({
+            "order": [],
+             "iDisplayLength": -1,
+             "columns": [
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false }
+          ],
+             "autoWidth": true,
+             "jQueryUI": true,
+             //        //"sDom": '<"H"CTrf>t<"F"lip>',
+             "dom": '<"F"CTrif>t<"F"CTrif>',
+             "scrollX": "100%",
+             //"sScrollY": "700px",
+             "scrollY": (0.8 * $(window).height()),
+             "scrollCollapse": true
+         });
+
+         $('#filterSpecs').keyup(function () {
+             var valthis = $(this).val().toLowerCase();
+
+             $('select#FieldsListTmp>option').each(function () {
+                 var text = $(this).text().toLowerCase();
+                 if (text.indexOf(valthis) !== -1) {
+                     $(this).show(); $(this).prop('selected', true);
+                 }
+                 else {
+                     $(this).hide();
+                     $(this).prop('selected', false);
+                 }
+             });
+         });
+
+         $('#editfilterSpecs').keyup(function () {
+             var valthis = $(this).val().toLowerCase();
+
+             $('select#FieldsListTmpEdit>option').each(function () {
+                 var text = $(this).text().toLowerCase();
+                 if (text.indexOf(valthis) !== -1) {
+                     $(this).show(); $(this).prop('selected', true);
+                 }
+                 else {
+                     $(this).hide();
+                     $(this).prop('selected', false);
+                 }
+             });
+         });
+     });
+
+</script>
+   <!-- Edit dialog start-->
+    <script type="text/JavaScript">
+//  Depricated, using "ShowEditDivSpecsDialog" instead
+//        $(function () {
+//            var dialog, form;
+
+//            function addUser() {
+//                form.submit();
+//            }
+
+//            dialog = $("#Edit-dialog-form").dialog({
+//                autoOpen: false,
+//                height: 1200,
+//                width: 1400,
+//                modal: true
+//            });
+
+//            form = $("#FormEdit");
+
+//        });
+
+//        function ShowEditDialog(dialog, inputFormId) {
+
+//            //debugger;
+//            var x = document.getElementById(inputFormId);
+//            var y = document.getElementById("FormEdit");
+
+
+//            for (var i = 0; i < x.length; i++) {
+//                if (y.elements.namedItem(x.elements[i].name) != null) {
+//                    y.elements.namedItem(x.elements[i].name).value = x.elements[i].value;
+//                }
+//            }
+//            var td = "#" + dialog;
+//            $(td).dialog();
+//            $(td).dialog("option", "width", 1400);
+//            $(td).dialog("option", "length", 1200);
+//            $(td).dialog("option", "modal", true);
+//            $(td).dialog("open");
+
+//        };
+
+
+  </script>
+
+
+  <!-- Edit dialog end-->
+
+      <!-- Create specDialog start-->
+    <script type="text/JavaScript">
+        $(function () {
+            var dialog, form;
+
+            function addUser() {
+                form.submit();
+            }
+
+            dialog = $("#Create-DivLineSpecsDialog-form").dialog({
+                autoOpen: false,
+                height: 1050,
+                width: 1400,
+                modal: true
+            });
+
+            form = $("#FormCreateDivLineSpecs");
+
+        });
+
+        function ShowCreateDivSpecsDialog(dialog, inputFormId) {
+
+            debugger;
+            var x = document.getElementById(inputFormId);
+            var y = document.getElementById("FormCreateDivLineSpecs");
+            var col = "";
+            var newDivTable = "";
+
+            for (var i = 0; i < x.length; i++) {
+                if (y.elements.namedItem(x.elements[i].name) != null) {
+                    y.elements.namedItem(x.elements[i].name).value = x.elements[i].value;
+                }
+                if (x.elements[i].name.match("col")) {
+                    col = x.elements[i].value;
+                }
+
+                if (x.elements[i].name.match("newDivTable")) {
+                    newDivTable = x.elements[i].value;
+                }
+            }
+
+            if (col == "undefined" || col == null || col == "new" || col=="") {
+                col = newDivTable;
+                y.elements.namedItem("col").value = col;
+            }
+
+            //Spec per table in "FieldsListTmp"
+            document.getElementById("FieldsListTmp").innerHTML = "";
+            var output = [];
+            var length = ngon.dictionarySpecs[col].length;
+            for (var i = 0; i < length; i++) {
+                output[i] = '<option value="' + ngon.dictionarySpecs[col][i] + '">' + ngon.dictionarySpecs[col][i] + '</option>';
+            }
+            document.getElementById("FieldsListTmp").innerHTML = output.join('');
+            //
+
+            var td = "#" + dialog;
+            $(td).dialog();
+            $(td).dialog("option", "width", 1400);
+            $(td).dialog("option", "length", 1050);
+            $(td).dialog("option", "modal", true);
+            $(td).dialog("open");
+
+        };
+
+
+  </script>
+
+
+  <!-- Create specDialog  end-->
+
+        <!-- Edit specDialog start-->
+    <script type="text/JavaScript">
+        $(function () {
+            var dialog, form;
+
+            function addUser() {
+                form.submit();
+            }
+
+            dialog = $("#Edit-DivLineSpecsDialog-form").dialog({
+                autoOpen: false,
+                height: 1050,
+                width: 1400,
+                modal: true
+            });
+
+            form = $("#FormEditDivLineSpecs");
+
+        });
+
+        function ShowEditDivSpecsDialog(dialog, inputFormId) {
+
+            debugger;
+            var x = document.getElementById(inputFormId);
+            var y = document.getElementById("FormEditDivLineSpecs");
+            var FieldsEdit = "";
+            var table = "";
+
+            for (var i = 0; i < x.length; i++) {
+                if (y.elements.namedItem(x.elements[i].name) != null) {
+                    y.elements.namedItem(x.elements[i].name).value = x.elements[i].value;
+                }
+                if (x.elements[i].name.match("FieldsEdit")) {
+                    FieldsEdit = x.elements[i].value;
+                }
+                if (x.elements[i].name.match("table")) {
+                    table = x.elements[i].value;
+                }
+            }
+
+            //Taking "FieldsEdit" comma delimited str into select options of "FieldsListEdit"
+            document.getElementById("FieldsListEdit").innerHTML = "";
+            var output = [];
+            var arrayOfVals = FieldsEdit.split(",");
+            var length = arrayOfVals.length;
+            if (FieldsEdit === "") {
+                length = 0;
+            }
+            for (var i = 0; i < length; i++) {
+                output[i] = '<option value="' + arrayOfVals[i] + '">' + arrayOfVals[i] + '</option>';
+            }
+            document.getElementById("FieldsListEdit").innerHTML = output.join('');
+
+
+            //Spec per table in "FieldsListTmpEdit"
+            document.getElementById("FieldsListTmpEdit").innerHTML = "";
+            var output = [];
+            var length = ngon.dictionarySpecs[table].length;
+            for (var i = 0; i < length; i++) {
+                output[i] = '<option value="' + ngon.dictionarySpecs[table][i] + '">' + ngon.dictionarySpecs[table][i] + '</option>';
+            }
+            document.getElementById("FieldsListTmpEdit").innerHTML = output.join('');
+            //
+
+            var td = "#" + dialog;
+            $(td).dialog();
+            $(td).dialog("option", "width", 1400);
+            $(td).dialog("option", "length", 1050);
+            $(td).dialog("option", "modal", true);
+            $(td).dialog("open");
+
+        };
+
+
+  </script>
+
+
+  <!-- Edit specDialog  end-->
+
+          <!-- Edit DivReports start-->
+    <script type="text/JavaScript">
+        $(function () {
+            var dialog, form;
+
+            function addUser() {
+                form.submit();
+            }
+
+            dialog = $("#Edit-DivReportsDialog-form").dialog({
+                autoOpen: false,
+                height: 400,
+                width: 1000,
+                modal: true
+            });
+
+            form = $("#FormEditDivReports");
+
+        });
+
+        function ShowDivReportsDialog(dialog, inputFormId) {
+
+            //debugger;
+            var x = document.getElementById(inputFormId);
+            var y = document.getElementById("FormEditDivReports");
+            var reportsNamesStr = "";
+            var table = "";
+
+            for (var i = 0; i < x.length; i++) {
+                if (y.elements.namedItem(x.elements[i].name) != null) {
+                    y.elements.namedItem(x.elements[i].name).value = x.elements[i].value;
+                }
+                if (x.elements[i].name.match("table")) {
+                    table = x.elements[i].value;
+                }
+                if (x.elements[i].name.match("reportsNamesStr")) {
+                    reportsNamesStr = x.elements[i].value;
+                }
+            }
+
+            //Need to build select options for reports,
+            //Need to put select as many as exist reports, with selected, and anoter empty one 
+            document.getElementById("SelectSRreportID").innerHTML = "";
+            var output = [];
+            var length = ngon.DictionaryUserTableReports[table].length;
+            for (var i = 0; i < length; i++) {
+                output[i] = '<option value="' + ngon.DictionaryUserTableReports[table][i] + '">' + ngon.DictionaryUserReportsNames[ngon.DictionaryUserTableReports[table][i]] + '</option>';
+            }
+            var output1 = [];
+            output[0] = '<option value="">' + '</option>';
+            for (var i = 1; i <= length; i++) {
+                output1[i] = output[i-1];
+            }
+            output1[output1.length] = '<option value="delete">delete</option>';
+            document.getElementById("SelectSRreportID").innerHTML = output1.join('');
+
+            var arrayOfReportNames = reportsNamesStr.split(",");
+            for (var i = 1; i < 6; i++) {
+                if (arrayOfReportNames.length > i - 1) document.getElementById("EditDivReports_reportIDs" + i).value = arrayOfReportNames[i - 1]
+                document.getElementById("SelectreportIDs" +i).innerHTML = output1.join('');
+            }
+
+
+            var td = "#" + dialog;
+            $(td).dialog();
+            $(td).dialog("option", "width", 1000);
+            $(td).dialog("option", "length", 400);
+            $(td).dialog("option", "modal", true);
+            $(td).dialog("open");
+
+        };
+
+
+  </script>
+
+
+  <!-- Edit DivReports  end-->
+
+ <script type="text/JavaScript">
+
+     function changedDivNameSelect(selectDivName, newTableDiv, DivLinePosId, add_col) {
+         debugger;
+         var newTableDiv = document.getElementById(newTableDiv);
+         if (selectDivName.value == "new") {
+             newTableDiv.style.visibility = 'visible'
+         } else {
+             newTableDiv.style.visibility = 'hidden'
+         }
+
+         ///////
+         var selectDivLinePos = document.getElementById(DivLinePosId);
+         var output = [];
+         var length = ngon.dictionaryDivLines[selectDivName.value].length;
+         for (var i = 0; i < length; i++) {
+             output[i] = '<option value="' + ngon.dictionaryDivLines[selectDivName.value][i] + '">' + ngon.dictionaryDivLines[selectDivName.value][i] + '</option>';
+             if (selectDivLinePos.value === ngon.dictionaryDivLines[selectDivName.value][i]) {
+                 output[i] = '<option value="' + ngon.dictionaryDivLines[selectDivName.value][i] + '"' + ' selected="selected">' + ngon.dictionaryDivLines[selectDivName.value][i] + '</option>';
+             }
+         }
+
+         selectDivLinePos.innerHTML = output.join('');
+         /////////
+         var add_col = document.getElementById(add_col);
+         add_col.value = ngon.dictionaryTablesOfDivs[selectDivName.value];
+     }
+     function resetColVal(add_col) {
+         var add_col = document.getElementById(add_col);
+         add_col.value = "";
+     }
+     function validateCSR_Table_Div_Line_Add(formName) {
+    //debugger;
+         var x = document.getElementById(formName);
+    //do some validation for example:
+    var name = "";
+    for (var i = 0; i < x.length; i++) {
+        if (x.elements[i].name.match("DivLineName.*")) {
+            name = x.elements[i].value;
+        }
+    }
+    //txt = txt.substr(0, txt.length - 1);
+    if (name == "") {
+        alert("Div Line Name is mandatory");
+        return;
+    }
+    else {
+    
+        x.submit();
+    }
+}
+
+function SubmitOrder(OrderFormId, direction) {
+        //debugger;
+        var x = document.getElementById(OrderFormId);
+        for (var i = 0; i < x.length; i++) {
+            if (x.elements[i].name.match("direction")) {
+                x.elements[i].value = direction;
+            }
+        }
+        x.submit();
+    }
+
+    function submitCSR_Table_Div_Report(formName, reportIDsStr_id) {
+        //debugger;
+        var x = document.getElementById(formName);
+        //do some validation for example:
+        var reportIDs = "";
+        for (var i = 0; i < x.length; i++) {
+            if (x.elements[i].name.match("SelectreportIDs.*")) {
+                reportIDs += x.elements[i].value + ",";
+            }
+        }
+        if (reportIDs.length > 0) {
+            reportIDs = reportIDs.substr(0, reportIDs.length - 1);
+        }
+        document.getElementById(reportIDsStr_id).value = reportIDs;
+
+        x.submit();
+    }
+
+    function AjaxUpdateExcelPorts(elem, action,  protocol,  proj,  phase) {
+
+        //debugger;
+        var URL = action;
+        var elemId = "#" + elem;
+        var _excelPorts = $(elemId).val();
+        var posting = $.post(URL, { protocol: protocol, proj: proj, phase: phase, excelPorts: _excelPorts });
+
+        posting.done(function (data) {
+            if (data.includes('fail'))
+            {
+                $("#messageText").html(data);
+            }
+            else
+            {
+                $("#messageInfoText").html(data);
+            }
+        });
+    }
+
+  </script>
+
+     @{ var ExportedFile = ViewBag.ExportedFileNAme;
+        if (ExportedFile != null)
+        {
+             <script type="text/JavaScript">
+                 $(document).ready(function () {
+                     var url = '@Url.Action("ViewExportFile", "ManageDB", new { filename = ViewBag.ExportedFileNAme })';
+                     $(location).attr('href', url);
+                 });
+             </script>
+        }
+     }
+  
+<p class="messageText" id="messageText">@TempData["message"]</p>
+<p class="messageInfoText" id="messageInfoText">@TempData["messageInfo"]</p> 
+
+
+      @using (Html.BeginForm("CSR_Table_Configure", "CyclePlanDB", FormMethod.Post, new { @id = "allForm", @name = "allForm" }))
+      {
+     <p>
+        Select Project: 
+        <select id="all_proj" name="proj" onchange="GenSubmitFormAction('allForm','@Url.Action("CSR_Table_Configure", "CyclePlanDB")')">
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="all_phase" name="phase" onchange="GenSubmitFormAction('allForm','@Url.Action("CSR_Table_Configure", "CyclePlanDB")')">
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+        Select Interface: 
+        <select id="all_protocol" name="protocol" class="wselect" onchange="GenSubmitFormAction('allForm','@Url.Action("CSR_Table_Configure", "CyclePlanDB")')">
+            @foreach (var protocol in ViewBag.protocollist)
+            {
+                if (protocol.ToString() == ViewBag.protocol)
+                {
+                    <option value="@protocol.ToString()" selected="selected"> @protocol.ToString()</option>
+                }
+                else
+                {
+                    <option value="@protocol.ToString()" > @protocol.ToString()</option>
+                }
+            }
+        </select> 
+        &nbsp; <input type="button" value="Cycle Plan Main" title="back to Cycle Plan Main" class="button" onclick="GenLocatioAction('@Url.Action("Main", "CyclePlanDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj })')" />
+
+    @if (Model.separateCSRperTable=="Y")
+    {
+        <br /><br /><span>Select CSR Table: </span>
+        <select id="selectedTable" name="selectedTable" onchange="GenSubmitFormAction('allForm','@Url.Action("CSR_Table_Configure", "CyclePlanDB")')">
+            @foreach (var tmplTable in ViewBag.ProjectColList)
+            {
+                if (tmplTable.ToString() == ViewBag.selectedCol)
+                {
+                    <option value="@tmplTable.ToString()" selected="selected"> @tmplTable.ToString()</option>
+                }
+                else
+                {
+                    <option value="@tmplTable.ToString()"> @tmplTable.ToString()</option>
+                }
+            }
+        </select> 
+        <br /><br />
+    }
+    </p>
+      }
+     <p>   
+        <u><b>Notice:</b></u> This page configures <b>new CSR Excel Template</b>, in order to use the template, you should build Excel and deploy.
+        <br /> You can always start build from scratch or use current/previous project/phase CSR. click to reset New CSR: <input type="button" value="Reset New CSR" title="Reset New CSR configuration (empty), next: copy configuration or build line by line" class="button" onclick="GenLocatioAction('@Url.Action("CSR_reset_config", "CyclePlanDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, @sourceAction = "CSR_Table_Configure" })')" />
+        @if ((Model.table_divs.Count != 0) && (Model.table_divs[Model.tables[0]].Count != 0))
+        {
+             <span>&nbsp; click to copy New CSR from actual configuration: <input type="button" value="Copy current CSR" title="Reset New CSR configuration changes and copy current actual configuration" class="button" onclick="GenLocatioAction('@Url.Action("CSR_reset_config", "CyclePlanDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, copy_from_proj = ViewBag.proj, copy_from_phase = ViewBag.phase, @sourceAction = "CSR_Table_Configure" })')" /></span>
+        }
+        <br /><br />
+    </p>
+
+    @if ((Model.table_divs.Count == 0) || (Model.table_divs[Model.tables[0]].Count == 0))
+    {
+        using (Html.BeginForm("CSR_copy_config_from", "CyclePlanDB", FormMethod.Post, new { @id = "copyForm", @name = "copyForm" }))
+        {
+            <input type="hidden" name="proj" value="@ViewBag.proj"  />
+            <input type="hidden" name="phase" value="@ViewBag.phase"  />
+            <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+            <input type="hidden" name="sourceAction" value="CSR_Table_Configure"  />
+        
+     <p>
+        <b style="background-color:Yellow">Copy configuration from current/previous project/phase. Select Project: </b>
+        <select id="copy_from_proj" name="copy_from_proj" >
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="copy_from_phase" name="copy_from_phase" >
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+        &nbsp; <input type="submit" value="Copy" title="Copy configuration from previous/current project/phase" class="button" />
+    </p>
+        }
+    }
+    @{
+        string excelPortsStr = "";
+        foreach (string port in Model.excelPorts)
+        {
+            excelPortsStr += port + ",";
+        }
+        excelPortsStr = excelPortsStr.TrimEnd(',');
+        string UnitsStr = "";
+        foreach (CCD_EV_ManageDB.Models.Unit unit in Model.units)
+        {
+            UnitsStr += unit.ToString() + ",";
+        }
+        UnitsStr = UnitsStr.TrimEnd(',');
+        if (String.IsNullOrEmpty(UnitsStr))
+        {
+            UnitsStr = "no unitts assigned, default of template (1-1-1) is used";
+        }
+    <p><u>Template Details:</u>
+    <br />Excel Ports    : <input  id="excelPorts" name="excelPorts" type="text" value="@excelPortsStr" /> (comma delimited) &nbsp;<input type="button" value="update" title="Update Excel Ports for this new CSR Template" class="button"  onclick="AjaxUpdateExcelPorts('excelPorts','@Url.Action("update_excelPorts_ajax", "CyclePlanDB")','@ViewBag.protocol','@ViewBag.proj', '@ViewBag.phase')"/>
+    &nbsp; Units    : <input  name="units" type="text" value="@UnitsStr" style="width:750px" disabled="disabled"/> (for update use "Configure SM/CSR Meta Data" page)
+    </p>
+
+    }
+  <!--   nnnnnnnnnn     -->
+    @using (Html.BeginForm("CSR_Table_Div_Line_Add", "CyclePlanDB", FormMethod.Post, new { @id = "addForm", @name = "addForm" }))
+    {
+        <input type="hidden" name="proj" value="@ViewBag.proj"  />
+        <input type="hidden" name="phase" value="@ViewBag.phase"  />
+        <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+        <input type="hidden" id="add_col" name="col" value="@ViewBag.selectedCol"  />
+     <p>   
+        <u>Add new Table Div Line:</u> <input type="button" value="?" title="Help" class="button"  onclick="ShowHelpImgJS ( 'Help CSR Configuration Example: Table Div; Table Div Line','helpCSR_Table_Configure.png','1220','550','1179','532')" /> 
+         
+        <br /><br />1. Select Table Div: 
+        <select id="DivName" name="DivName" style="width:auto" onchange="changedDivNameSelect(this,'newDivNameDiv','DivLinePos','add_col')">
+        
+            @foreach (var tableDivsPair in Model.table_divs)
+            {
+                if ((Model.separateCSRperTable == "Y") && (tableDivsPair.Key != ViewBag.selectedCol))
+                {
+                    continue;
+                }
+                foreach (var tableDivPair in tableDivsPair.Value)
+                {
+                    <option value="@tableDivPair.Key"> @tableDivPair.Key  (@tableDivPair.Value.table_name) </option>
+                }
+            }
+            <option value="new"> new </option>
+        </select>  (Table section in CSR Excel template)
+
+        @{
+            string NewDivVis = "hidden";
+            if ((Model.table_divs.Count == 0) || (Model.table_divs[Model.tables[0]].Count == 0) || ((Model.separateCSRperTable=="Y" && Model.table_divs[ViewBag.selectedCol].Count == 0)))
+            {
+                NewDivVis = "visible";
+            }
+        <span id="newDivNameDiv" style="visibility:@NewDivVis" ><br /><br /> &nbsp;&nbsp;  New Table Div Name : &nbsp; <input id="newDivName" name="newDivName" type="text" value="" onchange="resetColVal('add_col')" /> (Name for New Table section in CSR Excel template)        
+        &nbsp; Table:<select id="newDivTable" name="newDivTable" style="width:auto">
+        
+            @foreach (string col in ViewBag.ProjectColList)
+            {
+                if ((Model.separateCSRperTable == "Y") && (col != ViewBag.selectedCol))
+                {
+                    continue;
+                }
+                    <option value="@col"> @col</option>
+            }
+        </select> (DB Table for New Table section in CSR Excel template)</span>
+        }
+        <br /><br />2. Position (Add After)  : 
+        <select id="DivLinePos" name="DivLinePos" style="width:auto" >
+        @if ((Model.table_divs.Count > 0) && (Model.table_divs.First().Value.Count > 0))
+        {
+            foreach (var DivLine in Model.table_divs.First().Value.First().Value.TableDivLines)
+            {
+                <option value="@DivLine.Key"> @DivLine.Key</option>
+            }
+        }
+        else
+        {
+            <option value="initialPos">  </option>
+        }
+        </select>
+        <!--<br /><br /> Div Line Name   : &nbsp; <input id="DivLineName" name="DivLineName" type="text" value="" /> (Line name in CSR Excel template) -->
+        <br /><br />3. Use popup to create line and select specific SpectTestNames: &nbsp;<input type="button" value="Create Line" class="button" id="SelectSpecs" onclick="ShowCreateDivSpecsDialog('Create-DivLineSpecsDialog-form','addForm')" /> <!--(below definitions are optional, num of trials and num of tests will be defined automatically)-->
+        <!--<br /><br /><br />Optional: Define "SpecTestName" or additional conditions. (if you use additional conditions, you must define num of trials and num of tests)  : 
+        <br /><br />Field   : 
+        <input id="field1" name="field1" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="condition1" name="condition1" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="values1" name="values1" type="text" value="" /> (comma delimited)
+        <br /><br />Field   : 
+        <input id="field2" name="field2" type="text" value="" />  
+        &nbsp; Condition   : 
+        <select id="condition2" name="condition2" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="values2" name="values2" type="text" value="" /> (comma delimited)
+        <br /><br />Field   : 
+        <input id="field3" name="field3" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="condition3" name="condition3" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="values3" name="values3" type="text" value="" /> (comma delimited)
+        <br /><br />Field   : 
+        <input id="field4" name="field4" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="condition4" name="condition4" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="values4" name="values4" type="text" value="" /> (comma delimited)
+                <br /><br />Field   : 
+        <input id="field5" name="field5" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="condition5" name="condition5" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="values5" name="values5" type="text" value="" /> (comma delimited)
+        <br /><br />Trials   : <input id="trials" name="trials" type="text" style="width: 50px" value="1" /> (number, default is 1)
+        <br /><br />Num of tests   : <input id="NumOfTests" name="NumOfTests" type="text" style="width: 50px" value="1" /> (number, default is 1)  
+
+         <br /><br />   <input type="button" value="Create" class="button" id="Create" onclick="validateCSR_Table_Div_Line_Add('addForm')"/> -->
+    </p>
+    }
+    <br />
+        @using (Html.BeginForm("CSR_Table_BuildCSRExcel", "CyclePlanDB", FormMethod.Post, new { @id = "buildForm", @name = "buildForm" }))
+        {
+    <input type="hidden" name="proj" value="@ViewBag.proj"  />
+    <input type="hidden" name="phase" value="@ViewBag.phase"  />
+    <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+    <input type="hidden" name="selectedTable" value="@ViewBag.selectedCol"  />
+            
+     <p> 
+        <b>Edit New CSR Excel - Table Divisions and Lines for @ViewBag.protocol @ViewBag.proj @ViewBag.phase, use buttons in table below: </b>
+        <span > <!--<u>Build Excel template for CSR</u>:  
+       Select table: <select id="addcol" name="col" class="wselect">
+            @foreach (var col in ViewBag.ProjectColList)
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        </select>   -->
+        <br />(If all definitions are updated)&nbsp;<input type="submit" value="Create Excel" class="button" />
+        </span>
+    </p>
+        }
+   <table id="TableDivLines" class="display">
+    <thead>
+    <tr>
+        <th >
+            TableDivName
+        </th>
+        <th >
+            DB Table
+        </th>
+        <th >
+            LineName
+        </th>
+        <th >
+            Trials
+        </th>
+        <th >
+            Num of tests
+        </th>
+        <th >
+            Logic
+        </th>
+        <th >
+            Order Line
+        </th>
+        <th>
+            Order Div
+        </th>
+        <th>
+            Reports
+        </th>
+        <th >
+            Edit
+        </th>
+        <th >
+            Delete
+        </th>
+    </tr> 
+
+    </thead>
+    <tbody>
+    @foreach (var TDVPair in Model.table_divs)
+    {
+        if ((Model.separateCSRperTable == "Y") && (TDVPair.Key != ViewBag.selectedCol))
+        {
+            continue;
+        }
+        int TDVcnt = 0;
+        MDBUserTableReport MDBReport = new MDBUserTableReport();
+        foreach (var TDV in TDVPair.Value)
+        {
+            TDVcnt++;
+            bool isLastTDV = false;
+            if (TDVcnt == TDVPair.Value.Count)
+            {
+                isLastTDV = true;
+            }
+            int TDLcnt = 0;
+            foreach (var TDL in TDV.Value.TableDivLines)
+            {
+                TDLcnt++;
+                string ReportForm = "ReportForm" + @TDL.Value.name + @TDV.Key;
+                string EditForm = "EditForm" + @TDL.Value.name + @TDV.Key;
+                string DelForm = "DelForm" + @TDL.Value.name + @TDV.Key;
+                string OrderForm = "OrderForm" + @TDL.Value.name + @TDV.Key;
+                string DivOrderForm = "DivOrderForm" + @TDL.Value.name + @TDV.Key;
+                string cornersStr = "";
+                cornersStr = cornersStr.TrimEnd(',');
+                string portsStr = "";
+                portsStr = portsStr.TrimEnd(',');
+                string lanesStr = "";
+                lanesStr = lanesStr.TrimEnd(',');
+                bool isLastTDL = false;
+                if (TDLcnt == TDV.Value.TableDivLines.Count) { isLastTDL = true; }
+                
+     <tr>
+        <td>
+            @TDV.Key  
+        </td> 
+        <td>
+            (@TDV.Value.table_name)
+        </td> 
+        <td>
+            @TDL.Value.name 
+        </td> 
+         <td>
+            @TDL.Value.trials
+        </td> 
+        <td>
+            @TDL.Value.numOfTests
+        </td> 
+         <td>
+        "@TDL.Value.tableDivFields[0].name @TDL.Value.tableDivFields[0].condition @TDL.Value.tableDivFields[0].values[0] ... " 
+        </td>
+        <td>
+        @using (Html.BeginForm("CSR_Table_Div_Line_Order", "CyclePlanDB", FormMethod.Post, new { @id = OrderForm, @name = OrderForm }))
+        {
+            <input type="hidden" name="proj" value="@ViewBag.proj"  />
+            <input type="hidden" name="phase" value="@ViewBag.phase"  />
+            <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+            <input type="hidden" name="table" value="@TDV.Value.table_name"  />
+            <input type="hidden" name="DivName" value="@TDV.Key"  />
+            <input type="hidden" name="DivLineName" value="@TDL.Value.name"  />
+            <input type="hidden" name="direction" value=""  />
+            if (!isLastTDL)
+            {
+                <input  type="image" title="Order DivLine down" src="@Url.Content("~/content/Images/arrowvb.png")" onclick="SubmitOrder('@OrderForm','down')"/>
+            }
+            if (TDLcnt > 1)
+            {
+                <span>&nbsp;</span> <input  type="image" title="Order DivLine up"src="@Url.Content("~/content/Images/arrowvt.png")" onclick="SubmitOrder('@OrderForm','up')"/>
+            }
+
+        }
+        </td> 
+        <td>
+        @using (Html.BeginForm("CSR_Table_Div_Order", "CyclePlanDB", FormMethod.Post, new { @id = DivOrderForm, @name = DivOrderForm }))
+        {
+            <input type="hidden" name="proj" value="@ViewBag.proj"  />
+            <input type="hidden" name="phase" value="@ViewBag.phase"  />
+            <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+            <input type="hidden" name="table" value="@TDV.Value.table_name"  />
+            <input type="hidden" name="DivName" value="@TDV.Key"  />
+            <input type="hidden" name="direction" value=""  />
+            if (((TDLcnt == 1) && (!isLastTDV)) || ((TDLcnt == 1) && (Model.table_divs.Count > 1)))
+            {
+                <input  type="image" title="Order Div down" src="@Url.Content("~/content/Images/arrowvb.png")" onclick="SubmitOrder('@DivOrderForm','down')"/>
+            }
+            if (((TDLcnt == 1) && (TDVcnt > 1)) || ((TDLcnt == 1) && (Model.table_divs.Count > 1)))
+            {
+                <span>&nbsp;</span> <input  type="image" title="Order Div up"src="@Url.Content("~/content/Images/arrowvt.png")" onclick="SubmitOrder('@DivOrderForm','up')"/>
+            }
+
+        }
+        </td>
+        <td>
+            @if (TDLcnt == 1)
+            {
+                using (Html.BeginForm("CSR_Table_Div_UpdateReportsExec", "CyclePlanDB", FormMethod.Post, new { @id = ReportForm, @name = ReportForm }))
+                {
+                    string reportsIdsStr = "";
+                    string reportsNamesStr = "";
+                    foreach (string reportId in TDV.Value.reportIds)
+                    {
+                        reportsIdsStr += reportId + ",";
+                        reportsNamesStr += MDBReport.ReadUserTableReport(reportId).Name + ",";
+                    }
+                    reportsIdsStr = reportsIdsStr.TrimEnd(',');
+                    reportsNamesStr = reportsNamesStr.TrimEnd(',');
+                        <input type="hidden" name="proj" value="@ViewBag.proj"  />
+                        <input type="hidden" name="phase" value="@ViewBag.phase"  />
+                        <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+                        <input type="hidden" name="table" value="@TDV.Value.table_name"  />
+                        <input type="hidden" name="DivName" value="@TDV.Key"  />
+                        <input type="hidden" name="SRreportID" value="@MDBReport.ReadUserTableReport(TDV.Value.SRreportId).Name"  />
+                        <input type="hidden" name="reportsIdsStr" value="@reportsIdsStr"  />
+                        <input type="hidden" name="reportsNamesStr" value="@reportsNamesStr"  />
+                        <input type="button" value="A" title="Assign Div Reports" class="button" onclick="ShowDivReportsDialog('Edit-DivReportsDialog-form','@ReportForm')" /><!-- onclick="ShowDivReportsDialog('Edit-DivReportsDialog-form','@ReportForm')" onclick="alert('TODO:Edit-DivReportsDialog-form')"-->
+                }
+            }
+        </td>
+        <td>
+        @using (Html.BeginForm("CSR_Table_Div_Line_Edit", "CyclePlanDB", FormMethod.Post, new { @id = EditForm, @name = EditForm }))
+        {
+            <input type="hidden" name="proj" value="@ViewBag.proj"  />
+            <input type="hidden" name="phase" value="@ViewBag.phase"  />
+            <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+            <input type="hidden" name="DivName" value="@TDV.Key"  />
+            <input type="hidden" name="DivLineName" value="@TDL.Value.name"  />
+            <input type="hidden" name="origDivLineName" value="@TDL.Value.name"  />
+            <input type="hidden" name="table" value="@TDV.Value.table_name"  />
+            <input type="hidden" name="trials" value="@TDL.Value.trials" />
+            <input type="hidden" name="NumOfTests" value="@TDL.Value.numOfTests" />
+            int fieldsCnt = 0;
+            string specValues = "";
+            if (TDL.Value.tableDivFields.Count > 0)
+            {
+                for (int i = 0; i < TDL.Value.tableDivFields.Count; i++)
+                {
+                    if (TDL.Value.tableDivFields.ElementAt(i).isSpecSubSet)
+                    {
+                        specValues += TDL.Value.tableDivFields.ElementAt(i).values[0] + ",";
+                        continue;
+                    }
+                    fieldsCnt++;
+                    string Edit_field = "Edit_field" + (fieldsCnt).ToString();
+                    string Edit_condition = "Edit_condition" + (fieldsCnt).ToString();
+                    string Edit_values = "Edit_values" + (fieldsCnt).ToString();
+                    string values = "";
+                    foreach (string val in TDL.Value.tableDivFields.ElementAt(i).values)
+                    {
+                        values += val + ",";
+                    }
+                    values = values.TrimEnd(',');
+                    <input type="hidden" name="@Edit_field"  value="@TDL.Value.tableDivFields.ElementAt(i).name"  />
+                    <input type="hidden" name="@Edit_condition"  value="@TDL.Value.tableDivFields.ElementAt(i).condition"  />
+                    <input type="hidden" name="@Edit_values"  value="@values"  />
+                }
+                specValues = specValues.TrimEnd(',');
+                <input type="hidden" name="FieldsEdit"  value="@specValues"  />
+            }
+            for (int i = fieldsCnt; i < 5; i++)
+            {
+                string Edit_field = "Edit_field" + (i + 1).ToString();
+                string Edit_condition = "Edit_condition" + (i + 1).ToString();
+                string Edit_values = "Edit_values" + (i + 1).ToString();
+                    <input type="hidden" name="@Edit_field"  value=""  />
+                    <input type="hidden" name="@Edit_condition"  value="contains"  />
+                    <input type="hidden" name="@Edit_values"  value=""  />
+            }
+            <!-- Depricated -->
+            <!-- <input type="button" value="E" title="Edit DivLine" class="button" onclick="ShowEditDialog('Edit-dialog-form','@EditForm')"/>-->
+            <input type="button" value="E" title="Edit DivLine" class="button" onclick="ShowEditDivSpecsDialog('Edit-DivLineSpecsDialog-form','@EditForm')"/>
+            
+        }
+        </td> 
+        <td>
+        @using (Html.BeginForm("CSR_Table_Div_Line_Del", "CyclePlanDB", FormMethod.Post, new { @id = DelForm, @name = DelForm }))
+        {
+            <input type="hidden" name="proj" value="@ViewBag.proj"  />
+            <input type="hidden" name="phase" value="@ViewBag.phase"  />
+            <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+            <input type="hidden" name="DivName" value="@TDV.Key"  />
+            <input type="hidden" name="DivLineName" value="@TDL.Value.name"  />
+            <input type="hidden" name="table" value="@TDV.Value.table_name"  />
+            <input type="button" value="D" title="Delete DivLine" class="button" onclick="FormConfirmAction('@DelForm','@Url.Action("CSR_Table_Div_Line_Del", "CyclePlanDB")','Are you sure you want to delete Div Line  @TDV.Key  @TDL.Value.name ?')"/>
+        }
+        </td> 
+
+    </tr>
+            }
+        }
+    }
+    </tbody>
+</table>
+
+ <!--  Depricated, 
+<div id="Edit-dialog-form" title="Edit Table Div Line">
+  <p class="validateTips">Edit Div Line</p>
+ 
+  <form method="post" action='@Url.Action("CSR_Table_Div_Line_EditExec", "CyclePlanDB")' id="FormEdit">
+        <input type="hidden" name="proj" value="@ViewBag.proj"  />
+        <input type="hidden" name="phase" value="@ViewBag.phase"  />
+        <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+        <input type="hidden" name="origDivLineName" value=""  />
+        <input type="hidden" name="DivName" value=""  />
+        <input type="hidden" name="table" value=""  />
+        <input type="hidden" name="FieldsEdit"  value=""  />
+    <fieldset>
+     <label for="name">Name:</label>
+      <br /><br /> Div Line Name   : &nbsp; <input id="EditDivLineName" name="DivLineName" type="text" value="" /> (Line name in CSR Excel template)
+        <br /><br />Trials   : <input id="Edittrials" name="trials" type="text" value="1" /> (number, default is 1)
+        <br /><br />Num of tests   : <input id="EditNumOfTests" name="NumOfTests" type="text" value="1" /> (number, default is 1)
+        <br /><br />Use popup to select specific SpectTestNames for this table line: &nbsp;<input type="button" value="Select Specs" class="button" id="EditSelectSpecs" onclick="ShowEditDivSpecsDialog('Edit-DivLineSpecsDialog-form','FormEdit')" /> 
+        <br /><br />Define "SpecTestName" or additional conditions   : 
+        <br /><br />Field   : 
+        <input id="Edit_field1" name="field1" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="Edit_condition1" name="condition1" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="Edit_values1" name="values1" type="text" value="" /> (comma delimited)
+        <br /><br />Field   : 
+        <input id="Edit_field2" name="field2" type="text" value="" />  
+        &nbsp; Condition   : 
+        <select id="Edit_condition2" name="condition2" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="Edit_values2" name="values2" type="text" value="" /> (comma delimited)
+        <br /><br />Field   : 
+        <input id="Edit_field3" name="field3" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="Edit_condition3" name="condition3" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="Edit_values3" name="values3" type="text" value="" /> (comma delimited)
+        <br /><br />Field   : 
+        <input id="Edit_field4" name="field4" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="Edit_condition4" name="condition4" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="Edit_values4" name="values4" type="text" value="" /> (comma delimited)
+                <br /><br />Field   : 
+        <input id="Edit_field5" name="field5" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="Edit_condition5" name="condition5" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="Edit_values5" name="values5" type="text" value="" /> (comma delimited)  
+
+        <br />   <input type="submit" value="Submit" class="button" id="editSubmit" onclick="validateCSR_Table_Div_Line_Add('FormEdit')"/>
+    </fieldset>
+  </form>
+</div> -->
+
+
+<div id="Create-DivLineSpecsDialog-form" title="Define Div Line">
+  <p class="validateTips">Select specific specs</p>
+ 
+  <form method="post" action='@Url.Action("CSR_Table_Div_Line_Add", "CyclePlanDB")' id="FormCreateDivLineSpecs">
+          <input type="hidden" name="proj" value="@ViewBag.proj"  />
+          <input type="hidden" name="phase" value="@ViewBag.phase"  />
+          <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+          <input type="hidden" name="col" value=""  />
+          <input type="hidden" name="spec" value="" />
+          <input type="hidden" name="DivName" value="" />
+          <input type="hidden" name="newDivName" value="" />
+          <input type="hidden" name="newDivTable" value="" />
+          <input type="hidden" name="DivLinePos" value="" />         
+
+    <fieldset>
+      <label for="name">Div Line Name:</label>
+        <input id="CreateDivLineSpecs_DivLineName" name="DivLineName" type="text" value="" /> (Line name in CSR Excel template)
+        <br /><br />
+        <label for="name">Filter "All" SpecTestNames (auto selection):</label>
+        <input type="text" id="filterSpecs" name="filterSpecs" value=""  />
+        <br />
+         <table id="FieldsTable" style="border:none">
+             <thead>
+             <tr>
+             <th style="background-color: #e6e6e6;color: #555555">All SpecTestNames</th>
+             <th style="background-color: #e6e6e6;color: #555555"></th>
+             <th style="background-color: #e6e6e6;color: #555555">Selected SpecTestNames for Sub Set</th>
+             <th style="background-color: #e6e6e6;color: #555555"></th>
+             </tr>
+             </thead>
+             <tbody>
+                <tr>
+                    <td>
+ 
+                        <select id="FieldsListTmp" name="FieldsListTmp" multiple="multiple" size="25" style="width: 550px;">
+                        @{
+                            foreach (var field in ViewBag.selectedSpecTestslist)
+                            {
+                                <option value="@field.ToString()"> @field.ToString()</option>
+                            }
+                        }
+                         </select> 
+                    </td>
+    
+
+                    <td nowrap>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="add" class="button" onclick="javascript: moveSelected('FieldsListTmp', 'FieldsList', false,'Create');" value="Add"/></div><div class="Right">&nbsp;</div></div>
+                        <div class="Button">
+                            <div class="Left">&nbsp;</div>
+                            <!--<div class="Middle"><input type="button" id="addAll" class="button" value="Add All" onclick="javascript: moveSelected('FieldsListTmp', 'FieldsList', true,'Create');"/></div>-->
+                            <div class="Right">&nbsp;</div>
+                        </div>
+                    </td>
+
+                    <td>
+                    <select name="FieldsList" multiple="multiple" size="25" style="width: 550px;" class="InputField" id="FieldsList"></select>
+                    <input type="hidden" name="Fields" value=""/>
+                    <input type="hidden" name="load" value="yes"/>
+                    </td>
+
+                    <td nowrap>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="rem" class="button" onclick="javascript: moveSelected('FieldsList', null, false,'Create');" value="Remove"/></div><div class="Right">&nbsp;</div></div>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="remAll" class="button" onclick="javascript: moveSelected('FieldsList', null, true,'Create');" value="Remove All"/></div><div class="Right">&nbsp;</div></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      <br /><input type="button" value="submit" onclick="validateCSR_Table_Div_Line_Add('FormCreateDivLineSpecs')" class="button"/> ("Fields" definitions below are optional, when not in use num of trials and num of tests will be defined automatically)
+        <br /><br />Optional: Define "SpecTestName" or additional conditions. (if you use additional conditions, you must define num of trials and num of tests)  : 
+        <br /><br />Field   : 
+        <input id="field1" name="field1" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="condition1" name="condition1" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="values1" name="values1" type="text" value="" /> (comma delimited)
+        <br /><br />Field   : 
+        <input id="field2" name="field2" type="text" value="" />  
+        &nbsp; Condition   : 
+        <select id="condition2" name="condition2" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="values2" name="values2" type="text" value="" /> (comma delimited)
+        <br /><br />Field   : 
+        <input id="field3" name="field3" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="condition3" name="condition3" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="values3" name="values3" type="text" value="" /> (comma delimited)
+        <br /><br />Field   : 
+        <input id="field4" name="field4" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="condition4" name="condition4" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="values4" name="values4" type="text" value="" /> (comma delimited)
+                <br /><br />Field   : 
+        <input id="field5" name="field5" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="condition5" name="condition5" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="values5" name="values5" type="text" value="" /> (comma delimited)
+        <br /><br />Trials   : <input id="trials" name="trials" type="text" style="width: 50px" value="1" /> (number, default is 1) &nbsp; Num of tests   : <input id="NumOfTests" name="NumOfTests" type="text" style="width: 50px" value="1" /> (number, default is 1) &nbsp; <input type="button" value="submit" onclick="validateCSR_Table_Div_Line_Add('FormCreateDivLineSpecs')" class="button"/>
+    </fieldset>
+  </form>
+</div>
+
+<div id="Edit-DivLineSpecsDialog-form" title="Edit Div Line">
+  <p class="validateTips">Edit SpecSubSet</p>
+ 
+  <form method="post" action='@Url.Action("CSR_Table_Div_Line_EditExec", "CyclePlanDB")' id="FormEditDivLineSpecs"> 
+          <input type="hidden" name="proj" value="@ViewBag.proj"  />
+          <input type="hidden" name="phase" value="@ViewBag.phase"  />
+          <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+          <input type="hidden" name="table" value=""  />
+          <input type="hidden" name="spec" value="@ViewBag.selectedSpec" />
+          <input type="hidden" name="DivName" value="" />
+          <input type="hidden" name="origDivLineName" value="" />
+    
+
+    <fieldset>
+      <label for="name">Div Line Name:</label>
+        <input id="EditDivLineSpecs_DivLineName" name="DivLineName" type="text" value="" /> (Line name in CSR Excel template)
+        <br /><br />
+
+        <label for="name">Filter "All" SpecTestNames (auto selection):</label>
+        <input type="text" id="editfilterSpecs" name="filterSpecs" value=""  />
+        <br />
+         <table id="VisFieldsTableEdit" style="border:none">
+             <thead>
+             <tr>
+             <th style="background-color: #e6e6e6;color: #555555">All SpecTestNames</th>
+             <th style="background-color: #e6e6e6;color: #555555"></th>
+             <th style="background-color: #e6e6e6;color: #555555">Selected SpecTestNames for Sub Set</th>
+             <th style="background-color: #e6e6e6;color: #555555"></th>
+             </tr>
+             </thead>
+             <tbody>
+                <tr>
+                    <td>
+ 
+                        <select id="FieldsListTmpEdit" name="FieldsListTmpEdit" multiple="multiple" size="25" style="width: 550px;">
+                            <!--options are added dynamically while clicking "ShowEditDivSpecsDialog"  -->
+                         </select> 
+                    </td>
+    
+
+                    <td nowrap>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="addEdit" class="button" onclick="javascript: moveSelected('FieldsListTmpEdit', 'FieldsListEdit', false,'Edit');" value="Add"/></div><div class="Right">&nbsp;</div></div>
+                        <div class="Button">
+                            <div class="Left">&nbsp;</div>
+                            <!--<div class="Middle"><input type="button" id="addAllEdit" class="button" value="Add All" onclick="javascript: moveSelected('FieldsListTmpEdit', 'FieldsListEdit', true,'Edit');"/></div>-->
+                            <div class="Right">&nbsp;</div>
+                        </div>
+                    </td>
+
+                    <td>
+                    <select name="FieldsListEdit" multiple="multiple" size="25" style="width: 550px;" class="InputField" id="FieldsListEdit">
+                                <!--options are added dynamically while clicking "ShowEditDivSpecsDialog"  -->
+                                <!--<option value=" field.ToString()">  field.ToString()</option>-->
+
+                    </select>
+
+                    <!--dynamically put seleted values of specific Div Line "FieldsEdit" (just String value, comma delimited)--> 
+                    <input type="hidden" name="FieldsEdit" value=""/>
+                    <input type="hidden" name="load" value="yes"/>
+                    </td>
+
+                    <td nowrap>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="remEdit" class="button" onclick="javascript: moveSelected('FieldsListEdit', null, false,'Edit');" value="Remove"/></div><div class="Right">&nbsp;</div></div>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="remAllEdit" class="button" onclick="javascript: moveSelected('FieldsListEdit', null, true,'Edit');" value="Remove All"/></div><div class="Right">&nbsp;</div></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      <br /><input type="button" value="submit" onclick="validateCSR_Table_Div_Line_Add('FormEditDivLineSpecs')" class="button"/> ("Fields" definitions below are optional, when not in use num of trials and num of tests will be defined automatically)
+              <br /><br />Field   : 
+        <input id="Edit_field1" name="field1" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="Edit_condition1" name="condition1" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="Edit_values1" name="values1" type="text" value="" /> (comma delimited)
+        <br /><br />Field   : 
+        <input id="Edit_field2" name="field2" type="text" value="" />  
+        &nbsp; Condition   : 
+        <select id="Edit_condition2" name="condition2" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="Edit_values2" name="values2" type="text" value="" /> (comma delimited)
+        <br /><br />Field   : 
+        <input id="Edit_field3" name="field3" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="Edit_condition3" name="condition3" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="Edit_values3" name="values3" type="text" value="" /> (comma delimited)
+        <br /><br />Field   : 
+        <input id="Edit_field4" name="field4" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="Edit_condition4" name="condition4" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="Edit_values4" name="values4" type="text" value="" /> (comma delimited)
+                <br /><br />Field   : 
+        <input id="Edit_field5" name="field5" type="text" value="" />
+        &nbsp; Condition   : 
+        <select id="Edit_condition5" name="condition5" style="width:auto" >
+            <option value="contains">contains</option>
+            <option value="notContains">notContains</option>
+            <option value="equals">equals</option>
+        </select>
+        &nbsp; Values: <input id="Edit_values5" name="values5" type="text" value="" /> (comma delimited)
+        <br /><br />Trials   : <input id="Edittrials" name="trials" type="text" style="width: 50px" value="1" /> (number, default is 1) &nbsp; Num of tests   : <input id="EditNumOfTests" name="NumOfTests" type="text" style="width: 50px" value="1" /> (number, default is 1) &nbsp; <input type="button" type="button" value="submit" onclick="validateCSR_Table_Div_Line_Add('FormEditDivLineSpecs')" class="button"/> 
+    </fieldset>
+  </form>
+</div>
+
+
+<div id="Edit-DivReportsDialog-form" title="Edit Reports">
+  <p class="validateTips">Edit Reports</p>
+ 
+  <form method="post" action='@Url.Action("CSR_Table_Div_UpdateReportsExec", "CyclePlanDB")' id="FormEditDivReports"> 
+          <input type="hidden" name="proj" value="@ViewBag.proj"  />
+          <input type="hidden" name="phase" value="@ViewBag.phase"  />
+          <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+          <input type="hidden" name="table" value=""  />
+          <input type="hidden" name="DivName" value="" />
+          <input type="hidden" name="reportsIdsStr" value=""  />
+          <input type="hidden" name="reportsNamesStr" value=""  />
+          <input type="hidden" id = "newPRMreportIDs" name="newPRMreportIDs" value=""  />
+          
+          
+          
+    
+
+    <fieldset>
+        <br />Exist SRreportID:<input name="SRreportID" type="text" value="" disabled="disabled"/> update SRreportID:&nbsp;
+        <select name="SelectSRreportID"  id="SelectSRreportID" class="wselect">
+                    <!--options are added dynamically while clicking "DivReportsDialog"  -->
+                    <!--<option value=" reportId">  reportName</option>-->
+        </select>
+        <br /><br />
+
+        <br />Exist PRMreportID:<input type="text" id="EditDivReports_reportIDs1" name="reportIDs1" value=""  disabled="disabled"/>
+         update PRMreportID:&nbsp;<select name="SelectreportIDs1"  id="SelectreportIDs1" class="wselect">
+                    <!--options are added dynamically while clicking "DivReportsDialog"  -->
+                    <!--<option value=" reportId">  reportName</option>-->
+        </select>
+        <br />Exist PRMreportID:<input type="text" id="EditDivReports_reportIDs2" name="reportIDs2" value=""  disabled="disabled"/>
+         update PRMreportID:&nbsp;<select name="SelectreportIDs2"  id="SelectreportIDs2" class="wselect">
+            <!--options are added dynamically while clicking "DivReportsDialog"  -->
+            <!--<option value=" reportId">  reportName</option>-->
+        </select>
+        <br />Exist PRMreportID:<input type="text" id="EditDivReports_reportIDs3" name="reportIDs3" value=""  disabled="disabled"/>
+         update PRMreportID:&nbsp;<select name="SelectreportIDs3"  id="SelectreportIDs3" class="wselect">
+            <!--options are added dynamically while clicking "DivReportsDialog"  -->
+            <!--<option value=" reportId">  reportName</option>-->
+        </select>
+        <br />Exist PRMreportID:<input type="text" id="EditDivReports_reportIDs4" name="reportIDs4" value=""  disabled="disabled"/>
+         update PRMreportID:&nbsp;<select name="SelectreportIDs4"  id="SelectreportIDs4" class="wselect">
+            <!--options are added dynamically while clicking "DivReportsDialog"  -->
+            <!--<option value=" reportId">  reportName</option>-->
+        </select>
+        <br />Exist PRMreportID:<input type="text" id="EditDivReports_reportIDs5" name="reportIDs5" value=""  disabled="disabled"/>
+         update PRMreportID:&nbsp;<select name="SelectreportIDs5"  id="SelectreportIDs5" class="wselect">
+            <!--options are added dynamically while clicking "DivReportsDialog"  -->
+            <!--<option value=" reportId">  reportName</option>-->
+        </select>
+        <br />
+        <br /><br /><input type="button" value="submit" onclick="submitCSR_Table_Div_Report('FormEditDivReports','newPRMreportIDs')" class="button"/> 
+    </fieldset>
+  </form>
+</div>
+

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- One interface's XML file conatians all its related protocols definitions -->
+<SessionsManageConf>
+<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->
+	<ProtocolConf>
+		<protocol>Power_Integrity</protocol>
+		<proj>MR</proj>
+		<phase>A0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>Power_Integrity</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<field alias="FW">FW version</field>
+		<field alias="ESR">sType</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>NA</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>NA</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>NONE</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>NPL0</SRTemplate>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+			<!-- SRreportId: report id that is used for LogicUnit status report (optional) -->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options are equals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="Power Integrity" tname="Power_Integrity">
+			<table_div_line dname="Inrush Current VCC3P3 S0" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">Inrush Current VCC3P3 S0</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Inrush Current VCC3V3 Sx" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">Inrush Current VCC3V3 Sx</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Inrush Current VCC3V3 SVR" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">Inrush Current VCC3V3 SVR</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Power Raise 3P3 Low" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">Power Raise 3P3 Low</table_div_field>
+			</table_div_line>
+			<table_div_line dname="Thermal Sensor " DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">Thermal Sensor</table_div_field>
+			</table_div_line>
+			<table_div_line dname="SVR Efficiency" DivNumOfTests="1" trials="31">
+				<table_div_field fname="SpecTestName" condition="equals">SVR Efficiency</table_div_field>
+			</table_div_line>
+			<table_div_line dname="SVR AC Stability" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">SVR AC Stability</table_div_field>
+			</table_div_line>
+			<table_div_line dname="SVR Ripples with ripples" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">SVR Ripples</table_div_field>
+				<table_div_field fname="Ripples_Setup" condition="equals">True</table_div_field>
+			</table_div_line>
+			<table_div_line dname="SVR Ripples without ripples" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">SVR Ripples</table_div_field>
+				<table_div_field fname="Ripples_Setup" condition="equals">False</table_div_field>
+			</table_div_line>
+			<table_div_line dname="SVR Load Regulation" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">SVR Load Regulation</table_div_field>
+			</table_div_line>
+			<table_div_line dname="SVR Line Regulation" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">SVR Line Regulation</table_div_field>
+			</table_div_line>
+			<table_div_line dname="SVR Current Limit" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">SVR Current Limit</table_div_field>
+			</table_div_line>
+
+		</table_div>
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+			<!-- skew:skew (FF/TYP/SS)-->
+			<!-- type:Board configuration (first letter upper case)-->
+			<!-- setup:Setup (first letter upper case)-->
+			<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>2</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>2</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>N</setup>
+				<num>2</num>
+			</unit>
+		</units>
+		<!--CR end-->
+	</ProtocolConf>
+	
+	<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->
+	<ProtocolConf>
+		<protocol>Power_Consumption</protocol>
+		<proj>MR</proj>
+		<phase>A0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>Power_Consumption</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<field alias="FW">FW version</field>
+		<field alias="ESR">sType</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<corners>Hot,Room</corners>
+		<ports>NA</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>L0</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>NONE</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>NPL0</SRTemplate>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+			<!-- SRreportId: report id that is used for LogicUnit status report (optional) -->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options are equals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="Power Consumption" tname="Power_Consumption">
+			<table_div_line dname="2x TBT, 4xPCIe, DP Sink-SRC, USB tunnel CL0" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2x TBT, 4xPCIe, DP Sink-SRC, USB tunnel CL0</table_div_field>
+			</table_div_line>
+						<table_div_line dname="2x TBT, 4xPCIe, DP Sink-SRC, USB tunnel CL1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2x TBT, 4xPCIe, DP Sink-SRC, USB tunnel CL1</table_div_field>
+			</table_div_line>
+						<table_div_line dname="2x TBT, 4xPCIe, DP Sink-SRC, DP Sink tunnel" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2x TBT, 4xPCIe, DP Sink-SRC, DP Sink tunnel</table_div_field>
+			</table_div_line>
+						<table_div_line dname="2x TBT, 4xPCIe, 2x DP Sink tunnel" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2x TBT, 4xPCIe, 2x DP Sink tunnel</table_div_field>
+			</table_div_line>
+						<table_div_line dname="2x TBT, 4xPCIe, DP Sink tunnel" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2x TBT, 4xPCIe, DP Sink tunnel</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">2x DP Sink tunnel</table_div_field>
+			</table_div_line>
+						<table_div_line dname="2x TBT, 4xPCIe, DP Sink-SRC CL0" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2x TBT, 4xPCIe, DP Sink-SRC CL0</table_div_field>
+			</table_div_line>
+						<table_div_line dname="1x TBT, 4xPCIe, DP Sink-SRC, DP Sink tunnel CL0s" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">1x TBT, 4xPCIe, DP Sink-SRC, DP Sink tunnel CL0s</table_div_field>
+			</table_div_line>
+						<table_div_line dname="1x TBT, 4xPCIe, 2x DP Sink tunnel" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">1x TBT, 4xPCIe, 2x DP Sink tunnel</table_div_field>
+			</table_div_line>
+						<table_div_line dname="1x TBT, 4xPCIe, DP Sink tunnel CL0" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">1x TBT, 4xPCIe, DP Sink tunnel CL0</table_div_field>
+			</table_div_line>
+						<table_div_line dname="1x TBT, 4xPCIe, DP Sink-SRC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">1x TBT, 4xPCIe, DP Sink-SRC</table_div_field>
+			</table_div_line>
+						<table_div_line dname="2xDP-RDRV HBR3" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2xDP-RDRV HBR3</table_div_field>
+			</table_div_line>
+						<table_div_line dname="DP-RDRV PA HBR2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">DP-RDRV PA HBR2</table_div_field>
+			</table_div_line>
+						<table_div_line dname="DP-RDRV PA HBR3" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">DP-RDRV PA HBR3</table_div_field>
+			</table_div_line>
+						<table_div_line dname="4xPCIe, 2xMFDP" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">4xPCIe, 2xMFDP</table_div_field>
+			</table_div_line>
+						<table_div_line dname="4xPCIe, 1xMFDP" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">4xPCIe, 1xMFDP</table_div_field>
+			</table_div_line>
+						<table_div_line dname="4xPCIe, 2xUSB2+USB3.1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">4xPCIe, 2xUSB2+USB3.1</table_div_field>
+			</table_div_line>
+						<table_div_line dname="4xPCIe, USB2+USB3.1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">4xPCIe, USB2+USB3.1</table_div_field>
+			</table_div_line>
+						<table_div_line dname="POC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">POC</table_div_field>
+			</table_div_line>
+						<table_div_line dname="POC + LC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">POC + LC</table_div_field>
+			</table_div_line>
+						<table_div_line dname="POC + USB2 PHY" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">POC + USB2 PHY</table_div_field>
+			</table_div_line>
+						<table_div_line dname="RST_N" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">RST_N</table_div_field>
+			</table_div_line>	
+
+		</table_div>
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+			<!-- skew:skew (FF/TYP/SS)-->
+			<!-- type:Board configuration (first letter upper case)-->
+			<!-- setup:Setup (first letter upper case)-->
+			<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>P</type>
+				<setup>C</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>P</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>P</type>
+				<setup>C</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>P</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+		</units>
+		<!--CR end-->
+	</ProtocolConf>
+	
+
+</SessionsManageConf>

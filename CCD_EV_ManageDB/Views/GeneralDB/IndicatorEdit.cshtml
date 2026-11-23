@@ -1,0 +1,158 @@
+﻿@model Indicator
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+@{
+    ViewBag.Title = "Indicator Edit";
+}
+
+<h2>Indicator Edit</h2>
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+<script type="text/JavaScript">
+    function calcsum(cnt, _sum) {
+        weeksSum = 0;
+        weekIdPrefix = "w" + cnt + "_";
+        weekIdCnt = 0;
+        week = document.getElementById(weekIdPrefix + weekIdCnt.toString());
+        while (week != null) {
+            if (Number(week.value) != NaN) { weeksSum += Number(week.value);};
+            weekIdCnt++;
+            week = document.getElementById(weekIdPrefix + weekIdCnt.toString());
+        }
+        sumObj = document.getElementById(_sum);
+        sumObj.value = weeksSum;
+    }
+
+    function calcsumAll() {
+        lineIdCnt = 0;
+        weekSum = document.getElementById("sum" + lineIdCnt.toString());
+        while (weekSum != null) {
+            calcsum(lineIdCnt, "sum" + lineIdCnt.toString());
+            lineIdCnt++;
+            weekSum = document.getElementById("sum" + lineIdCnt.toString());
+        }
+    }
+
+    $(document).ready(function () {
+        calcsumAll();
+    });
+
+</script>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+
+     <p>
+        Name: <b>@Model._id </b>&nbsp; Spec:@Model.spec &nbsp; Lanes count:@Model.lanes
+    </p>
+   @using (Html.BeginForm("IndicatorEditExec", "GeneralDB", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+   {
+     <input type="hidden" id="_id" name="_id" value="@Model._id" />
+     <input type="hidden" id="spec" name="spec" value="@Model.spec" />
+       <br />
+        <table id="fsTables" class="display">
+        <thead>
+            <tr>
+                <th >
+                    SpecTestName
+                </th>
+                <th >
+                    Units&nbsp;
+                </th>
+                @foreach (WorkWeek ww in Model.tests[0].WorkWeeks)
+                {
+                    <th >
+                        W @ww.Name &nbsp;                                                                                                              
+                    </th>
+                }
+                <th>
+                Sum
+                </th>
+                <th>
+                Action
+                </th>
+                <th>
+                Comment
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @{
+                int cnt = 0;
+
+                foreach (IndTest test in Model.tests)
+                {
+                    string _id = "Line" + cnt.ToString();
+                    int cntw = 0;
+                    string tn = "t" + cnt.ToString();
+                    string u = "u" + cnt.ToString();
+                    string w = "w" + cnt.ToString();
+                    string wb = "wb" + cnt.ToString();
+                    string wnext = "w" + (cnt+1).ToString();
+                    string c = "c" + cnt.ToString();
+                    string cnext = "c" + (cnt+1).ToString();
+                    string sum = "sum" + (cnt).ToString();
+                     <tr id="@_id">
+                        <td><input type="text" name="@tn" value="@test.SpecTestName" disabled="disabled" style="width: 500px" title="@test.SpecTestName"/></td>
+                        <td><input type="text" id="@u" name="@u" value="@test.UnitsNum" style="width: 25px"/></td>
+                        @foreach (WorkWeek ww in test.WorkWeeks)
+                        {
+                            string wn = w + "_" + cntw.ToString();
+                            string wbn =  wb + "_" + cntw.ToString();
+                            string checkboxJS = "IndicatorsEditCheckBlocked('myForm','" + wbn + "')";
+                            <td>
+                                <input type="text" id="@wn" name= "@wn" value="@ww.PlannedOrig" style="width: 25px" title="W @ww.Name" onchange="calcsum(@cnt,'@sum')" />
+                                @Html.CheckBox(wbn, ww.Blocked, new { @id = wbn, @name = wbn, @title = "Blocked", @onclick = checkboxJS })
+                            </td>
+                                cntw++;
+
+                        }
+                        <td><input type="text" id="@sum" name="@sum" disabled="disabled" style="width: 30px" title="Weeks sum"/></td>
+                        <td>
+                            @if (cnt == 0)
+                            {
+                                <input type="button" value="C.All" title="Copy Line to All" class="button" onclick="IndicatorEditCopyLineAll();calcsumAll();" />
+                            }
+                            else
+                            {
+                                if (cnt < Model.tests.Count - 1)
+                                {
+                                    <input type="button" value="C.Next" title="Copy Line to next line" class="button" onclick="IndicatorEditCopyLineNextOne('@w','@wnext');calcsumAll();" />
+                                }
+                            }
+
+                        </td>
+                        <td>
+                            <input type="text" id="@c" name="@c" title="@test.Comment" value="@test.Comment" style="width: 300px"/>
+                        </td>
+                    </tr>
+                            cnt++;
+                }
+         }
+    </tbody>
+    </table>
+   <br /><br />
+
+          <input type="submit" value="Save" class="button" />
+          <input type="hidden" id="proj" name="proj" value="@Model.project" />
+          <input type="hidden" id="phase" name="phase" value="@Model.phase" />
+          <input type="button" value="Cancel" class="button" onclick="GenSubmitFormAction('myForm','@Url.Action("IndicatorsList", "GeneralDB")')"/>
+       
+       }
+
+    <br /><br />
+    <p>
+    @{using (Html.BeginForm("loadIndicatorPlanning", "GeneralDB", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <input type="hidden" id="load_id" name="_id" value="@Model._id" />  
+            <text>Load planned values from Excel&nbsp;&nbsp;</text><input type="file" name="file" class="button" title="Use Launched Indicator Excel file, for editing planned values"/>    
+            <text>&nbsp;</text><input type="submit" name="Upload" value="Upload"  class="button" title="Use Launched Indicator Excel file, for editing planned values"/>   
+            <text>&nbsp;</text>
+        }
+    }
+    </p>
+
+
+   
+

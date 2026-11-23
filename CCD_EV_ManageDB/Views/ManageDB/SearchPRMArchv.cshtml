@@ -1,0 +1,368 @@
+﻿@model CCD_EV_ManageDB.Models.DBsearch
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "SearchPRM";
+}
+
+<h2>Search PRM DB</h2>
+    @{ if (Model.jumpBottom)
+       {
+             <script type="text/JavaScript">
+                 $(document).ready(function () {
+                     location.hash = "#" + "pageBottom";
+                 });
+             </script>
+       }
+     }
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+ <script type="text/javascript">
+      $(document).ready(function () {
+         $("#fieldsInput").hide(); 
+     });
+
+</script>
+    @{ var ExportedFile = TempData["ExportedFileNAme"];
+       if (ExportedFile != null)
+       {
+            <script type="text/JavaScript">
+                $(document).ready(function () {
+                    var url = '@Url.Action("ViewExportFile", "ManageDB", new { filename = TempData["ExportedFileNAme"] })';
+                    $(location).attr('href', url);
+                });
+            </script>
+       }
+    }
+
+             <!-- Excel export dialog -->
+      <script>
+          $(function () {
+              var dialog, form;
+
+              function addUser() {
+                  form.submit();
+              }
+
+              dialog = $("#dialog-form").dialog({
+                  autoOpen: false,
+                  height: 200,
+                  width: 350,
+                  modal: true
+              });
+
+              form = $("#ExpForm");
+
+              $("#ExpCancel").button().on("click", function () {
+                  form[0].reset();
+                  dialog.dialog("close");
+              });
+
+          });
+
+          function ShowExpDialog(dialog) {
+
+              //debugger;
+              var td = "#" + dialog;
+              $(td).dialog();
+              $(td).dialog("option", "width", 350);
+              $(td).dialog("option", "length", 200);
+              $(td).dialog("option", "modal", true);
+              $(td).dialog("open");
+
+          };
+
+
+  </script>
+  <!-- Excel export dialog -->
+
+   @using (Html.BeginForm("SearchPRM", "ManageDB", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+   {
+       <!--TODO: "test" need to be taken -->
+        <input type="hidden" id="db" name="db" value="@Model.db" />
+     <p>Select table: 
+        <select id="col" name="col" class="wselect" onchange="changePRMCol('@Url.Action("SwitchTable", "ManageDB")')">
+        @foreach (var col in ViewBag.collist)
+        {
+            if (col.ToString() == Model.col)
+            {
+            <option value="@col.ToString()" selected="selected"> @col.ToString()</option>   
+            }
+            else
+            {
+            <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        }
+        </select> 
+    </p>
+    <!--Enter DB Query --> @Html.Hidden("Query", Model.Query)
+    <!--Enter DB OP --> @Html.Hidden("SearchOP", Model.SearchOP) 
+    <!--Enter DB Fields --> @Html.Hidden("FieldsStr", Model.FieldsStr)
+    <!--Enter DB Sort --> //@Html.Hidden("SortStr", Model.SortStr)@Html.Hidden("SortDirection", Model.SortDirection)
+
+        foreach (var triplet in Model.QueryTriplets)
+        {
+            string[] tarr = triplet.ToString().Split(new Char[] { ';' });
+    <div id="queryInput">
+        <p>Enter DB Query :
+        <select id="_Query0" name="_Query0">
+        @foreach (var op in ViewBag.q0list)
+        {
+            if (op.ToString() == tarr[0])
+            {
+                <option value="@op.ToString()" selected="selected" >@op.ToString()</option>
+            }
+            else
+            {
+                <option value="@op.ToString()">@op.ToString()</option>
+            }
+        } 
+        </select> 
+        <select id="_Query1" name="_Query1">
+        @{
+            foreach (var field in Model.TableFields)
+        {
+            if (field.ToString() == tarr[1])
+            {
+                <option value="@field.ToString()" selected="selected"> @field.ToString()</option>   
+            }
+            else
+            {
+                <option value="@field.ToString()"> @field.ToString()</option>
+            }
+        }
+        }
+        </select> 
+        @Html.TextBox("_Query2", tarr[2], new { @id = "_Query2" })
+        <input type="button" value="Remove" class="button" onclick="removeElem(this.parentNode)" /></p>
+    </div>
+        }
+    <div id="queryEnd"></div>
+    <input type="button" value="add query" class="button" onclick="fnClone('queryInput','queryEnd')"/>
+    <input type="button" value="Clear query" class="button" title="Reload table with empty query" onclick="changePRMCol('@Url.Action("SwitchTable", "ManageDB")')" />
+    <!--<input type="submit" value="Submit query" onclick="FormToStr()" />-->
+       
+       
+    <p>Specify Fields: Inc @Html.RadioButton("FieldsIncExc", "Inc", Model.FieldsInc) Exc @Html.RadioButton("FieldsIncExc", "Exc", Model.FieldsExc)
+    @{  if (Model.FieldsStr == null) { Model.FieldsStr = ""; }
+        string[] fieldsStr = Model.FieldsStr.Split(new Char[] { ';' });
+        foreach (string strField in fieldsStr)
+        {
+			<select id="_Fields1" name="_Fields1">
+            <option value=""></option>
+			@{
+            foreach (var field in Model.TableFields)
+            {
+                if (field.ToString() == strField)
+                {
+						<option value="@field.ToString()" selected="selected"> @field.ToString()</option>   
+                }
+                else
+                {
+						<option value="@field.ToString()"> @field.ToString()</option>
+                }
+            }
+			}
+			</select> 
+        }
+   }
+    <input type="button" value="add field" class="button" onclick="fnClone('fieldsInput','fieldsInputEnd')"/>
+    <input type="button" value="all fields" class="button" onclick="AllFields()"/>
+    </p>
+    <div id="fieldsInput" style="position:relative; left: 179px;">
+		<select id="_Fields2" name="_Fields2">
+        <option value=""></option>
+		@{
+       foreach (var field in Model.TableFields)
+        {
+		        <option value="@field.ToString()"> @field.ToString()</option>
+        }
+		}
+		</select> 
+        <input type="button" value="Remove" class="button" onclick="removeElem(this.parentNode)" />
+     </div>     
+    <div id="fieldsInputEnd"></div>     
+    <input type="hidden" id="Skip" name="Skip" value="0" />
+    <input type="hidden" id="jumpBottom" name="jumpBottom" value="true" />
+    <p>Sort Field: 
+    <select id="SortStr" name="SortStr">
+        @{
+       foreach (var field in Model.TableFields)
+        {
+            if (field.ToString() == Model.SortStr)
+            {
+                <option value="@field.ToString()" selected="selected"> @field.ToString()</option>   
+            }
+            else
+            {
+                <option value="@field.ToString()"> @field.ToString()</option>
+            }
+        }
+        }
+    </select>
+    <select id="SortDirection" name="SortDirection">
+        @{
+        if (Model.SortDirection == "ASC")
+        {
+            <option value="ASC" selected="selected">ASC</option>
+            <option value="DES">DES</option>   
+        }
+        else
+        {
+            <option value="ASC" selected="selected">ASC</option>
+            <option value="DES" selected="selected">DES</option>  
+        }
+        }
+    </select>
+    <!-- Query logic operator: AND @Html.RadioButton("SearchOP", "AND", (Model.SearchOP == "AND")) OR @Html.RadioButton("SearchOP", "OR", (Model.SearchOP == "OR")) -->
+    &nbsp;
+    <input type="submit" value="Submit query" onclick="FormToStr()" />
+
+    </p>
+   }
+
+<div>     
+@using (Html.BeginForm("Delete", "ManageDB", FormMethod.Post, new { @id = "tForm", @name = "tForm" }))
+{
+        <input type="button" value="Export report query results" class="button" id="ExportReport" onclick="ShowExpDialog('dialog-form')"/>
+        <p>PRM DB, Table:"@Model.col" Query: "@Model.Query" Results num: <b>@ViewBag.numberOfResults </b>
+     @{
+                                                                       int DataTableLimit = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["DataTableLimit"]);
+                                                                       int resNum = Convert.ToInt32(ViewBag.numberOfResults);
+                                                                       string text = "showing first ";
+                                                                       if (resNum > DataTableLimit)
+                                                                       {           
+                @text <select id="_Skip" name="_Skip" onchange="changeSkip()">
+			    @{
+           for (int i = 0; i * DataTableLimit < resNum; i++)
+           {
+               int last = (i + 1) * DataTableLimit;
+               if (last > resNum) { last = resNum; }
+               if (Model.Skip == (i * DataTableLimit))
+               {
+						    <option value="@(i * DataTableLimit)" selected="selected"> @((i * DataTableLimit) + 1) - @last</option>   
+               }
+               else
+               {
+						    <option value="@(i * DataTableLimit)"> @((i * DataTableLimit) + 1) - @last</option>
+               }
+           }
+			    }
+			    </select> 
+                                                                       }
+
+   }
+   </p>
+}
+</div>
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+<table id="table_id" class="display">
+    <thead>
+    <tr>
+        <th >
+            Mark
+        </th>
+     @foreach (var field in Model.Fields)
+     {
+        <th id="@field.ToString()">
+        @{  
+           if ((field.ToString() == Model.SortStr))
+           {
+               if ((Model.SortDirection == "DES"))
+               {
+                <span title="Sort up" onclick="sortField('@field.ToString()','ASC','@Model.Query')">@field.ToString() &nbsp;</span> 
+                <img src=@Url.Content("~/content/Images/sort_up.gif") title="Sort up" onclick="sortField('@field.ToString()','ASC','@Model.Query')"/>
+               }
+               if ((Model.SortDirection == "ASC"))
+               {
+                <span title="Sort down" onclick="sortField('@field.ToString()','DES','@Model.Query')">@field.ToString() &nbsp;</span> 
+                <img src=@Url.Content("~/content/Images/sort_down.gif") title="Sort down" onclick="sortField('@field.ToString()','DES','@Model.Query')"/>
+               }
+
+           }
+           else
+           {
+                <span title="Sort down" onclick="sortField('@field.ToString()','DES','@Model.Query')">@field.ToString() &nbsp;</span>
+            <img src=@Url.Content("~/content/Images/sort_up_down.gif") title="Sort down" onclick="sortField('@field.ToString()','DES','@Model.Query')"/>
+           }
+
+         }                                                                                
+        </th>
+     }
+    </tr>
+     </thead>
+    <tbody>
+    @foreach (BsonDocument item in Model.ResCursor)
+    {
+        string r_id = item.AsBsonDocument.GetElement("_id").ToString();
+        string _r_id = item.AsBsonDocument.GetElement("_id").Value.ToString().Replace(" ", "_");
+        string _r_id_tr = _r_id + "_line";
+     <tr id="@_r_id_tr">  
+        <td>
+            <input id="@_r_id" name="@_r_id" class="button" value="m" type="button" onclick="markLine('@_r_id_tr')"/>      
+        </td>
+        @foreach (var field in Model.Fields)
+        {
+        <td >
+            @{ 
+            if ((field.ToString().Length > 3) && (field.ToString().Substring(0, 4).ToUpper() == "FILE") && (@item.GetValue(field.ToString(), "") != ""))
+            {
+                string fname = item.GetValue(field.ToString()).ToString();
+                    <a href="file:////@item.GetValue(field.ToString(), "")" class="fileLinkRes">@System.Text.RegularExpressions.Regex.Replace(fname, ".*\\\\", "")</a>
+            }
+            else
+            {
+                @item.GetValue(field.ToString(), "");
+            }
+            }
+        </td>
+        }
+    </tr>
+    }
+    </tbody>
+</table>
+
+<div id="dialog-form" title="Export report query results">
+  <p class="validateTips">Edit Excel report content.</p>
+ 
+  <form action='@Url.Action("ExportReportFileBG", "ManageDB")' id="ExpForm">
+    <fieldset>
+      <label for="name">All fields</label>
+      <input type="radio" name="fields" id="fieldsA" value="all" checked="checked"/>
+      <label for="name">Query fields</label>
+      <input type="radio" name="fields" id="fieldsQ" value="query" /> 
+      <br />
+      <label for="name">One sheet</label>
+      <input type="radio" name="sheets" id="sheetsO" value="one" checked="checked"/>
+      <label for="name">Separated Sheets</label>
+      <input type="radio" name="sheets" id="sheetsT" value="tests" />
+      <br />
+      <label for="name">Separator field:</label>
+      <!-- <input type="text" name="TestNameField" id="TestNameField" value="TestName" /> -->
+      	<select id="TestNameField" name="TestNameField">
+        <option value=""></option>
+	    @{
+            foreach (var field in Model.TableFields)
+            {
+                if (field.ToString() == "TestName")
+                {
+				    <option value="@field.ToString()" selected="selected"> @field.ToString()</option>   
+                }
+                else
+                {
+				    <option value="@field.ToString()"> @field.ToString()</option>
+            }
+        }
+	    }
+	    </select> 
+      <br />
+      <input type="submit" class="button"/>
+    </fieldset>
+  </form>
+</div>
+<a name="pageBottom"></a>

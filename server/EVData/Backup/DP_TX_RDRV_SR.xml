@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<AdvStatusReportDetails>
+	<Test name=" Eye Diagram Test" >
+		<Field name="BitRate">
+			<Value>1.62 Gbps</Value>
+			<Value>2.7 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" Total Jitter Test (High BitRate)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+	</Test>
+	<Test name=" Total Jitter Test (Low BitRate)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+	</Test>
+	<Test name=" PRBS 7  Eye Diagram Test with No Cable (TP3_EQ)" >
+		<Field name="BitRate">
+			<Value>2.7 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" PRBS 7  Eye Diagram Test (TP3_EQ)" >
+		<Field name="BitRate">
+			<Value>2.7 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" PLTPAT - Pre-Emphasis Level Test (Pre-emphasis 0)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+	</Test>
+	<Test name=" PLTPAT - Pre-Emphasis Level Delta Test (Pre-emphasis 1 to Pre-emphasis 0)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+	</Test>
+	<Test name=" PLTPAT - Pre-Emphasis Level Delta Test (Pre-emphasis 1 to Pre-emphasis 2)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+	</Test>
+	<Test name=" PLTPAT - Pre-Emphasis Level Delta Test (Pre-emphasis 2 to Pre-emphasis 1)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+	</Test>
+	<Test name=" PLTPAT - Peak to Peak Voltage Test" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+		<Field name="PreEmphasis">
+			<Value>Pre-emphasis 0</Value>
+			<Value>Pre-emphasis 1</Value>
+			<Value>Pre-emphasis 2</Value>
+		</Field>  
+		<Filter name="F1">
+			<Value>Swing 2</Value>
+			<Value>Pre-emphasis 2</Value>
+		</Filter>
+	</Test>
+	<Test name=" PLTPAT - Non-Transition Voltage Range Measurement (Swing 2)" >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" PLTPAT - Non-Transition Voltage Range Measurement (Swing 1)" >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" PLTPAT - Non-Transition Voltage Range Measurement (Swing 0)" >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" PLTPAT - Non-PreEmphasis Level Test (Swing 2/ Swing 1)" >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" PLTPAT - Non-PreEmphasis Level Test (Swing 2/ Swing 0)" >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" Peak to Peak Voltage Test" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+		<Field name="BitRate">
+			<Value>1.62 Gbps</Value>
+			<Value>2.7 Gbps</Value>
+		</Field>
+		<Field name="PreEmphasis">
+			<Value>Pre-emphasis 0</Value>
+			<Value>Pre-emphasis 1</Value>
+			<Value>Pre-emphasis 2</Value>
+		</Field>  
+		<Filter name="F1">
+			<Value>Swing 2</Value>
+			<Value>Pre-emphasis 2</Value>
+		</Filter>
+	</Test>
+	<Test name=" Non-Transition Voltage Range Measurement (Swing 2)" >
+		<Field name="BitRate">
+			<Value>1.62 Gbps</Value>
+			<Value>2.7 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" Non-Transition Voltage Range Measurement (Swing 1)" >
+		<Field name="BitRate">
+			<Value>1.62 Gbps</Value>
+			<Value>2.7 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" Non-Transition Voltage Range Measurement (Swing 0)" >
+		<Field name="BitRate">
+			<Value>1.62 Gbps</Value>
+			<Value>2.7 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" Non-PreEmphasis Level Test (Swing 2/ Swing 1)" >
+		<Field name="BitRate">
+			<Value>1.62 Gbps</Value>
+			<Value>2.7 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" Non-PreEmphasis Level Test (Swing 1/ Swing 0)" >
+		<Field name="BitRate">
+			<Value>1.62 Gbps</Value>
+			<Value>2.7 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" Non-ISI Jitter Test (High BitRate)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+	</Test>
+	<Test name=" Non-ISI Jitter Test (Low BitRate)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+	</Test>
+	<Test name=" Non-ISI Jitter Test (High Bit Rate)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+	</Test>
+	<Test name=" Non-ISI Jitter Test (Reduced Bit Rate)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+	</Test>
+	<Test name=" Main Link Frequency Compliance" >
+		<Field name="BitRate">
+			<Value>1.62 Gbps</Value>
+			<Value>2.7 Gbps</Value>
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" Intra Pair Skew Test" >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" D10.2 Total Jitter Test with No Cable Model (TP3_EQ) " >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" D10.2 Total Jitter Test (TP3_EQ) " >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" D10.2 Random Jitter (TP3_EQ)" >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" D10.2 Deterministic Jitter with No Cable (TP3_EQ)" >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" D10.2 Deterministic Jitter (TP3_EQ)" >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>	
+	<Test name=" AC Common Mode Test" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+		<Field name="BitRate">
+			<Value>1.62 Gbps</Value>
+			<Value>2.7 Gbps</Value>
+			<Value>5.4 Gbps</Value>
+		</Field>
+		<Field name="PreEmphasis">
+			<Value>Pre-emphasis 0</Value>
+			<Value>Pre-emphasis 1</Value>
+			<Value>Pre-emphasis 2</Value>
+		</Field>  
+		<Filter name="F1">
+			<Value>Swing 2</Value>
+			<Value>Pre-emphasis 2</Value>
+		</Filter>
+	</Test>
+	<Test name=" Pre-Emphasis Level Test (Pre-emphasis 0)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+		<Field name="BitRate">
+			<Value>1.62 Gbps</Value>
+			<Value>2.7 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" Pre-Emphasis Level Delta Test (Pre-emphasis 1 to Pre-emphasis 0)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+			<Value>Swing 2</Value>
+		</Field>
+		<Field name="BitRate">
+			<Value>1.62 Gbps</Value>
+			<Value>2.7 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" Pre-Emphasis Level Delta Test (Pre-emphasis 1 to Pre-emphasis 2)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+		</Field>
+		<Field name="BitRate">
+			<Value>1.62 Gbps</Value>
+			<Value>2.7 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" Pre-Emphasis Level Delta Test (Pre-emphasis 2 to Pre-emphasis 1)" >
+		<Field name="Level">
+			<Value>Swing 0</Value>
+			<Value>Swing 1</Value>
+		</Field>
+		<Field name="BitRate">
+			<Value>1.62 Gbps</Value>
+			<Value>2.7 Gbps</Value>
+		</Field>
+	</Test>
+	<Test name=" HBR2CPAT  Eye Diagram Test (TP3_EQ)" >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>	
+	<Test name=" HBR2CPAT  Eye Diagram Test with No Cable (TP3_EQ)" >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>	
+	<Test name=" HBR2CPAT Deterministic Jitter Test (TP3_EQ) " >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>	
+	<Test name=" HBR2CPAT Deterministic Jitter Test with No Cable (TP3_EQ) " >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>	
+	<Test name=" HBR2CPAT Total Jitter Test with No Cable (TP3_EQ) " >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>	
+	<Test name=" HBR2CPAT Total Jitter Test (TP3_EQ) " >
+		<Field name="BitRate">
+			<Value>5.4 Gbps</Value>
+		</Field>
+	</Test>	
+
+
+</AdvStatusReportDetails>

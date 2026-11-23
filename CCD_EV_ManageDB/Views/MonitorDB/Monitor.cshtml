@@ -1,0 +1,117 @@
+﻿@model CCD_EV_ManageDB.Models.MonitorTable
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@{
+    ViewBag.Title = "Monitor";
+}
+
+<h2>Monitor</h2>
+
+@{
+    <script type="text/JavaScript">
+        $(document).ready(function () {
+            $('#singleTableExecutions').dataTable({
+                "iDisplayLength": -1,
+                //"bPaginate": true,
+                "iCookieDuration": 60,
+                "bStateSave": false,
+                "bAutoWidth": true,
+                "bScrollAutoCss": true,
+                //"bProcessing": true,
+                //"bRetrieve": true,
+                "bSort": false,
+                "bJQueryUI": true,
+                //"sDom": '<"H"CTrf>t<"F"lip>',
+                "sDom": 't<CT>',
+                //"aLengthMenu": [[10, 20, 100, -1], [10, 20, 100, "All"]],
+                "sScrollX": "500px",
+                "sScrollY": "300px",
+                //"sScrollY": (0.8 * $(window).height()),
+                "bScrollCollapse": true,
+                "fnInitComplete": function () {
+                    this.css("visibility", "visible");
+                }
+            });
+        });
+</script>
+    <table id="singleTableExecutions" class="display">
+    <thead>
+        <tr>
+             @foreach (string field in Model.ExecutionFields) 
+             {
+             <th>
+                @field
+             </th>
+             }
+        </tr>             
+    </thead>
+     @foreach (BsonDocument item in Model.ExecutionRecords)
+    {
+        <tr>
+        @foreach (string field in Model.ExecutionFields)
+        {
+            <td >
+              @item.GetValue(field, "")
+            </td>
+        }
+        </tr>
+    }
+</table>
+}
+<br />
+
+    @{
+        string displaySpace = " ";
+        string details = "";
+        foreach (BsonElement field in Model.TableCurResult.Elements)
+        { details += field.Name + " " + Model.TableCurResult.GetValue(field.Name, "").ToString() + ","; }
+        int detailsLength = details.Length;
+        if (detailsLength > 71) { detailsLength = 70; }
+    }
+
+<table width="200" class="monitorTable">
+<thead>
+    <tr>
+        <th colspan="100">@Model.TName @displaySpace @Model.HostName</th>
+    </tr>
+    <tr>
+        <th colspan="100" title="@details">@details.Substring(0, detailsLength)</th>
+    </tr>
+    <tr>
+        <th colspan="100">Status:@displaySpace @Model.ExecutionCurStatus </th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+    @foreach (MItem corner in Model.Corners)
+    {
+        <td bgcolor="@corner.Color">
+        @corner.Name
+        </td>
+    }
+    <td colspan="100"></td>
+    </tr>
+    <tr>
+        @foreach (MItem test in Model.Tests)
+        {
+        <td bgcolor="@test.Color">
+        <span title="@test.Name" >@test.Name.Substring(0, 10)</span>
+        </td>
+        }
+    <td colspan="8"></td>
+    </tr>
+    <tr>
+        @foreach (MItem lane in Model.Lanes)
+        {
+        <td bgcolor="@lane.Color">
+        @lane.Name
+        </td>
+        }
+    <td colspan="8"></td>
+    </tr>
+    </tbody>
+</table>
+

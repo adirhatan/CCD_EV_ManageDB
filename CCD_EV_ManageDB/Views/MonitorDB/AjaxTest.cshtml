@@ -1,0 +1,58 @@
+﻿@model CCD_EV_ManageDB.Models.MonitorData
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@{
+    ViewBag.Title = "AjaxTest";
+}
+
+<h2>AjaxTest</h2>
+
+
+@{
+foreach(KeyValuePair<string, MongoCursor> entry in Model.MonitorResults)
+{
+
+    <script type="text/JavaScript">
+        $(document).ready(function () {
+            var table = $('#@entry.Key').DataTable({
+                "ajax": '/MonitorDB/AjaxData?table=@entry.Key',
+                "columns": [
+                    { "data": "TestEnd" },
+                    { "data": "_id" },
+                    { "data": "SessionStart" },
+                    { "data": "ProjectName" },
+                    { "data": "Phase" },
+                    { "data": "Skew" },
+                    { "data": "TestStart" },
+                    { "data": "Corner" },
+                    { "data": "BoardNumber" },
+                    { "data": "UnitId" }
+                    ]
+            });
+//            setInterval(function () {
+//                table.ajax.reload();
+//            }, 10000);
+        });
+
+
+</script>
+    <p>@entry.Key</p>
+    <table id="@entry.Key" class="display">
+    <thead>
+        <tr>
+             @foreach (var field in Model.Fields)
+             {
+             <th id="@field.ToString()">
+                @field.ToString()
+             </th>
+             }
+        </tr>             
+    </thead>
+</table>
+    <br />
+}
+
+}

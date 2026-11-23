@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "CyclePlan Main";
+}
+
+<h2>Cycle Plan Main</h2>
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>    
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+
+      @using (Html.BeginForm("Main", "CyclePlanDB", FormMethod.Post, new { @id = "allForm", @name = "allForm" }))
+      {
+     <p>
+        Select Project: 
+        <select id="all_proj" name="proj" onchange="GenSubmitFormAction('allForm','@Url.Action("Main", "CyclePlanDB")')">
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="all_phase" name="phase" onchange="GenSubmitFormAction('allForm','@Url.Action("Main", "CyclePlanDB")')">
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+        Select Interface: 
+        <select id="all_protocol" name="protocol" class="wselect" onchange="GenSubmitFormAction('allForm','@Url.Action("Main", "CyclePlanDB")')">
+            @foreach (var protocol in ViewBag.protocollist)
+            {
+                if (protocol.ToString() == ViewBag.protocol)
+                {
+                    <option value="@protocol.ToString()" selected="selected"> @protocol.ToString()</option>
+                }
+                else
+                {
+                    <option value="@protocol.ToString()" > @protocol.ToString()</option>
+                }
+            }
+        </select> 
+
+    </p>
+        <ul>
+            <li><a href="@Url.Action("DefineMetaData", "CyclePlanDB")">1. Define Meta Data</a></li>
+            <li><a href="@Url.Action("CreateSpecSubSets", "CyclePlanDB")" >2. Create Spec Sub Sets</a></li>
+            <li><a href="@Url.Action("CreateCoverageRules", "CyclePlanDB")" >3. create coverage rules</a></li>
+            <li><a href="@Url.Action("AssignProjectUnits", "CyclePlanDB")" >4. Assign Project Units</a></li>
+            <li><a href="@Url.Action("ConfigureSM_CSR", "CyclePlanDB")" >5. Configure SM/CSR Meta Data</a></li>
+            <li><a href="@Url.Action("CSR_Table_Configure", "CyclePlanDB")" >6. Configure New CSR Excel Template</a></li>
+            <li><a href="@Url.Action("CSR_Template_Deploy", "CyclePlanDB")" >7. Deploy New/exist CSR Template</a></li>
+            <li><a href="@Url.Action("ValidateProject", "CyclePlanDB")" >8. Validate Project (TBD)</a></li>
+            <li><a href="@Url.Action("PlanProject", "CyclePlanDB")" >9. Plan Project: Indicators & more</a></li>
+        </ul>
+
+        }
+
+
+

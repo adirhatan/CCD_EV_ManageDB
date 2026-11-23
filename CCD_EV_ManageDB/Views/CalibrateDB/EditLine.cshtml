@@ -1,0 +1,164 @@
+﻿@model Calibration
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+
+@{
+    ViewBag.Title = "Edit Calibration line";
+}
+
+  @if (!String.IsNullOrWhiteSpace(Model.id))
+  {
+    <h2>Edit Calibration line</h2>
+  }
+  else
+  {
+    <h2>New Calibration line</h2>
+  }
+
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+  <script type="text/JavaScript">
+
+      $(function () {
+          $("#dialog").dialog();
+          if ($("#dialog").dialog("isOpen")) $("#dialog").dialog("close");
+      });
+     </script>
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+ @using (Html.BeginForm("EditLineExec", "CalibrateDB", FormMethod.Post, new { @id = "LineForm", @name = "LineForm" }))
+ {
+     <input type="hidden" id="_id" name="_id" value="@Model.id" />
+     <input type="hidden" id="_File" name="_File" value="@Model.File" />
+ <p> <!-- Spec CTS Station  Project Phase Rate Setup, Interface Valid File User Execution Date()-->
+     Spec:
+    <select id="_Spec" name="_Spec" class="wselect">
+        @foreach (string col in ViewBag.reflist)
+        {
+            if (col == Model.Spec)
+            {
+                <option value="@col.ToString()" selected="selected"> @col.ToString()</option>
+            }
+            else
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        }
+    </select>
+     CTS:
+    <input type="text" id="_CTS" name="_CTS" value="@Model.CTS" style="width: 200px" />
+     Station:
+    <input type="text" id="_Station" name="_Station" value="@Model.Station" style="width: 85px" />
+    Project:
+    <select id="_Project" name="_Project">
+        @foreach (var proj in ViewBag.projlist)
+        {
+            if (proj.ToString() == Model.Project)
+            {
+                <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+            }
+            else
+            {
+                <option value="@proj.ToString()"> @proj.ToString()</option>
+            }
+        }
+    </select> 
+    Phase:
+    <select id="_Phase" name="_Phase">
+        @foreach (var phase in ViewBag.phaselist)
+        {
+            if (phase.ToString() == Model.Phase)
+            {
+                <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+            }
+            else
+            {
+                <option value="@phase.ToString()" > @phase.ToString()</option>
+            }
+        }
+    </select> 
+    Rate:
+    <input type="text" id="_Rate" name="_Rate" value="@Model.Rate" style="width: 200px" />
+    Setup:
+    <input type="text" id="_Setup" name="_Setup" value="@Model.Setup" style="width: 200px" />
+    <br /><br />
+    Interface:
+     <select id="_Interface" name="_Interface">
+            <option value="CIO" >CIO</option>
+            <option value="USB" >USB</option>
+            <option value="DP" >DP</option>
+    </select> 
+    User:
+    <input type="text" id="_User" name="_User" value="@Model.User" style="width: 100px" />
+
+    Execution Date(YYYYMMDD):
+    <input type="text" id="_ExecutionDate" name="_ExecutionDate" value="@Model.ExecutionDate" style="width: 70px" />
+    Expiration Days:
+    <input type="text" id="_ExpirationDays" name="_ExpirationDays" value="@Model.ExpirationDays" style="width: 25px" />
+
+    <br /><br />
+        
+    @if (!string.IsNullOrEmpty(Model.File))
+    {
+        <text>File: <a class="bgMessage" href="@Url.Action("ViewCalibrationFile", "CalibrateDB", new { filepath = Model.File, _id = Model.id, Source = "EditLine" })">@Path.GetFileName(Model.File)</a></text>
+    }
+    else
+    {
+        <text>File: None</text>
+    }
+
+    <br />
+    <input type="submit" value="Save" />
+    <input type="button" value="Cancel" title="Cancel" class="button" onclick="GenLocatioAction('@Url.Action("CalibrationLinesClear", "CalibrateDB")')" />
+    </p>
+ }
+<br />
+
+@{
+    if (!string.IsNullOrEmpty(Model.id))
+    {
+        using (Html.BeginForm("EditLineFile", "CalibrateDB", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <input type="hidden" id="_rid" name="_id" value="@Model.id" />
+            <text>Load/Change Clibration File: </text>
+            <input type="file" name="file" />
+            <input type="submit" value="Load" title="Load Calibration file"/>
+        }
+    }
+    else
+    {
+        <p>Save meta data. Then you will be able to load file</p>
+    }
+
+    if (Model.Valid)
+    {
+        using (Html.BeginForm("ValidationLineUpdate", "CalibrateDB", FormMethod.Post, new { @id = "tForm", @name = "tForm" }))
+        {
+            <input type="hidden" id="_tid" name="_id" value="@Model.id" />
+            <input type="hidden" id="_tv" name="v" value="false" />
+            <text>Validation: Valid</text>
+            <input type="button" class="button" value="Invalidate" title="Invalidate Calibration" onclick="FormConfirmAction('tForm','@Url.Action("ValidationLineUpdate", "CalibrateDB")','Are you sure you want to invalidate calibration?\nAll execution results of this calibration will be indicator excluded.')"/>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm("ValidationLineUpdate", "CalibrateDB", FormMethod.Post, new { @id = "fForm", @name = "fForm" }))
+        {
+            <input type="hidden" id="_fid" name="_id" value="@Model.id" />
+            <input type="hidden" id="_fv" name="v" value="true" />
+            <text>Validation: Invalid</text>
+            <input type="button" class="button" value="Validate" title="Validate Calibration" onclick="FormConfirmAction('fForm','@Url.Action("ValidationLineUpdate", "CalibrateDB")','Are you sure you want to validate calibration?\nAll execution results of this calibration will be indicator included.')" />
+        }
+        <p>Validation: <span style="background-color:Red"> Invalid </span> </p>
+    }
+
+    if ((Model.Valid) && (Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd")) - Convert.ToInt32(Model.ExecutionDate) > Convert.ToInt32(Model.ExpirationDays)))
+    {
+       <p>Expiration: <span style="background-color:Yellow"> Expired </span> </p>
+    }
+}
+
+

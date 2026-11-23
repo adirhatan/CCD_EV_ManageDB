@@ -1,0 +1,245 @@
+﻿@model SessionsManageDisplay
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using MongoDB.Bson.Serialization;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using System.Text.RegularExpressions;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+
+@{
+    ViewBag.Title = "CSR Configure";
+}
+
+
+<h2>Session Manage - CSR Configure</h2>
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>     
+
+     @{ var ExportedFile = ViewBag.ExportedFileNAme;
+        if (ExportedFile != null)
+        {
+             <script type="text/JavaScript">
+                 $(document).ready(function () {
+                     var url = '@Url.Action("ViewExportFile", "ManageDB", new { filename = ViewBag.ExportedFileNAme })';
+                     $(location).attr('href', url);
+                 });
+             </script>
+        }
+     }
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+      @using (Html.BeginForm("CSRConfigCopyConfig", "GeneralDB", FormMethod.Post, new { @id = "copyForm", @name = "copyForm" }))
+      {
+     <p>
+        Project: 
+        <input id="_proj" name="_proj" value="@ViewBag.proj" disabled="disabled" />
+        <input type="hidden" id="proj" name="proj" value="@ViewBag.proj" />
+
+        Phase: 
+        <input id="_phase" name="_phase" value="@ViewBag.phase" disabled="disabled" />
+        <input type="hidden" id="phase" name="phase" value="@ViewBag.phase" />
+        Protocol: 
+        <input id="_prototcol" name="_prototcol" value="@ViewBag.protocol" disabled="disabled" />       
+        <input type="hidden" id="prototcol" name="_protocol" value="@ViewBag.protocol" />  
+        <input type="hidden" id="Interface" name="Interface" value="@ViewBag.Interface" />      
+
+        <!--&nbsp;&nbsp;&nbsp;&nbsp;
+        Copy all <b>@ViewBag.Interface</b> active configuration to new project/phase:
+        &nbsp;&nbsp; 
+        Select Project: 
+        <select id="t_proj" name="t_proj" >
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="t_phase" name="t_phase" >
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+        <input type="submit" value="Create" class="button" />-->
+
+        <input type="button"  style="float: right;" value="Session Manage" title="back to Session Manage List" class="button" onclick="GenLocatioAction('@Url.Action("SessionsManageList", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj })')" />
+    </p>
+      }
+    <br />
+    <p>
+    The following Excel templates where found:
+    <br />
+    @foreach (string currTemplate in ViewBag.currTemplates)
+    {
+        string _table = "";
+        foreach (string t in ViewBag.tables)
+        {
+            if (currTemplate.Contains(t))
+            {
+                _table = t;
+                break;
+            }
+        }
+        using (Html.BeginForm("CSRConfigUploadFile", "GeneralDB", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+                <b style="background-color:Lime">Active - </b>@currTemplate
+            <input type="button" name="Download" value="Download"  class="button" onclick="GenLocatioAction('@Url.Action("CSRConfigDownloadFile", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, @filename = currTemplate })')" />
+            <input type="hidden" id="exl_proj" name="proj" value="@ViewBag.proj" />
+            <input type="hidden" id="exl_phase" name="phase" value="@ViewBag.phase" />
+            <input type="hidden" id="exl_prototcol" name="protocol" value="@ViewBag.protocol" />  
+            <input type="hidden" id="exl_table" name="table" value="@_table" />  
+            <text>&nbsp;</text><input type="file" name="file" class="button" />    
+            <text>&nbsp;</text><input type="submit" name="Upload" value="Upload"  class="button" />   
+            <text>&nbsp;</text>
+            if (string.IsNullOrEmpty(_table))
+            {
+                <input type="button" name="Validate" value="Validate"  class="button" title="click to create validation txt report" onclick="GenLocatioAction('@Url.Action("ValidateCycleReportBG", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj })')" />  
+            }
+            else
+            {
+                <input type="button" name="Validate" value="Validate"  class="button" title="click to create validation txt report" onclick="GenLocatioAction('@Url.Action("ValidateCycleReportBG", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, @table = _table })')" />  
+            }
+        }
+
+
+        foreach (string file in ViewBag.TemplateFiles)
+        {
+            if ((Path.GetFileNameWithoutExtension(file) == Path.GetFileNameWithoutExtension(currTemplate))) { continue; }
+            if ((Path.GetFileNameWithoutExtension(file).StartsWith(Path.GetFileNameWithoutExtension(currTemplate))) || (Path.GetFileNameWithoutExtension(currTemplate).StartsWith(Path.GetFileNameWithoutExtension(file))))
+            {
+                @file 
+                <text>&nbsp;</text>
+                 <input type="button" name="Download" value="Download"  class="button"  onclick="GenLocatioAction('@Url.Action("CSRConfigDownloadFile", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, @filename = file })')" />
+                 <text>&nbsp</text><input type="button" name="MakeActive" value="Make Active" class="button"  onclick="GenLocatioAction('@Url.Action("CSRConfigMakeFileActive", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, @filename = file, @table = _table })')" />
+                 <text>&nbsp</text><input type="button" name="Delete" value="Delete" class="button"  onclick="GenLocatioConfirmAction('@Url.Action("CSRConfigDeleteFile", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, @filename = file })','Are you sure you want to delete @file?')" />
+                <br />
+            }
+        }
+    }
+    </p>   
+    <br />
+    <p>
+    The following XML config files where found:
+    <br />
+
+          @{using (Html.BeginForm("CSRConfigUploadFile", "GeneralDB", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                  <b style="background-color:Lime">Active - </b>@ViewBag.currConfigfile
+                <input type="button" name="Download" value="Download"  class="button" onclick="GenLocatioAction('@Url.Action("CSRConfigDownloadFile", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, @filename = ViewBag.currConfigfile })')" />
+                <input type="hidden" id="xml_proj" name="proj" value="@ViewBag.proj" />
+                <input type="hidden" id="xml_phase" name="phase" value="@ViewBag.phase" />
+                <input type="hidden" id="xml_prototcol" name="protocol" value="@ViewBag.protocol" />  
+                <text>&nbsp;</text><input type="file" name="file" class="button" />    
+                <text>&nbsp;</text><input type="submit" name="Upload" value="Upload"  class="button" />   
+            }
+        }
+    @foreach (string file in ViewBag.ConfigFiles)
+    {
+        if ((Path.GetFileNameWithoutExtension(file) == Path.GetFileNameWithoutExtension(ViewBag.currConfigfile))) { continue; }
+        @file 
+        <text>&nbsp;</text>
+         <input type="button" name="Download" value="Download" class="button"  onclick="GenLocatioAction('@Url.Action("CSRConfigDownloadFile", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, @filename = file })')" />
+        <text>&nbsp;</text><input type="button" name="MakeActive" value="Make Active" class="button"  onclick="GenLocatioAction('@Url.Action("CSRConfigMakeFileActive", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, @filename = file })')" />
+        <text>&nbsp</text><input type="button" name="Delete" value="Delete" class="button"  onclick="GenLocatioConfirmAction('@Url.Action("CSRConfigDeleteFile", "GeneralDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj, @filename = file })','Are you sure you want to delete @file?')" />
+        <br />
+    }
+    </p>   
+
+ @using (Html.BeginForm("CSRConfigAssignReports", "GeneralDB", FormMethod.Post, new { @id = "AssignReportsForm", @name = "AssignReportsForm" }))
+ {
+ <br />
+ <p>Assign reports: &nbsp; 
+          @{ MDBUserTableReport MDBReport = new MDBUserTableReport();
+             foreach (string Table in Model.Conf.table_divs.Keys)
+             {
+                  <br />
+                 foreach (string TableDivName in Model.Conf.table_divs[Table].Keys)
+                 {
+                    <text>Table:</text> 
+                    <input name="Table" value="@Table" disabled="disabled" />
+                    <text>Section in Excel template:  </text> 
+                    <input name="TableDivName" value="@TableDivName" disabled="disabled" size="30" />
+                     string rUser = Regex.Replace(Model.Conf.table_divs[Table][TableDivName].SRreportId, @"\d*", "");
+                     if (!string.IsNullOrEmpty(rUser))
+                     {
+                         rUser = "(" + rUser + ")";
+                     }
+                    <text>Exist SRreport name:</text>
+                    <input name="existReport" value="@rUser @MDBReport.ReadUserTableReport(Model.Conf.table_divs[Table][TableDivName].SRreportId).Name" title="@rUser @MDBReport.ReadUserTableReport(Model.Conf.table_divs[Table][TableDivName].SRreportId).Name" disabled="disabled" size="50" />
+                    <text>New SRreport Name: </text> 
+                     string sid = "SRreport_" + TableDivName;
+                    <select id="@sid" name="@sid" class="wselect">
+                    @{Dictionary<string, HashSet<string>> DictionaryUserTableReports = ViewBag.DictionaryUserTableReports;
+                      if (DictionaryUserTableReports.ContainsKey(Table))
+                      {
+                          <option value=""></option>
+                          foreach (string reportName in ViewBag.DictionaryUserTableReports[Table])
+                          {
+                            <option value="@MDBReport.ReadUserTableReport(User.Identity.Name, Table, reportName)._id"> @reportName</option>
+                          }
+                      }
+                    }
+                    </select>
+                    <br />
+                      List<string> tmp_reportIds = Model.Conf.table_divs[Table][TableDivName].reportIds;
+                      tmp_reportIds.Add("");
+                      int cnt = 0;
+                      foreach (string reportId in Model.Conf.table_divs[Table][TableDivName].reportIds)
+                      {
+                          cnt++;
+                        <text>Table:</text> 
+                        <input name="Table" value="@Table" disabled="disabled" />
+                        <text>Section in Excel template:  </text> 
+                        <input name="TableDivName" value="@TableDivName" disabled="disabled" size="30" />
+                          string prUser = Regex.Replace(reportId, @"\d*", "");
+                          if (!string.IsNullOrEmpty(prUser))
+                          {
+                              prUser = "(" + prUser + ")";
+                          }
+                        <text>Exist PRM report name:</text>
+                        <input name="existReport" value="@prUser @MDBReport.ReadUserTableReport(reportId).Name" title="@prUser @reportId).Name" disabled="disabled" size="50" />
+                        <text>New PRM report Name: </text> 
+                          string spid = "PRMreport" + cnt.ToString() + "_" + TableDivName;
+                        <select id="@spid" name="@spid" class="wselect">
+                        @{
+                          if (DictionaryUserTableReports.ContainsKey(Table))
+                          {
+                          <option value="@reportId"></option>
+                              foreach (string reportName in ViewBag.DictionaryUserTableReports[Table])
+                              {
+                            <option value="@MDBReport.ReadUserTableReport(User.Identity.Name, Table, reportName)._id"> @reportName</option>
+                              }
+                          <option value="">Delete</option>
+                          }
+                        }
+                        </select>
+                        <br />
+                      }
+                 }
+             }
+             <input type="hidden" id="rassign_proj" name="proj" value="@ViewBag.proj" />
+             <input type="hidden" id="rassign_phase" name="phase" value="@ViewBag.phase" />
+             <input type="hidden" id="rassign_prototcol" name="protocol" value="@ViewBag.protocol" /> 
+             <input type="submit" name="Submit" value="Submit Reports" class="button" />
+ }
+</p>
+ }
+    
+      

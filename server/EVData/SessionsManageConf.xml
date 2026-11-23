@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<SessionsManageConf>
+	<ProtocolConf>
+		<protocol>Test_DP_BB_A0</protocol>
+		<proj>BB</proj>
+		<phase>A0</phase>
+		<table>Test_DP_src0</table>
+		<field>NVM_Pre</field>
+		<field>UserComment</field>
+		<field>Skew</field>
+		<field alias="Channel">Test Channel</field>
+		<field>Test Mode</field>
+		<!--CR start-->
+		<ports>PA,PB,PC,PD</ports>
+		<lanes>L0,L1</lanes>
+		<excelPorts>PA,PB,PC,PD</excelPorts>
+		<SRTemplate>PABCDL01</SRTemplate>
+		<table_div tdname="Test_DP_src0" tname="Test_DP_src0">
+			<table_div_line dname="1M" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_GEN1_RX_JTOL_Long_Channel_SJ1MHz,USB3.1_GEN2_RX_JTOL_Short_Channel_SJ1MHz</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_GEN1_RX_JTOL_Long_Channel_SJ2MHz,USB3.1_GEN2_RX_JTOL_Short_Channel_SJ2MHz</table_div_field>
+			</table_div_line>
+			<table_div_line dname="DC_50_N_Amp_0.4" DivNumOfTests="1" trials="1">
+				<table_div_field fname="DC" condition="equals">50</table_div_field>
+				<table_div_field fname="N_Amp" condition="equals">0.4</table_div_field>
+			</table_div_line>
+		</table_div>
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+		</units>
+		<!--CR end-->
+	</ProtocolConf>
+	
+	<ProtocolConf>
+		<protocol>USB3_Test_RX_BB_A0</protocol>
+		<proj>BB</proj>
+		<phase>A0</phase>
+		<table>USB3_Test_RX</table>
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<field alias="Channel">Test Channel</field>
+		<field>Test Mode</field>
+		<!--CR start-->
+		<ports>PA,PB</ports>
+		<lanes>L0,L1</lanes>
+		<excelPorts>NONE</excelPorts>
+		<SRTemplate>PABL01</SRTemplate>
+		<table_div tdname="USB3.1 GEN1 Rx" tname="USB3_Test_RX">
+			<table_div_line dname="0.5M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">0.5MHz,GEN1</table_div_field>
+			</table_div_line>
+			<table_div_line dname="1M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_GEN1_RX_JTOL_Long_Channel_SJ1MHz,USB3.1_GEN1_RX_JTOL_Short_Channel_SJ1MHz</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_GEN1_RX_JTOL_Long_Channel_SJ2MHz,USB3.1_GEN1_RX_JTOL_Short_Channel_SJ2MHz</table_div_field>
+			</table_div_line>
+			<table_div_line dname="4.9M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">4.9MHz,GEN1</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz,GEN1</table_div_field>
+			</table_div_line>
+			<table_div_line dname="20M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">20MHz,GEN1</table_div_field>
+			</table_div_line>
+			<table_div_line dname="33M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">33MHz,GEN1</table_div_field>
+			</table_div_line>
+			<table_div_line dname="50M Gen1" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">50MHz,GEN1</table_div_field>
+			</table_div_line>
+
+		</table_div>
+		<table_div tdname="USB3.1 GEN2 Rx" tname="USB3_Test_RX">
+			<table_div_line dname="1M Gen2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_GEN2_RX_JTOL_Long_Channel_SJ1MHz,USB3.1_GEN2_RX_JTOL_Short_Channel_SJ1MHz</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M Gen2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_GEN2_RX_JTOL_Long_Channel_SJ2MHz,USB3.1_GEN2_RX_JTOL_Short_Channel_SJ2MHz</table_div_field>
+			</table_div_line>
+		</table_div>
+		<table_div tdname="USB3.1 GEN1 Rx LFPS" tname="USB3_Test_RX">
+			<table_div_line dname="DC_50_N_Amp_0.4" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="equals">USB3.1_GEN1_RX_LFPS</table_div_field>
+				<table_div_field fname="DC" condition="equals">50</table_div_field>
+				<table_div_field fname="N_Amp" condition="equals">0.4</table_div_field>
+			</table_div_line>
+			<table_div_line dname="DC_50_N_Amp_0.6" DivNumOfTests="1" trials="1">
+				<table_div_field fname="DC" condition="equals">50</table_div_field>
+				<table_div_field fname="N_Amp" condition="equals">0.6</table_div_field>
+			</table_div_line>
+						<table_div_line dname="DC_40_N_Amp_0.5" DivNumOfTests="1" trials="1">
+				<table_div_field fname="DC" condition="equals">40</table_div_field>
+				<table_div_field fname="N_Amp" condition="equals">0.5</table_div_field>
+			</table_div_line>
+			<table_div_line dname="DC_60_N_Amp_0.5" DivNumOfTests="1" trials="1">
+				<table_div_field fname="DC" condition="equals">60</table_div_field>
+				<table_div_field fname="N_Amp" condition="equals">0.5</table_div_field>
+			</table_div_line>
+		</table_div>
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>2</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>2</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+			<skew>SS</skew>
+				<type>S</type>
+				<setup>S</setup>
+				<num>2</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>L</setup>
+				<num>2</num>
+			</unit>
+		</units>
+		<!--CR end-->
+	</ProtocolConf>
+	<!--<ProtocolConf>
+		<protocol>CIO_Rx</protocol>
+		<proj>BB</proj>
+		<phase>A0</phase>
+		<table>CIO_10G_Rx</table>
+		<table>CIO_20G_Rx</table>
+		<table>TBT3_Legacy_Gen2_Rx</table>
+		<table>TBT3_Legacy_Gen3_Rx</table>
+		<field>ACT_PASS</field>
+		<field>Skew</field>
+	</ProtocolConf>
+	<ProtocolConf>
+		<protocol>Device_CIO_Tx</protocol>
+		<proj>TR</proj>
+		<phase>C1</phase>
+		<table>CIO_10G_Tx</table>
+		<table>CIO_20G_Tx</table>
+		<table>TBT3_Legacy_Gen2_Tx</table>
+		<table>TBT3_Legacy_Gen3_Tx</table>
+		<field>ACT_PASS</field>
+		<field>Skew</field>
+		<field alias="Station">HostName</field>
+	</ProtocolConf>-->
+	<ProtocolConf>
+		<protocol>CIO_Rounded_Gen2_Test_TX_GR_A0</protocol>
+		<proj>GR</proj>
+		<phase>A0</phase>
+		<table>CIO_Rounded_Gen2_Test</table>
+		<field>ACT_PASS</field>
+		<field>Skew</field>
+		<!--CR start-->
+		<ports>PA,PB,PC,PD</ports>
+		<lanes>L0,L1</lanes>
+		<excelPorts>PA,PB,PC,PD</excelPorts>
+		<SRTemplate>PABCDL01</SRTemplate>
+		<separateCSRperTable>N</separateCSRperTable>
+		<table_div tdname="CIO Rounded Gen2" tname="CIO_Rounded_Gen2_Test">
+			<table_div_line dname="Host" DivNumOfTests="63" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">Case,0G</table_div_field>
+			</table_div_line>
+		</table_div>
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>S</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>S</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+			<skew>SS</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+		</units>
+		<!--CR end-->
+	</ProtocolConf>
+	
+	<ProtocolConf>
+		<protocol>Test_CIO_RX_GR_A0</protocol>
+		<proj>GR</proj>
+		<phase>A0</phase>
+		<table>TBT3_Gen2_Rx_Test</table>
+		<table>TBT3_Gen3_Rx_Test</table>
+		<field>Skew</field>
+		<field alias="FW">FW version</field>
+		<!--CR start-->
+		<ports>PA,PB,PC,PD</ports>
+		<lanes>L0,L1</lanes>
+		<excelPorts>PA,PB,PC,PD</excelPorts>
+		<SRTemplate>PABCDL01</SRTemplate>
+		<separateCSRperTable>Y</separateCSRperTable>
+		<table_div tdname="TBT_Legenderay_Gen2" tname="TBT3_Gen2_Rx_Test" SRreportId="naty20190731160306">
+			<table_div_line dname="1M" DivNumOfTests="2" trials="11">
+				<table_div_field fname="SpecTestName" condition="contains">1MHz</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M" DivNumOfTests="1" trials="11">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz</table_div_field>
+			</table_div_line>
+			<table_div_line dname="50M" DivNumOfTests="1" trials="11">
+				<table_div_field fname="SpecTestName" condition="contains">50MHz</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M" DivNumOfTests="1" trials="11">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz</table_div_field>
+			</table_div_line>
+						<table_div_line dname="100M" DivNumOfTests="2" trials="11">
+				<table_div_field fname="SpecTestName" condition="contains">100MHz</table_div_field>
+			</table_div_line>
+			<reportId>naty20190801180510</reportId>
+		</table_div>
+		<table_div tdname="TBT_Legenderay_Gen3" tname="TBT3_Gen3_Rx_Test" SRreportId="">
+			<table_div_line dname="1M" DivNumOfTests="2" trials="11">
+				<table_div_field fname="SpecTestName" condition="contains">1MHz</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M" DivNumOfTests="1" trials="11">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz</table_div_field>
+			</table_div_line>
+			<table_div_line dname="50M" DivNumOfTests="1" trials="11">
+				<table_div_field fname="SpecTestName" condition="contains">50MHz</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M" DivNumOfTests="1" trials="11">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz</table_div_field>
+			</table_div_line>
+						<table_div_line dname="100M" DivNumOfTests="2" trials="11">
+				<table_div_field fname="SpecTestName" condition="contains">100MHz</table_div_field>
+			</table_div_line>
+			<reportId>naty20190805134928</reportId>
+		</table_div>
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>P</setup>
+				<num>1</num>
+			</unit>
+		</units>
+		<!--CR end-->
+	</ProtocolConf>
+	
+
+
+	
+	
+
+</SessionsManageConf>

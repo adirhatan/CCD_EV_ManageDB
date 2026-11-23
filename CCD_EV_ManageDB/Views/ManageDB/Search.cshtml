@@ -1,0 +1,254 @@
+﻿@model CCD_EV_ManageDB.Models.DBsearch
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search</h2>
+  <script>
+      function FormToStr() {
+          // debugger;
+          var x = document.getElementById("myForm");
+          var txt = "";
+          for (var i = 0; i < x.length; i++) {
+              if (x.elements[i].name.match("_Query")) {
+                  txt = txt + x.elements[i].value + ";";
+              }
+          }
+          alert(txt);
+          txt = txt.substr(0, txt.length - 1);
+          alert(txt);
+          x.elements.namedItem("Query").value = txt;
+          x.submit();
+
+      }
+      function delMatchRecords() {
+           debugger;
+          var r = confirm("Hi man, r u sure??");
+          if (r == true) {
+              var x = document.getElementById("tForm");
+              x.action = "/ManageDB/DeleteMatchedRecs";
+              x.submit();
+          }
+          //else {
+          //} 
+      }
+      function fnClone() {
+          /* the 'true' possible value specifies to clone the childNodes as well.*/
+          var oCloneNode = document.getElementById('queryInput').cloneNode(true);
+          document.getElementById('queryEnd').insertBefore(oCloneNode);
+      }
+      function removeElem(elem) {
+          elem.parentNode.removeChild(elem);
+          return false;
+      }
+      function changeCol() {
+          var form = document.getElementById("myForm");
+          window.location = "/ManageDB/SwitchTable?db=" + form.elements.namedItem("db").value + "&col=" + form.elements.namedItem("col").value;
+      }
+      function changeSes() {
+          var form = document.getElementById("loadForm");
+          window.location = "/ManageDB/LoadToPRM?_session=" + form.elements.namedItem("_session").value;
+      }
+      function sortField(field,direction) {
+          var x = document.getElementById("myForm");
+          var txt = "@Model.Query";
+          x.elements.namedItem("Query").value = txt;
+          x.elements.namedItem("SortStr").value = field;
+          x.elements.namedItem("SortDirection").value = direction;
+          x.submit();
+      }
+      $(document).ready(function() {
+          $('#table_id').dataTable({
+              "iDisplayLength": -1,
+              "bPaginate": true,
+              "iCookieDuration": 60,
+              "bStateSave": false,
+              "bAutoWidth": false,
+              "bScrollAutoCss": true,
+              "bProcessing": true,
+              "bRetrieve": true,
+              //"bJQueryUI": true,
+              "sDom": '<"H"CTrf>t<"F"lip>',
+              "aLengthMenu": [[10, 20, 100, -1], [10, 20, 100, "All"]],
+              "sScrollX": "100%",
+              //"sScrollY": "500px",
+              "sScrollY": (0.6 * $(window).height()),
+              //"bScrollCollapse": true,
+              "fnInitComplete": function () {
+                  this.css("visibility", "visible");
+              }
+        } );
+      });   
+  </script>
+   @using (Html.BeginForm("Search", "ManageDB", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+   {
+        <select id="db" name="db" onchange="changeCol()">
+        @foreach (var db in ViewBag.dblist)
+        {
+            if (db.ToString() == Model.db)
+            {
+            <option value="@db.ToString()" selected="selected"> @db.ToString()</option>   
+            }
+            else
+            {
+            <option value="@db.ToString()"> @db.ToString()</option>
+            }
+        }
+        </select> 
+        <select id="col" name="col" onchange="changeCol()">
+        @foreach (var col in ViewBag.collist)
+        {
+            if (col.ToString() == Model.col)
+            {
+            <option value="@col.ToString()" selected="selected"> @col.ToString()</option>   
+            }
+            else
+            {
+            <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        }
+        </select> 
+
+    <p>Enter DB Query : @Html.TextBox("Query", Model.Query)</p>
+    <p>Enter DB OP : @Html.TextBox("SearchOP", Model.SearchOP)</p>
+    <p>Enter DB Fields : @Html.TextBox("FieldsStr", Model.FieldsStr)</p>
+    <p>Enter DB Sort : @Html.TextBox("SortStr", Model.SortStr)@Html.TextBox("SortDirection", Model.SortDirection)</p>
+
+      
+        foreach (var triplet in Model.QueryTriplets)
+        {
+            string[] tarr = triplet.ToString().Split(new Char[] { ';' });
+    <div id="queryInput">
+        <p>Enter DB Query :
+        <select id="_Query0" name="_Query0">
+        @foreach (var op in ViewBag.q0list)
+        {
+            if (op.ToString() == tarr[0])
+            {
+                <option value="@op.ToString()" selected="selected" >@op.ToString()</option>
+            }
+            else
+            {
+                <option value="@op.ToString()">@op.ToString()</option>
+            }
+        } 
+        </select> 
+        <select id="_Query1" name="_Query1">
+        @{
+        var DBG = @HttpContext.Current.Session["DBG"] as DBGlobal;
+        foreach (var field in DBG.Fields)
+        {
+            if (field.ToString() == tarr[1])
+            {
+                <option value="@field.ToString()" selected="selected"> @field.ToString()</option>   
+            }
+            else
+            {
+                <option value="@field.ToString()"> @field.ToString()</option>
+            }
+        }
+        }
+        </select> 
+        @Html.TextBox("_Query2", tarr[2], new { @id = "_Query2" })
+        <input type="button" value="Remove" class="button" onclick="removeElem(this.parentNode)" /></p>
+    </div>
+        }
+    <div id="queryEnd"></div>
+    <input type="button" value="add query" class="button" onclick="fnClone()"/>
+    <input type="submit" value="Submit query" onclick="FormToStr()" />
+   }
+   <input type="button" value="Load to PRM" class="button" onclick="fnClone()"/>
+   <a href="/ManageDB/LoadToPRM?_session=@Model.uSession" class="button" >Load to PRM</a>
+    <br />
+
+       @using (Html.BeginForm("LoadToPRM", "ManageDB", FormMethod.Post, new { @id = "loadForm", @name = "loadForm" }))
+       {    
+        <select id="_session" name="_session" onchange = "changeSes();" class="wselect">
+        @{
+           var DBG = @HttpContext.Current.Session["DBG"] as DBGlobal;
+           foreach (var ses in DBG.Sessions)
+           {
+               if (ses.ToString() == Model.uSession)
+               {
+                <option value="@ses.ToString()" selected="selected"> @ses.ToString()</option>   
+               }
+               else
+               {
+                <option value="@ses.ToString()"> @ses.ToString()</option>
+               }
+           }
+        }
+        </select> 
+   <input type="submit" value="Load to PRM" class="button"  disabled="disabled"/>
+       }
+
+@using (Html.BeginForm("Delete", "ManageDB", FormMethod.Post, new { @id = "tForm", @name = "tForm" }))
+{
+<input type="submit" value="Delete checked records" onclick = "return confirm('Are you sure you want to click this link?')"/>
+    <input type="button" value="Delete matched records" class="button" onclick="delMatchRecords()"/>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+<table id="table_id" class="display">
+    <thead>
+    <tr>
+        <th >
+            Select
+        </th>
+     @foreach (var field in Model.Fields)
+     {
+        <th >
+        @{  
+         if ((field.ToString() == Model.SortStr) && (Model.SortDirection == "DES"))
+         {   
+                <a onclick="sortField('@field.ToString()','ASC')">@field.ToString()</a> 
+                <img src=@Url.Content("~/content/Images/sort_up.gif") alt="Sort up" onclick="sortField('@field.ToString()','ASC')"/>
+         }
+         else
+         {
+                <a onclick="sortField('@field.ToString()','DES')">@field.ToString()</a>
+            <img src=@Url.Content("~/content/Images/sort_down.gif") alt="Sort down" onclick="sortField('@field.ToString()','DES')"/>
+         }
+
+         }                                                                                
+        </th>
+     }
+    </tr> 
+    </thead>
+    <tbody>
+    @foreach (BsonDocument item in Model.ResCursor)
+    {
+        string r_id = item.AsBsonDocument.GetElement("_id").ToString();
+                                                                                                    <tr>  
+        <td>
+            <div id="@r_id markLine">
+        
+            <input id="@r_id" name="@r_id" type="checkbox" />
+            </div>
+        </td>
+        @foreach (var field in Model.Fields)
+        {
+        <td >
+            @{ 
+            if ((field.ToString().Length > 3) && (field.ToString().Substring(0, 4) == "FILE") && (@item.GetValue(field.ToString(), "") != ""))
+            {
+                string fname = item.GetValue(field.ToString()).ToString();
+                    <a href="file:////@item.GetValue(field.ToString(), "")">@System.Text.RegularExpressions.Regex.Replace(fname, ".*\\\\", "")</a>
+            }
+            else
+            {
+                @item.GetValue(field.ToString(), "");
+            }
+            }
+        </td>
+        }
+    </tr>
+    }
+    </tbody>
+</table>
+}

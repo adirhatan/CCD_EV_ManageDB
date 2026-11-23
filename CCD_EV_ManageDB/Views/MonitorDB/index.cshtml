@@ -1,0 +1,78 @@
+﻿@model CCD_EV_ManageDB.Models.MonitorData
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "index";
+}
+
+<h2>index</h2>
+
+
+
+@{
+foreach(KeyValuePair<string, MongoCursor> entry in Model.MonitorResults)
+   
+{
+
+    <script type="text/JavaScript">
+    $(document).ready(function () {
+        $('#@entry.Key').dataTable({
+        "iDisplayLength": -1,
+        //"bPaginate": true,
+        "iCookieDuration": 60,
+        "bStateSave": false,
+        "bAutoWidth": true,
+        "bScrollAutoCss": true,
+        //"bProcessing": true,
+        //"bRetrieve": true,
+        "bSort": false,
+        "bJQueryUI": true,
+        //"sDom": '<"H"CTrf>t<"F"lip>',
+        "sDom": 't<CT>',
+        //"aLengthMenu": [[10, 20, 100, -1], [10, 20, 100, "All"]],
+        "sScrollX": "500px",
+        "sScrollY": "300px",
+        //"sScrollY": (0.8 * $(window).height()),
+        "bScrollCollapse": true,
+        "fnInitComplete": function () {
+            this.css("visibility", "visible");
+        }
+    });
+});
+</script>
+    <table id="@entry.Key" class="display">
+    <thead>
+        <tr>
+            <th >
+                 @entry.Key
+            </th>
+             @foreach (var field in Model.Fields)
+             {
+             <th id="@field.ToString()">
+                @field.ToString()
+             </th>
+             }
+        </tr>             
+    </thead>
+    @foreach (BsonDocument item in entry.Value)
+    {
+        <tr>
+        <td>
+        aa
+        </td>
+        @foreach (var field in Model.Fields)
+        {
+            <td >
+              @item.GetValue(field.ToString(), "")
+            </td>
+        }
+        </tr>
+    }
+</table>
+}
+
+}

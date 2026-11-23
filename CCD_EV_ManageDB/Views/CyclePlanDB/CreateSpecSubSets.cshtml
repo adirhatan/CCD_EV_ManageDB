@@ -1,0 +1,541 @@
+﻿@model List<CyclePlanSpecSubSet>
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using MongoDB.Bson.Serialization;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using CCD_EV_ManageDB.Repositories;
+
+@{
+    ViewBag.Title = "Create Spec Sub Sets";
+}
+
+<h2>Create Spec Sub Sets</h2>
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>    
+
+ <script type="text/JavaScript">     function getForm(sourceDoc, formId) { return sourceDoc.getElementById(formId); }
+     function getFormElement(sourceForm, elementName) { return sourceForm[elementName]; for (var i = 0; i < sourceForm.elements.length; i++) { var theElement = sourceForm.elements[i]; if (theElement.name == elementName) { return theElement; } } }
+     function moveSelected(sourceElementId, targetElementId, moveAll,source) {
+         var sourceElement = document.getElementById(sourceElementId); var targetElement = null; if (targetElementId != null) { targetElement = document.getElementById(targetElementId); }
+         if (sourceElement == null || sourceElement.tagName != "SELECT" || (targetElement != null && targetElement.tagName != "SELECT")) { return; }
+         var unselectedOptions = new Array(); for (var i = 0; i < sourceElement.length; i++) {
+             var option = sourceElement.options[i]; if (option.selected || (moveAll && !option.hide)) {
+                 if (targetElement != null) {
+                     var alreadyExists = false; for (var j = 0; j < targetElement.length; j++) { if (targetElement.options[j].value == option.value) { alreadyExists = true; break; } }
+                     if (!alreadyExists) { targetElement.options[targetElement.length] = new Option(option.text, option.value); }
+                 } else { sourceElement.options[i] = null; i--; }
+             }
+             option.selected = false;
+         }
+         if (source == "Create") { updateHiddenFormCreate() };
+         if (source == "Edit") { updateHiddenFormEdit() };
+     }
+     function updateHiddenFormCreate() { debugger; sourceElement = document.getElementById('FieldsList'); var theForm = sourceElement.form; var useridEl = theForm.elements['Fields']; useridEl.value = ""; for (var i = 0; i < sourceElement.length; i++) { var option = sourceElement.options[i]; useridEl.value += option.value; if (i + 1 < sourceElement.length) { useridEl.value += ','; } } }
+     function updateHiddenFormEdit() { debugger; sourceElement = document.getElementById('FieldsListEdit'); var theForm = sourceElement.form; var useridEl = theForm.elements['FieldsEdit']; useridEl.value = ""; for (var i = 0; i < sourceElement.length; i++) { var option = sourceElement.options[i]; useridEl.value += option.value; if (i + 1 < sourceElement.length) { useridEl.value += ','; } } }
+     function clearSelect(formId, elementId) { var formElement = document.getElementById(formId).elements[elementId]; formElement.selectedIndex = -1; }
+</script>
+
+ <script type="text/JavaScript">
+     $(document).ready(function () {
+         //debugger;
+         $('#SpecSupSets').dataTable({
+             "iDisplayLength": -1,
+             "columns": [
+            { "orderable": true },
+            { "orderable": true },
+            { "orderable": true },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false }
+          ],
+             "autoWidth": true,
+             "jQueryUI": true,
+             //        //"sDom": '<"H"CTrf>t<"F"lip>',
+             "dom": '<"F"CTrif>t<"F"CTrif>',
+             "scrollX": "100%",
+             //"sScrollY": "700px",
+             "scrollY": (0.8 * $(window).height()),
+             "scrollCollapse": true
+         });
+
+         $('#filterSpecs').keyup(function () {
+             var valthis = $(this).val().toLowerCase();
+
+             $('select#FieldsListTmp>option').each(function () {
+                 var text = $(this).text().toLowerCase();
+                 if (text.indexOf(valthis) !== -1) {
+                     $(this).show(); $(this).prop('selected', true);
+                 }
+                 else {
+                     $(this).hide();
+                     $(this).prop('selected', false);
+                 }
+             });
+         });
+
+         $('#editfilterSpecs').keyup(function () {
+             var valthis = $(this).val().toLowerCase();
+
+             $('select#FieldsListTmpEdit>option').each(function () {
+                 var text = $(this).text().toLowerCase();
+                 if (text.indexOf(valthis) !== -1) {
+                     $(this).show(); $(this).prop('selected', true);
+                 }
+                 else {
+                     $(this).hide();
+                     $(this).prop('selected', false);
+                 }
+             });
+         });
+         
+     });
+
+</script>
+@{ if (TempData["EditedSubset_id"] != null)
+   {
+ <script type="text/JavaScript">
+     $(document).ready(function () {
+         ShowVisDialog('Edit-dialog-form');
+     });
+</script>
+   }
+}
+
+
+   <!-- Edit dialog start-->
+    <script type="text/JavaScript">
+          $(function () {
+              var dialog, form;
+
+              function addUser() {
+                  form.submit();
+              }
+
+              dialog = $("#Edit-dialog-form").dialog({
+                  autoOpen: false,
+                  height: 800,
+                  width: 1400,
+                  modal: true
+              });
+
+              form = $("#FormEdit");
+
+          });
+
+          function ShowVisDialog(dialog) {
+
+              //debugger;
+              var td = "#" + dialog;
+              $(td).dialog();
+              $(td).dialog("option", "width", 1400);
+              $(td).dialog("option", "length", 800);
+              $(td).dialog("option", "modal", true);
+              $(td).dialog("open");
+
+          };
+
+
+  </script>
+
+
+  <!-- Edit dialog end-->
+
+    <!-- Create dialog start-->
+    <script type="text/JavaScript">
+        $(function () {
+            var dialog, form;
+
+            function addUser() {
+                form.submit();
+            }
+
+            dialog = $("#Create-dialog-form").dialog({
+                autoOpen: false,
+                height: 800,
+                width: 1400,
+                modal: true
+            });
+
+            form = $("#CreateForm");
+
+        });
+
+        function ShowVisDialog(dialog) {
+
+            //debugger;
+            var td = "#" + dialog;
+            $(td).dialog();
+            $(td).dialog("option", "width", 1400);
+            $(td).dialog("option", "length", 800);
+            $(td).dialog("option", "modal", true);
+            $(td).dialog("open");
+
+        };
+
+
+  </script>
+
+
+  <!-- Visualization export dialog end-->
+
+
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+
+      @using (Html.BeginForm("CreateSpecSubSets", "CyclePlanDB", FormMethod.Post, new { @id = "allForm", @name = "allForm" }))
+      {
+     <p>
+        Select Project: 
+        <select id="all_proj" name="proj" onchange="GenSubmitFormAction('allForm','@Url.Action("CreateSpecSubSets", "CyclePlanDB")')">
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="all_phase" name="phase" onchange="GenSubmitFormAction('allForm','@Url.Action("CreateSpecSubSets", "CyclePlanDB")')">
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+        Select Protocol: 
+        <select id="all_protocol" name="protocol" class="wselect" onchange="GenSubmitFormAction('allForm','@Url.Action("CreateSpecSubSets", "CyclePlanDB")')">
+            @foreach (var protocol in ViewBag.protocollist)
+            {
+                if (protocol.ToString() == ViewBag.protocol)
+                {
+                    <option value="@protocol.ToString()" selected="selected"> @protocol.ToString()</option>
+                }
+                else
+                {
+                    <option value="@protocol.ToString()" > @protocol.ToString()</option>
+                }
+            }
+        </select> 
+        &nbsp; <input type="button" value="Cycle Plan Main" title="back to Cycle Plan Main" class="button" onclick="GenLocatioAction('@Url.Action("Main", "CyclePlanDB", new { @protocol = ViewBag.protocol, @phase = ViewBag.phase, @proj = ViewBag.proj })')" />
+    </p>
+          <br />
+      }
+
+          <!--  New: copy prev project-->    
+    @if (Model.Count==0)
+    {
+        using (Html.BeginForm("CreateSpecSubSets_copy_config_from", "CyclePlanDB", FormMethod.Post, new { @id = "copyForm", @name = "copyForm" }))
+        {
+            <input type="hidden" name="proj" value="@ViewBag.proj"  />
+            <input type="hidden" name="phase" value="@ViewBag.phase"  />
+            <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+     <p>
+        <b style="background-color:Yellow">Copy configuration from previous project/phase. Select Project: </b>
+        <select id="copy_from_proj" name="copy_from_proj" >
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="copy_from_phase" name="copy_from_phase" >
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+        &nbsp; <input type="submit" value="Copy" title="Copy configuration from previous project/phase" class="button" />
+    </p>
+        }
+    }
+
+     <!--  New: copy prev project-->   
+       
+    @using (Html.BeginForm("CreateSpecSubSetsAddSSS", "CyclePlanDB", FormMethod.Post, new { @id = "addForm", @name = "addForm" }))
+    {
+    <input type="hidden" name="proj" value="@ViewBag.proj"  />
+    <input type="hidden" name="phase" value="@ViewBag.phase"  />
+    <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+     <p>   
+        <u>Create new SpecSubSet</u>: Select Table-Spec: 
+        <select id="ind_col" name="col" style="width:400px" onchange="GenSubmitFormAction('addForm','@Url.Action("CreateSpecSubSets", "CyclePlanDB")')">
+            @foreach (var col in ViewBag.IndicatorsMetalist)
+            {
+                if (ViewBag.selectedCol == col.Key)
+                {
+                    <option value="@col.Key" selected="selected"> @col.Key - @col.Value.spec </option>
+                }
+                else
+                {
+                    <option value="@col.Key"> @col.Key - @col.Value.spec</option>
+                }
+            }
+        </select>  
+
+            <input type="button" value="Create" class="button" id="ExportVisualization" onclick="ShowVisDialog('Create-dialog-form')"/>
+    </p>
+                }
+    <br />
+    <b>Exist Spec Sub Sets for @ViewBag.protocol @ViewBag.proj @ViewBag.phase: </b>
+   <table id="SpecSupSets" class="display">
+    <thead>
+    <tr>
+        <th >
+            Table
+        </th>
+        <th >
+            Spec
+        </th>
+        <th >
+            Name
+        </th>
+        <th >
+            #Tests
+        </th>
+        <th >
+            Edit
+        </th>
+        <th >
+            Delete
+        </th>
+    </tr> 
+
+    </thead>
+    <tbody>
+    @foreach (CyclePlanSpecSubSet CPSpecSubSet in Model)
+    {
+        string EditForm = "EditForm" + @CPSpecSubSet._id;
+        string DelForm = "DelForm" + @CPSpecSubSet._id;
+     <tr>
+        <td>
+        @CPSpecSubSet.Table
+        </td> 
+        <td>
+         @CPSpecSubSet.Spec
+        </td> 
+        <td>
+         @CPSpecSubSet.Name
+        </td> 
+         <td>
+         @CPSpecSubSet.SpecTestNames.Count / @CPSpecSubSet.allTests
+        </td> 
+        <td>
+        @using (Html.BeginForm("CreateSpecSubSetsEditSubSet", "CyclePlanDB", FormMethod.Post, new { @id = EditForm, @name = EditForm }))
+        {
+             <input type="hidden" name="id" value="@CPSpecSubSet._id"  />
+             <input type="hidden" name="proj" value="@ViewBag.proj"  />
+             <input type="hidden" name="phase" value="@ViewBag.phase"  />
+             <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+             <input type="button" value="E" title="Edit SubSet" class="button" onclick="GenSubmitFormAction('@EditForm','@Url.Action("CreateSpecSubSetsEditSubSet", "CyclePlanDB")')"/>
+        }
+        </td> 
+        <td>
+        @using (Html.BeginForm("CreateSpecSubSetsDelSubSet", "CyclePlanDB", FormMethod.Post, new { @id = DelForm, @name = DelForm }))
+        {
+             <input type="hidden" name="id" value="@CPSpecSubSet._id"  />
+             <input type="button" value="D" title="Delete SubSet" class="button" onclick="FormConfirmAction('@DelForm','@Url.Action("CreateSpecSubSetsDelSubSet", "CyclePlanDB")','Are you sure you want to delete SpecSubSet @CPSpecSubSet.Name ?')"/>
+        }
+        </td> 
+
+    </tr>
+    }
+    </tbody>
+</table>
+
+
+
+<div id="Create-dialog-form" title="Create SpecSubSet">
+  <p class="validateTips">Create SpecSubSet of "@ViewBag.selectedSpec"</p>
+ 
+  <form method="post" action='@Url.Action("CreateSpecSubSetsAddSubSet", "CyclePlanDB")' id="CreateForm">
+          <input type="hidden" name="proj" value="@ViewBag.proj"  />
+          <input type="hidden" name="phase" value="@ViewBag.phase"  />
+          <input type="hidden" name="protocol" value="@ViewBag.protocol"  />
+          <input type="hidden" name="col" value="@ViewBag.selectedCol"  />
+          <input type="hidden" name="spec" value="@ViewBag.selectedSpec" />
+
+    <fieldset>
+      <label for="name">SpecSubSet Name:</label>
+        <input type="text" id="SubSetName" name="SubSetName" style="width: 120px" />
+        <br />
+        <label for="name">Filter "All" SpecTestNames (auto selection):</label>
+        <input type="text" id="filterSpecs" name="filterSpecs" value=""  />
+        <br />
+         <table id="FieldsTable" style="border:none">
+             <thead>
+             <tr>
+             <th style="background-color: #e6e6e6;color: #555555">All SpecTestNames</th>
+             <th style="background-color: #e6e6e6;color: #555555"></th>
+             <th style="background-color: #e6e6e6;color: #555555">Selected SpecTestNames for Sub Set</th>
+             <th style="background-color: #e6e6e6;color: #555555"></th>
+             </tr>
+             </thead>
+             <tbody>
+                <tr>
+                    <td>
+ 
+                        <select id="FieldsListTmp" name="FieldsListTmp" multiple="multiple" size="25" style="width: 550px;">
+                        @{
+                            foreach (var field in ViewBag.selectedSpecTestslist)
+                            {
+                                <option value="@field.ToString()"> @field.ToString()</option>
+                            }
+                        }
+                         </select> 
+                    </td>
+    
+
+                    <td nowrap>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="add" class="button" onclick="javascript: moveSelected('FieldsListTmp', 'FieldsList', false,'Create');" value="Add"/></div><div class="Right">&nbsp;</div></div>
+                        <div class="Button">
+                            <div class="Left">&nbsp;</div>
+                            <!--<div class="Middle"><input type="button" id="addAll" class="button" value="Add All" onclick="javascript: moveSelected('FieldsListTmp', 'FieldsList', true,'Create');"/></div>-->
+                            <div class="Right">&nbsp;</div>
+                        </div>
+                    </td>
+
+                    <td>
+                    <select name="FieldsList" multiple="multiple" size="25" style="width: 550px;" class="InputField" id="FieldsList"></select>
+                    <input type="hidden" name="Fields" value=""/>
+                    <input type="hidden" name="load" value="yes"/>
+                    </td>
+
+                    <td nowrap>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="rem" class="button" onclick="javascript: moveSelected('FieldsList', null, false,'Create');" value="Remove"/></div><div class="Right">&nbsp;</div></div>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="remAll" class="button" onclick="javascript: moveSelected('FieldsList', null, true,'Create');" value="Remove All"/></div><div class="Right">&nbsp;</div></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      <br />
+      <input type="submit" class="button"/>
+    </fieldset>
+  </form>
+</div>
+
+@{
+    CyclePlanSpecSubSet EditedSubset = new CyclePlanSpecSubSet();
+    if (TempData["EditedSubset_id"]!=null)
+    {
+        MDBCyclePlanSpecSubSet MDBCPlanSpecSubSet = new MDBCyclePlanSpecSubSet();
+        EditedSubset = MDBCPlanSpecSubSet.Read(TempData["EditedSubset_id"].ToString());
+        //EditedSubset = (CyclePlanSpecSubSet)TempData["EditedSubset"];
+    }
+    List<string> editedSpecTestslist = new List<string>();
+    if (TempData["editedSpecTestslist"]!=null)
+    {
+        editedSpecTestslist = (List<string>)TempData["editedSpecTestslist"];
+    }
+}
+<div id="Edit-dialog-form" title="Edit SpecSubSet">
+  <p class="validateTips">Edit SpecSubSet of "@ViewBag.selectedSpec"</p>
+ 
+  <form method="post" action='@Url.Action("CreateSpecSubSetsEditExecSubSet", "CyclePlanDB")' id="FormEdit">
+          <input type="hidden" name="id" value="@EditedSubset._id"  />
+    <fieldset>
+      <label for="name">SpecSubSet Name</label>
+        <input type="text" id="SubSetNameEdit" name="SubSetName" value="@EditedSubset.Name"  />
+        <br />
+
+        <label for="name">Filter "All" SpecTestNames (auto selection):</label>
+        <input type="text" id="editfilterSpecs" name="filterSpecs" value=""  />
+        <br />
+         <table id="VisFieldsTableEdit" style="border:none">
+             <thead>
+             <tr>
+             <th style="background-color: #e6e6e6;color: #555555">All SpecTestNames</th>
+             <th style="background-color: #e6e6e6;color: #555555"></th>
+             <th style="background-color: #e6e6e6;color: #555555">Selected SpecTestNames for Sub Set</th>
+             <th style="background-color: #e6e6e6;color: #555555"></th>
+             </tr>
+             </thead>
+             <tbody>
+                <tr>
+                    <td>
+ 
+                        <select id="FieldsListTmpEdit" name="FieldsListTmpEdit" multiple="multiple" size="25" style="width: 550px;">
+                        @{
+                            foreach (var field in editedSpecTestslist)
+                            {
+                                <option value="@field.ToString()"> @field.ToString()</option>
+                            }
+                        }
+                         </select> 
+                    </td>
+    
+
+                    <td nowrap>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="addEdit" class="button" onclick="javascript: moveSelected('FieldsListTmpEdit', 'FieldsListEdit', false,'Edit');" value="Add"/></div><div class="Right">&nbsp;</div></div>
+                        <div class="Button">
+                            <div class="Left">&nbsp;</div>
+                            <!--<div class="Middle"><input type="button" id="addAllEdit" class="button" value="Add All" onclick="javascript: moveSelected('FieldsListTmpEdit', 'FieldsListEdit', true,'Edit');"/></div>-->
+                            <div class="Right">&nbsp;</div>
+                        </div>
+                    </td>
+
+                    <td>
+                    <select name="FieldsListEdit" multiple="multiple" size="25" style="width: 550px;" class="InputField" id="FieldsListEdit">
+                        @{
+                            foreach (var field in EditedSubset.SpecTestNames)
+                            {
+                                <option value="@field.ToString()"> @field.ToString()</option>
+                            }
+                        }
+                    </select>
+                    @{
+                        string EditedSubsetSpecTestNamesStr = "";
+                        int fieldCnt = 0;
+                        foreach (var field in EditedSubset.SpecTestNames) 
+                        {
+                            fieldCnt++;
+                            EditedSubsetSpecTestNamesStr += field;
+                            if (fieldCnt<EditedSubset.SpecTestNames.Count) 
+                            {
+                                EditedSubsetSpecTestNamesStr += ",";
+                            }
+                        }
+                    }
+                    <input type="hidden" name="FieldsEdit" value="@EditedSubsetSpecTestNamesStr"/>
+                    <input type="hidden" name="load" value="yes"/>
+                    </td>
+
+                    <td nowrap>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="remEdit" class="button" onclick="javascript: moveSelected('FieldsListEdit', null, false,'Edit');" value="Remove"/></div><div class="Right">&nbsp;</div></div>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="remAllEdit" class="button" onclick="javascript: moveSelected('FieldsListEdit', null, true,'Edit');" value="Remove All"/></div><div class="Right">&nbsp;</div></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      <br />
+      <input type="submit" class="button"/>
+    </fieldset>
+  </form>
+</div>

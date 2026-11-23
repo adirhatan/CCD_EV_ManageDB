@@ -1,0 +1,357 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p>
+
+   @using (Html.BeginForm("FixHidden", "AdminDB", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+   {
+     <p>Select DB to fix hidden dates fields: 
+        <select id="db" name="db">
+
+            <option value="test"> TMP</option>
+            <option value="perm"> PRM</option>
+
+        </select> 
+
+        <input type="submit" value="Submit" />
+    </p>
+   }
+
+      @using (Html.BeginForm("FixNumeric", "AdminDB", FormMethod.Post, new { @id = "myNForm", @name = "myNForm" }))
+   {
+     <p>Select DB to fix numeric-string fields (UnitId,BoardNumber): 
+        <select id="ndb" name="db">
+
+            <option value="test"> TMP</option>
+            <option value="perm"> PRM</option>
+            <option value="comp"> CMP</option>
+
+        </select> 
+
+        <input type="submit" value="Submit" />
+    </p>
+   }
+
+
+      @using (Html.BeginForm("IndexTable", "AdminDB", FormMethod.Post, new { @id = "indForm", @name = "indForm" }))
+      {
+               <p>Select Dev table to index all fields: 
+        <select id="table" name="table">
+        @foreach (var col in ViewBag.collist)
+        {
+            <option value="@col.ToString()"> @col.ToString()</option>
+        }
+        </select> 
+        &nbsp;
+        Select db: 
+        <select id="idb" name="db">
+
+            <option value="TMP"> TMP</option>
+            <option value="PRM"> PRM</option>
+
+        </select> 
+
+        <input type="submit" value="Submit" />
+    </p>
+      }
+
+      
+            @using (Html.BeginForm("IndexTable", "AdminDB", FormMethod.Post, new { @id = "cindForm", @name = "cindForm" }))
+      {
+               <p>Select Comp table to index all fields: 
+        <select id="ctable" name="table">
+        @foreach (var col in ViewBag.compcollist)
+        {
+            <option value="@col.ToString()"> @col.ToString()</option>
+        }
+        </select> 
+        &nbsp;
+        Select db: 
+        <select id="cdb" name="db">
+            <option value="CMP"> CMP</option>
+        </select> 
+
+        <input type="submit" value="Submit" />
+    </p>
+      }
+
+      @using (Html.BeginForm("IndexAllTables", "AdminDB", FormMethod.Post, new { @id = "indAForm", @name = "indAForm" }))
+      {
+               <p>Select db to index all results tables: 
+        <select id="iAdb" name="db">
+
+            <option value="TMP"> TMP</option>
+            <option value="PRM"> PRM</option>
+            <option value="CMP"> CMP</option>
+
+        </select> 
+
+        <input type="submit" value="Submit" />
+    </p>
+      }
+
+
+      @using (Html.BeginForm("fixInAppTestName", "AdminDB", FormMethod.Post, new { @id = "fixInAppForm", @name = "fixInAppForm" }))
+      {
+               <p>Select Dev table to fix InAppTestName: 
+        <select id="InApptable" name="table">
+        @foreach (var col in ViewBag.collist)
+        {
+            <option value="@col.ToString()"> @col.ToString()</option>
+        }
+        </select> 
+        &nbsp;
+        Select db: 
+        <select id="InAppdb" name="db">
+
+            <option value="test"> TMP</option>
+            <option value="perm"> PRM</option>
+
+        </select> 
+
+        <input type="submit" value="Submit" />
+    </p>
+      }
+
+      @using (Html.BeginForm("LoadSpecMappingFile", "AdminDB", FormMethod.Post, new { enctype = "multipart/form-data", @id = "loadSpecForm", @name = "loadSpecForm" }))
+      {
+               <p>Load Spec mapping XML file: 
+        <select id="loadSpectable" name="table">
+        @foreach (var col in ViewBag.collist)
+        {
+            <option value="@col.ToString()"> @col.ToString()</option>
+        }
+        </select> 
+        &nbsp;
+        Select app: 
+        <select id="loadSpecApp" name="app">
+
+            <option value="KEYSIGHT"> KeySight</option>
+            <option value="TEK"> Tek</option>
+
+        </select> 
+        Mapping file: 
+        <input type="file" name="file" class="button" />
+
+        <input type="submit" value="Submit" />
+    </p>
+      }
+     @using (Html.BeginForm("GetSpecExcelFromMappingFile", "AdminDB", FormMethod.Post, new { @id = "getSpecExcelForm", @name = "getSpecExcelForm" }))
+      {
+               <p>Get Spec Excel from mapping file: 
+        <select id="getSpectable" name="table">
+        @foreach (var col in ViewBag.collist)
+        {
+            <option value="@col.ToString()"> @col.ToString()</option>
+        }
+        </select> 
+        &nbsp;
+        Select app: 
+        <select id="getSpecApp" name="app">
+
+            <option value="KEYSIGHT"> KeySight</option>
+            <option value="TEK"> Tek</option>
+
+        </select> 
+
+        <input type="submit" value="Submit" />
+        </p>
+        }
+
+             @using (Html.BeginForm("DeleteOldUserBGTasks", "AdminDB", FormMethod.Post, new { @id = "DeleteOldUserBGTasksForm", @name = "DeleteOldUserBGTasksForm" }))
+      {
+            <p>Delete User BG tasks older than a year: 
+                <input type="submit" value="Submit" />
+            </p>
+      }
+                   @using (Html.BeginForm("FixLoadToPRM", "AdminDB", FormMethod.Post, new { @id = "FixLoadToPRMForm", @name = "FixLoadToPRMForm" }))
+      {
+            <p>Fix LoadToPRM field: 
+                <input type="submit" value="Submit" />
+            </p>
+      }
+
+            @using (Html.BeginForm("TableMapSpecTestName", "AdminDB", FormMethod.Post, new { @id = "mapSpecAppForm", @name = "mapSpecAppForm" }))
+      {
+               <p>Select Dev table to remap SpecTestName using mapping XML: 
+        <select id="MapSpecApptable" name="colname">
+        @foreach (var col in ViewBag.collist)
+        {
+            <option value="@col.ToString()"> @col.ToString()</option>
+        }
+        </select> 
+        &nbsp;
+        Select db: 
+        <select id="MapAppdb" name="db">
+
+            <option value="test"> TMP</option>
+            <option value="perm"> PRM</option>
+
+        </select> 
+
+        Query: <input type="text" id="MapQuery" name="query"/>
+
+        <input type="submit" value="Submit" />
+    </p>
+      }
+
+      @using (Html.BeginForm("LoadSessionsManageConf", "AdminDB", FormMethod.Post, new { @id = "LoadSessionsManageConfForm", @name = "LoadSessionsManageConfForm" }))
+      {
+            <p>Load SessionsManageConf to DB: 
+                Select Interface: 
+                <select id="SessionsManageConfInterface" name="Interafce">
+
+                    <option value=""></option>
+                    <option value="USB">USB</option>
+                    <option value="CIO">CIO</option>
+                    <option value="DP">DP</option>
+                    <option value="PCIE">PCIE</option>
+                    <option value="Power">POWER</option>
+                    <option value="Crystal">Crystal</option>
+
+                </select> 
+
+                Project:
+                <select id="SessionsProj" name="proj">
+                    @foreach (var proj in ViewBag.projlist)
+                    {
+                        <option value="@proj.ToString()"> @proj.ToString()</option>
+                    }
+                </select> 
+                Phase:
+                <select id="SessionsPhase" name="phase">
+                    @foreach (var phase in ViewBag.phaselist)
+                    {
+                        <option value="@phase.ToString()"> @phase.ToString()</option>
+                    }
+                </select> 
+                <input type="submit" value="Submit" />
+            </p>
+      }
+
+
+
+      @using (Html.BeginForm("ChangeAttachmentsPath", "AdminDB", FormMethod.Post, new { @id = "ChangeAttachmentsPathForm", @name = "ChangeAttachmentsPathForm" }))
+      {
+            <p>Change Attachments Path in DB/Project: 
+                <select id="ChangeAttachmentsdb" name="dbname">
+                    <option value="test"> TMP</option>
+                    <option value="perm"> PRM</option>
+                    <option value="permArch"> PRM Arch</option>
+                    <option value="comp"> COMP</option>
+                    <option value="compArch"> COMP Arch</option>
+                </select> 
+               <select id="ChangeAttachmentsProj" name="project">
+                    @foreach (var proj in ViewBag.projlist)
+                    {
+                        <option value="@proj.ToString()"> @proj.ToString()</option>
+                    }
+                </select> 
+                Exist Prefix: <input type="text" id="sourcePathPrefix" name="sourcePathPrefix"/>
+                Target Prefix: <input type="text" id="targetPathPrefix" name="targetPathPrefix"/>
+                <input type="submit" value="Submit" />
+            </p>
+      }
+
+            @using (Html.BeginForm("CreateTestNameLookUPForProject", "AdminDB", FormMethod.Post, new { @id = "CreateTestNameLookUPForProject", @name = "CreateTestNameLookUPForProject" }))
+      {
+            <p>Create TestNameLookUP for project: 
+
+                Project:
+               <select id="CreateTestNameLookUPForProjectProj" name="project">
+                    @foreach (var proj in ViewBag.projlist)
+                    {
+                        <option value="@proj.ToString()"> @proj.ToString()</option>
+                    }
+                </select> 
+                Phase:
+                <select id="CreateTestNameLookUPForProjectPhase" name="phase">
+                    @foreach (var phase in ViewBag.phaselist)
+                    {
+                        <option value="@phase.ToString()"> @phase.ToString()</option>
+                    }
+                </select> 
+
+                <input type="submit" value="Submit" />
+            </p>
+      }
+
+      
+            @using (Html.BeginForm("CreateProjectSpecsXMLforCustomExec", "AdminDB", FormMethod.Post, new { @id = "CreateProjectSpecsXMLforCustomExec", @name = "CreateProjectSpecsXMLforCustomExec" }))
+      {
+            <p>Create Specs XML for CustomExec: 
+
+                Project:
+               <select id="CreateProjectSpecsXMLforCustomExec" name="project">
+                    @foreach (var proj in ViewBag.projlist)
+                    {
+                        <option value="@proj.ToString()"> @proj.ToString()</option>
+                    }
+                </select> 
+
+                <input type="submit" value="Submit" />
+            </p>
+      }
+
+
+    @using (Html.BeginForm("PocExeCallingBG", "AdminDB", FormMethod.Post))
+    {
+    <p>PocExeCallingBG: 
+            Out file name: <input type="text" id="outFileName1" name="outFileName"/>
+            Text: <input type="text" id="line1" name="line"/>
+
+    <input type="submit" value="Submit" />
+    </p>
+                  }
+
+
+    @using (Html.BeginForm("LoadCornerSetTimesFromExecutions", "AdminDB", FormMethod.Post))
+    {
+    <p>Load Corner Set Times From Executions: 
+
+    <input type="submit" value="Submit" />
+    </p>
+                  }
+
+          @using (Html.BeginForm("LaunchTestModeMarginReport", "AdminDB", FormMethod.Post, new { @id = "LoadSessionsManageConfForm", @name = "LoadSessionsManageConfForm" }))
+      {
+            <p>Launch TestModeMarginReport:
+                Select Interface: 
+                <select id="TestModeMarginReportInterface" name="_interface">
+
+                    <option value=""></option>
+                    <option value="USB">USB</option>
+                    <option value="CIO">CIO</option>
+                    <option value="DP">DP</option>
+                    <option value="PCIE">PCIE</option>
+                    <option value="Power">POWER</option>
+                    <option value="Crystal">Crystal</option>
+
+                </select> 
+                DB:
+                <select id="TestModeMarginReportdb" name="db_str">
+
+                    <option value="DB_TMP"> TMP</option>
+                    <option value="DB_PRM"> PRM</option>
+
+                </select> 
+                Project:
+                <select id="TestModeMarginReportProj" name="proj">
+                    @foreach (var proj in ViewBag.projlist)
+                    {
+                        <option value="@proj.ToString()"> @proj.ToString()</option>
+                    }
+                </select> 
+                Phase:
+                <select id="TestModeMarginReportPhase" name="phase">
+                    @foreach (var phase in ViewBag.phaselist)
+                    {
+                        <option value="@phase.ToString()"> @phase.ToString()</option>
+                    }
+                </select> 
+                <input type="submit" value="Submit" />
+            </p>
+      }

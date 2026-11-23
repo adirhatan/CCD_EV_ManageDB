@@ -1,0 +1,52 @@
+﻿@model CCD_EV_ManageDB.Models.DBsearch
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "LoadToPRM";
+}
+
+<h2>LoadToPRM - @Model.col</h2>
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+        <!-- LoadToPARM Sessions choose boxes start-->
+@using (Html.BeginForm("LoadToPRM", "ManageDB", FormMethod.Post, new { @id = "loadForm", @name = "loadForm" }))
+{ 
+    <input type="hidden" name="userids" value="@TempData["sessions"]"/>
+    <input type="hidden" name="load" value="yes"/>
+    <input type="hidden" name="col" value="@Model.col"/>     
+    <input type="submit" id="submitButtonId" name="submit" value="Load to PRM" class="button"/>
+    <input type="button" id="searchTMPButton" name="submit" value="Search TMP" class="button" onclick="javascript: window.location('@Url.Action("SearchTMP", "ManageDB")')" />
+ }
+<!-- LoadToPARM Sessions choose boxes end-->
+
+<table id="table_id" class="display">
+    <thead>
+    <tr>
+     @foreach (var field in Model.Fields)
+     {
+        <th >
+            @field.ToString()
+        </th>
+     }
+    </tr>
+     </thead>
+     <tbody>
+@foreach (BsonDocument item in Model.ResCursor)
+{
+    <tr>
+        @foreach (var field in Model.Fields)
+        {
+        <td >
+            @item.GetValue(field.ToString(), "")
+        </td>
+        }
+    </tr>
+}
+    </tbody>
+</table>

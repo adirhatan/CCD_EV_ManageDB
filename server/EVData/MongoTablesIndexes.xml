@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<MongoTablesIndexes>
+
+
+	<TMP>
+		<Table name="LAN_IEEE">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+			<Field name="BoardNumber" />
+			<Field name="UnitId" />
+			<Field name="Skew" />
+		</Table>
+	</TMP>
+	<PRM>
+		<Table name="LAN_IEEE">
+			<Field name="TestEnd" />
+			<Field name="SessionStart" />
+			<Field name="BoardNumber" />
+			<Field name="UnitId" />
+			<Field name="Skew" />
+		</Table>
+	</PRM>
+	<CMP>
+		<Table name="DP_cert_test">
+			<Field name="TestName" />
+			<Field name="ProjectName" />
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="DP_TX">
+			<Field name="BoardNumber" />
+			<Field name="AppTestName" />
+			<Field name="AppTestDetails" />
+			<Field name="Lane" />
+			<Field name="Port" />
+			<Field name="NVM_REV" />
+		</Table>
+		<Table name="DPpp_TX">
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="HDMI1p4_TX">
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="HDMI2p0_TX">
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="TBT_TX">
+			<Field name="BoardNumber" />
+			<Field name="AppTestName" />
+			<Field name="AppTestDetails" />
+			<Field name="Lane" />
+			<Field name="Port" />
+			<Field name="NVM_REV" />
+		</Table>
+		<Table name="TBT_RX">
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="USB3p1_TX">
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="USB2p0_TX">
+			<Field name="BoardNumber" />
+		</Table>
+		<Table name="USB3p1_TX">
+			<Field name="BoardNumber" />
+		</Table>
+	</CMP>
+
+
+</MongoTablesIndexes>

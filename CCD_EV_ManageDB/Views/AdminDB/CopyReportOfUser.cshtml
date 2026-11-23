@@ -1,0 +1,60 @@
+﻿
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using MongoDB.Bson.Serialization;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "Copy report of user";
+}
+<script type="text/JavaScript">
+    function changedUserReports(selectUser, selectReport) {
+        //debugger;
+        //var selectFields = elem.nextSibling.nextSibling;
+
+        var output = [];
+        var length = ngon.DictionaryAllUsersTableReports[selectUser.value].length;
+        for (var i = 0; i < length; i++) {
+            output[i] = '<option value="' + ngon.DictionaryAllUsersTableReports[selectUser.value][i] + '">' + ngon.DictionaryAllUsersTableReports[selectUser.value][i] + '</option>';
+        }
+
+        selectReport.innerHTML = output.join('');
+
+    }
+    
+</script>
+<h2>Copy report of user</h2>
+
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+   @using (Html.BeginForm("CopyReportToUser", "GeneralDB", FormMethod.Post, new { @id = "CopyReportForm", @name = "CopyReportForm" }))
+ {
+ <p>Copy report from user to another user: &nbsp; 
+    User (Table):
+    <select id="CUserTable" name="UserTable" class="wselect" onchange="changedUserReports(this,document.getElementById('CReportName'))">
+        <option value=""></option>
+        @foreach (var col in ViewBag.UsersTablesReports)
+        {
+            <option value="@col.ToString()"> @col.ToString()</option>
+        }
+    </select>
+    Report Name:
+    <select id="CReportName" name="ReportName" class="wselect">
+            <option value=""></option>
+    </select> 
+
+    User Name:
+    <select id="CUserId" name="UserId" class="wselect">
+        @foreach (var user in ViewBag.Users)
+        {
+            <option value="@user.ToString()"> @user.ToString()</option>
+        }
+    </select> 
+
+    <input type="submit" value="Submit" />
+</p>
+ }

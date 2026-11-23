@@ -1,0 +1,101 @@
+﻿@model List<CCD_EV_ManageDB.Models.UserTableReport>
+
+@{
+    ViewBag.Title = "CSR Launch Reports";
+}
+
+<h2>CSR Launch Reports</h2>
+
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+  <script type="text/JavaScript">      function getForm(sourceDoc, formId) { return sourceDoc.getElementById(formId); }
+      function getFormElement(sourceForm, elementName) { return sourceForm[elementName]; for (var i = 0; i < sourceForm.elements.length; i++) { var theElement = sourceForm.elements[i]; if (theElement.name == elementName) { return theElement; } } }
+      function moveSelected(sourceElementId, targetElementId, moveAll, source) {
+          var sourceElement = document.getElementById(sourceElementId); var targetElement = null; if (targetElementId != null) { targetElement = document.getElementById(targetElementId); }
+          if (sourceElement == null || sourceElement.tagName != "SELECT" || (targetElement != null && targetElement.tagName != "SELECT")) { return; }
+          var unselectedOptions = new Array(); for (var i = 0; i < sourceElement.length; i++) {
+              var option = sourceElement.options[i]; if (option.selected || moveAll) {
+                  if (targetElement != null) {
+                      var alreadyExists = false; for (var j = 0; j < targetElement.length; j++) { if (targetElement.options[j].value == option.value) { alreadyExists = true; break; } }
+                      if (!alreadyExists) { targetElement.options[targetElement.length] = new Option(option.text, option.value); }
+                  } else { sourceElement.options[i] = null; i--; }
+              }
+              option.selected = false;
+          }
+          if (source == "sessions") { updateHiddenFormSessions() };
+          if (source == "Visualization") { updateHiddenFormVisualization() };
+      }
+      //function updateHiddenForm() { var sourceElement = document.getElementById('foundMultiple'); var theForm = sourceElement.form; var useridEl = theForm.elements['userids']; useridEl.value = ""; $("#submitButtonId").attr("disabled", "disabled"); for (var i = 0; i < sourceElement.length; i++) { var option = sourceElement.options[i]; var val = option.value; var ind = val.indexOf(","); useridEl.value += option.value.substr(0, ind); $("#submitButtonId").removeAttr("disabled"); if (i + 1 < sourceElement.length) { useridEl.value += ','; } } }
+      function updateHiddenFormSessions() { var sourceElement = document.getElementById('foundMultiple'); var theForm = sourceElement.form; var useridEl = theForm.elements['userids']; useridEl.value = ""; $("#submitButtonId").attr("disabled", "disabled"); $("#QueryButtonId").attr("disabled", "disabled"); $("#LogButtonId").attr("disabled", "disabled"); $("#DeleteButtonId").attr("disabled", "disabled"); for (var i = 0; i < sourceElement.length; i++) { var option = sourceElement.options[i]; var val = option.value; var ind = val.indexOf(","); useridEl.value += option.value.substr(0, ind); $("#submitButtonId").removeAttr("disabled"); $("#QueryButtonId").removeAttr("disabled"); $("#LogButtonId").removeAttr("disabled"); $("#DeleteButtonId").removeAttr("disabled"); if (i + 1 < sourceElement.length) { useridEl.value += ','; } } }
+      function updateHiddenFormVisualization() { debugger; sourceElement = document.getElementById('VisFieldsList'); var theForm = sourceElement.form; var useridEl = theForm.elements['ids_str']; useridEl.value = ""; for (var i = 0; i < sourceElement.length; i++) { var option = sourceElement.options[i]; useridEl.value += option.value; if (i + 1 < sourceElement.length) { useridEl.value += ','; } } }
+      function clearSelect(formId, elementId) { var formElement = document.getElementById(formId).elements[elementId]; formElement.selectedIndex = -1; }
+
+
+</script>
+
+<p> Protocol: <b>@ViewBag.Protocol</b> &nbsp; Project: <b>@ViewBag.proj</b> &nbsp; Phase:<b> @ViewBag.Phase</b> &nbsp; Table: <b>@ViewBag.table</b>&nbsp; Table Division: <b>@ViewBag.table_div</b></p><br />
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+<div id="vis-dialog-form" title="Visualise results">
+  <p class="validateTips">Choose reports to launch in PRM DB, valid results</p>
+ 
+  <form action='@Url.Action("RunCSRReportsBG", "ReportDB")' id="VisForm">
+    <input type="hidden" name="protocol" value="@ViewBag.protocol" />
+    <input type="hidden" name="proj" value="@ViewBag.proj" />
+    <input type="hidden" name="phase" value="@ViewBag.phase" />
+    <input type="hidden" name="table_div" value="@ViewBag.table_div" />
+    <fieldset>
+      <label for="name">Reports:</label>
+         <table id="VisFieldsTable" style="border:none">
+             <thead>
+             <tr>
+             <th style="background-color: #e6e6e6;color: #555555">Configured reports</th>
+             <th style="background-color: #e6e6e6;color: #555555"></th>
+             <th style="background-color: #e6e6e6;color: #555555">Selected reports</th>
+             <th style="background-color: #e6e6e6;color: #555555"></th>
+             </tr>
+             </thead>
+             <tbody>
+                <tr>
+                    <td>
+ 
+                        <select id="VisFieldsListTmp" name="VisFieldsListTmp" multiple="multiple" size="20" style="width: 450px;" class="wselect">
+                        @{
+                            foreach (var report in Model)
+                            {
+                                <option value="@report._id"> @report.Name</option>
+                            }
+                        }
+                         </select> 
+                    </td>
+    
+
+                    <td nowrap>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="vis_add" class="button" onclick="javascript: moveSelected('VisFieldsListTmp', 'VisFieldsList', false,'Visualization');" value="Add"/></div><div class="Right">&nbsp;</div></div>
+                        <div class="Button">
+                            <div class="Left">&nbsp;</div>
+                            <div class="Middle"><input type="button" id="vis_addAll" class="button" value="Add All" onclick="javascript: moveSelected('VisFieldsListTmp', 'VisFieldsList', true,'Visualization');"/></div>
+                            <div class="Right">&nbsp;</div>
+                        </div>
+                    </td>
+
+                    <td>
+                    <select name="VisFieldsList" multiple="multiple" size="20" style="width: 450px;" class="InputField" id="VisFieldsList"></select>
+                    <input type="hidden" name="ids_str" value=""/>
+                    <input type="hidden" name="load" value="yes"/>
+                    </td>
+
+                    <td nowrap>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="vis_rem" class="button" onclick="javascript: moveSelected('VisFieldsList', null, false,'Visualization');" value="Remove"/></div><div class="Right">&nbsp;</div></div>
+                        <div class="Button"><div class="Left">&nbsp;</div><div class="Middle"><input type="button" id="vis_remAll" class="button" onclick="javascript: moveSelected('VisFieldsList', null, true,'Visualization');" value="Remove All"/></div><div class="Right">&nbsp;</div></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      <br />
+      email:<input type="text" name="mails" value="@ViewBag.Mail"/>
+      <input type="submit" class="button"/>
+    </fieldset>
+  </form>
+</div>
+

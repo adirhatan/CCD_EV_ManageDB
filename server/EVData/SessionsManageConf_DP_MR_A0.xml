@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- One interface's XML file conatians all its related protocols definitions -->
+<SessionsManageConf>
+	<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->
+	<ProtocolConf>
+		<protocol>DP_TX</protocol>
+		<proj>MR</proj>
+		<phase>A0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>DP_TX_RDRV</table>
+		<table>DP_TX_MultiFunction</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>PA,PB,SRC0</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>L0,L1,L2,L3</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>PA,PB,SRC0</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>PAB0L03</SRTemplate>
+		<!--separateCSRperTable: value "Y" determines separate excel template per table (default is N) -->
+		<separateCSRperTable>Y</separateCSRperTable>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+			<!-- SRreportId: report id that is used for LogicUnit status report (optional) -->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options are equals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="RDRV without SSC" tname="DP_TX_RDRV" SRreportId="naty20190807105234">
+			<table_div_line dname="D10.2 1.62Gbps" DivNumOfTests="1" trials="1">
+				<table_div_field fname="TestName" condition="contains">D10.2</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">1.62 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="D10.2 2.7Gbps" DivNumOfTests="1" trials="1">
+				<table_div_field fname="TestName" condition="contains">D10.2</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">2.7 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="D10.2 5.4Gbps" DivNumOfTests="7" trials="1">
+				<table_div_field fname="TestName" condition="contains">D10.2</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">5.4 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="D10.2 8.1Gbps" DivNumOfTests="1" trials="1">
+				<table_div_field fname="TestName" condition="contains">D10.2</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">8.1 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="PLTPAT 5.4Gbps" DivNumOfTests="48" trials="1">
+				<table_div_field fname="TestName" condition="contains">PLTPAT</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">5.4 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="PLTPAT 8.1Gbps" DivNumOfTests="48" trials="1">
+				<table_div_field fname="TestName" condition="contains">PLTPAT</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">8.1 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="TPS4 8.1Gbps" DivNumOfTests="7" trials="1">
+				<table_div_field fname="TestName" condition="contains">TPS4</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">8.1 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="HBR2CPAT 5.4Gbps" DivNumOfTests="6" trials="1">
+				<table_div_field fname="TestName" condition="contains">HBR2CPAT</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">8.1 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="PRBS7 1.62Gbps" DivNumOfTests="35" trials="1">
+				<table_div_field fname="TestName" condition="contains">PRBS7</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">1.62 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="PRBS7 2.7Gbps" DivNumOfTests="37" trials="1">
+				<table_div_field fname="TestName" condition="contains">PRBS7</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">2.7 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="PRBS7 5.4Gbps" DivNumOfTests="1" trials="1">
+				<table_div_field fname="TestName" condition="contains">PRBS7</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">5.4 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="PRBS7 8.1Gbps" DivNumOfTests="6" trials="1">
+				<table_div_field fname="TestName" condition="contains">PRBS7</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">8.1 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			
+			
+		</table_div>
+		
+		<table_div tdname="MultiFunction" tname="DP_TX_MultiFunction" SRreportId="naty20190807105234">
+			<table_div_line dname="D10.2 1.62Gbps" DivNumOfTests="1" trials="1">
+				<table_div_field fname="TestName" condition="contains">D10.2</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">1.62 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="D10.2 2.7Gbps" DivNumOfTests="1" trials="1">
+				<table_div_field fname="TestName" condition="contains">D10.2</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">2.7 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="D10.2 5.4Gbps" DivNumOfTests="7" trials="1">
+				<table_div_field fname="TestName" condition="contains">D10.2</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">5.4 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="D10.2 8.1Gbps" DivNumOfTests="1" trials="1">
+				<table_div_field fname="TestName" condition="contains">D10.2</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">8.1 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="PLTPAT 5.4Gbps" DivNumOfTests="48" trials="1">
+				<table_div_field fname="TestName" condition="contains">PLTPAT</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">5.4 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="PLTPAT 8.1Gbps" DivNumOfTests="48" trials="1">
+				<table_div_field fname="TestName" condition="contains">PLTPAT</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">8.1 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="TPS4 8.1Gbps" DivNumOfTests="7" trials="1">
+				<table_div_field fname="TestName" condition="contains">TPS4</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">8.1 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="HBR2CPAT 5.4Gbps" DivNumOfTests="6" trials="1">
+				<table_div_field fname="TestName" condition="contains">HBR2CPAT</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">8.1 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="PRBS7 1.62Gbps" DivNumOfTests="35" trials="1">
+				<table_div_field fname="TestName" condition="contains">PRBS7</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">1.62 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="PRBS7 2.7Gbps" DivNumOfTests="37" trials="1">
+				<table_div_field fname="TestName" condition="contains">PRBS7</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">2.7 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="PRBS7 5.4Gbps" DivNumOfTests="1" trials="1">
+				<table_div_field fname="TestName" condition="contains">PRBS7</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">5.4 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			<table_div_line dname="PRBS7 8.1Gbps" DivNumOfTests="6" trials="1">
+				<table_div_field fname="TestName" condition="contains">PRBS7</table_div_field>
+				<table_div_field fname="BitRate" condition="equals">8.1 Gbps</table_div_field>
+				<table_div_field fname="SSC" condition="equals">SSC Disabled</table_div_field>
+			</table_div_line>
+			
+			
+		</table_div>
+		
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+			<!-- skew:skew (FF/TYP/SS)-->
+			<!-- type:Board configuration (first letter upper case)-->
+			<!-- setup:Setup (first letter upper case)-->
+			<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+		</units>
+
+	</ProtocolConf>
+	
+	<!-- ProtocolConf determines SessionManage and CycleReport configuration per portocol; protocols are defined by Sys Admin (Naty). Each protocol has separate Session Manage page -->
+	<ProtocolConf>
+		<protocol>DP_RX</protocol>
+		<proj>MR</proj>
+		<phase>A0</phase>
+		<!-- table determines which tables will appear in Sessions Manage page; it is valid to define multiple tables (repeat the line for each table)-->
+		<table>DP_RX_Results</table>
+		<!-- field determines customized fields that will appear in Session Manage page, "alias" will be presented, value must be the real field name in DB -->
+		<!--  it is valid to define multiple fields (repeat the line for each field)-->
+		<field alias="Station">HostName</field>
+		<field>Skew</field>
+		<!--CycleRrport definitions start-->
+		<!-- ports: possible ports values of the results, comma delimited ,case insensitive -->
+		<ports>SINK1,SINK2</ports>
+		<!-- Lanes: possible lanes values of the results, comma delimited ,case insensitive -->
+		<lanes>L0,L1,L2,L3</lanes>
+		<!-- excelPorts: ports values exists in excel template, "NONE" or values, comma delimited -->
+		<excelPorts>SINK1,SINK2</excelPorts>
+		<!-- SRTemplate: template used for status report, should match ports+lanes combination see emptySR*.xlsx files in EVData -->
+		<SRTemplate>PABL01</SRTemplate>
+		<!--separateCSRperTable: value "Y" determines separate excel template per table (default is N) -->
+		<separateCSRperTable>N</separateCSRperTable>
+		<!-- table_div determains group of lines in excel that refers to specific table in DB-->
+			<!-- tdname:name in excel (column A)-->
+			<!-- tname:table name in DB-->
+			<!-- SRreportId: report id that is used for LogicUnit status report (optional) -->
+		<!-- table_div_line determains one line content-->
+			<!-- dname: name in excel (column B)-->
+			<!-- DivNumOfTests: number of different tests that will match this line-->
+			<!-- trials: number of trials per test-->
+		<!-- table_div_field determines how to query DB results to match the line; it is valid to define multiple table_div_field for same field or defferent fields(repeat the line for each table_div_field)-->
+			<!-- fname: field name in DB (case sensitive)-->
+			<!-- condition: defines the query logic, valid options are equals,contains,notContains -->
+			<!-- value: the result string (or substring) in DB, may contain multiple values comma delimited (spaces are valid caharacter)-->
+		<table_div tdname="DP RX With cable" tname="DP_RX_Results" SRreportId="naty20190807105234">
+			<table_div_line dname="2M RBR" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">RBR</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M RBR" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">RBR</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="20M RBR" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">20MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">RBR</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M HBR" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR_</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M HBR" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR_</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="20M HBR" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">20MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR_</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="100M HBR" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">100MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR_</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M HBR2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR2</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M HBR2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR2</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="20M HBR2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">20MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR2</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="100M HBR2" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">100MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR2</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M HBR3" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR3</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M HBR3" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR3</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="20M HBR3" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">20MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR3</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="100M HBR3" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">100MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR3</table_div_field>
+				<table_div_field fname="SpecTestName" condition="notContains">Zero_Cable</table_div_field>
+			</table_div_line>
+				
+			
+		</table_div>
+
+		<table_div tdname="DP RX Without cable" tname="DP_RX_Results" SRreportId="naty20190807105234">
+			<table_div_line dname="2M HBR ZeroC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR_</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M HBR ZeroC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR_</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="20M HBR ZeroC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">20MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR_</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="100M HBR ZeroC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">100MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR_</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M HBR2 ZeroC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR2</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M HBR2 ZeroC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR2</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="20M HBR2 ZeroC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">20MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR2</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="100M HBR2 ZeroC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">100MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR2</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="2M HBR3 ZeroC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">2MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR3</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="10M HBR3 ZeroC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">10MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR3</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="20M HBR3 ZeroC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">20MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR3</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">Zero_Cable</table_div_field>
+			</table_div_line>
+			<table_div_line dname="100M HBR3 ZeroC" DivNumOfTests="1" trials="1">
+				<table_div_field fname="SpecTestName" condition="contains">100MHz</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">HBR3</table_div_field>
+				<table_div_field fname="SpecTestName" condition="contains">Zero_Cable</table_div_field>
+			</table_div_line>		
+			
+		</table_div>
+		
+		<!--Units: Should match the units in the excel template, Drop down values of "Logic Unit" in Session Manage page are created from this list-->
+			<!-- skew:skew (FF/TYP/SS)-->
+			<!-- type:Board configuration (first letter upper case)-->
+			<!-- setup:Setup (first letter upper case)-->
+			<!-- num:1 or more if we have it in excel template (1,2 etc)-->
+		<units>
+			<unit>
+				<skew>FF</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>FF</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>TYP</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>S</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+			<unit>
+				<skew>SS</skew>
+				<type>L</type>
+				<setup>A</setup>
+				<num>1</num>
+			</unit>
+		</units>
+	</ProtocolConf>
+</SessionsManageConf>

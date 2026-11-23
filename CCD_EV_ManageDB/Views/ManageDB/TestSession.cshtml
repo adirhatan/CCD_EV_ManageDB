@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "TestSession";
+}
+
+<h2>TestSession</h2>
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+@using (Html.BeginForm("TestSession", "ManageDB", FormMethod.Get, new { @id = "myForm", @name = "myForm" }))
+{
+    <p>Time to wait miliseconds: <input type="text" id="time" name="time"/></p>
+    <input type="submit" />
+}

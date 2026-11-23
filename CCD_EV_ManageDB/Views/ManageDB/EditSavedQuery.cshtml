@@ -1,0 +1,18 @@
+﻿@model CCD_EV_ManageDB.Models.DBsearchSave
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "EditSavedQuery";
+}
+
+<h2>EditSavedQuery</h2>
+ @using (Html.BeginForm("EditSavedQuery", "ManageDB", FormMethod.Post, new { @id = "tForm", @name = "tForm" }))
+ {
+     //@Html.TextBox("name", Model.name, new { @id = "name" })   
+     <input type="submit" value="Submit query" onclick="kuku()" />
+
+ }

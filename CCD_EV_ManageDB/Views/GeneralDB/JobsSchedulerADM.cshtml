@@ -1,0 +1,160 @@
+﻿@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using MongoDB.Bson.Serialization;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "Jobs Scheduler";
+}
+
+<h2>Jobs Scheduler</h2>
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+      @using (Html.BeginForm("IndicatorsCreateSchedule", "GeneralDB", FormMethod.Post, new { @id = "allForm", @name = "allForm" }))
+      {
+     <p>
+        Create <b>Indicators</b> Schedule: 
+        <br />
+        Select Project: 
+        <select id="all_proj" name="proj">
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="all_phase" name="phase" >
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+
+        <select id="frequency" name="frequency">
+            <option value="weekly" > weekly</option>
+            <option value="daily" > daily</option>
+            <option value="monthly" > monthly</option>
+        </select> 
+        day:<input type="text" name="day" style="width: 50px"/>
+        hour:<input type="text" name="hour" style="width: 50px"/>
+        Mails(comma delimited):<input type="text" name="mails"/>
+        <input type="submit" value="Create" class="button" />
+        <br />       
+    </p>
+      }
+
+      @using (Html.BeginForm("SessionsManageCreateSchedule", "GeneralDB", FormMethod.Post, new { @id = "smForm", @name = "smForm" }))
+      {
+     <p>
+        Create <b>SessionsManage</b> Schedule: 
+        <br />
+        Select Project: 
+        <select id="sm_proj" name="proj">
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="sm_phase" name="phase" >
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+
+        <select id="sm_frequency" name="frequency">
+            <option value="weekly" > weekly</option>
+            <option value="daily" > daily</option>
+            <option value="monthly" > monthly</option>
+        </select> 
+        day:<input type="text" name="day" style="width: 50px"/>
+        hour:<input type="text" name="hour" style="width: 50px"/>
+        Mails(comma delimited):<input type="text" name="mails"/>
+        <input type="submit" value="Create" class="button" />
+        <br />       
+    </p>
+      }
+
+    @using (Html.BeginForm("HotCornersStatsCreateSchedule", "GeneralDB", FormMethod.Post, new { @id = "smForm", @name = "smForm" }))
+      {
+     <p>
+        Create <b>HotCornersStats</b> Schedule: 
+        <br />
+        Select Project: 
+        <select id="hc_proj" name="proj">
+            @foreach (var proj in ViewBag.projlist)
+            {
+                if (proj.ToString() == ViewBag.proj)
+                {
+                    <option value="@proj.ToString()" selected="selected"> @proj.ToString()</option>
+                }
+                else
+                {
+                    <option value="@proj.ToString()"> @proj.ToString()</option>
+                }
+            }
+        </select> 
+        Select Phase: 
+        <select id="hc_phase" name="phase" >
+            @foreach (var phase in ViewBag.phaselist)
+            {
+                if (phase.ToString() == ViewBag.phase)
+                {
+                    <option value="@phase.ToString()" selected="selected"> @phase.ToString()</option>
+                }
+                else
+                {
+                    <option value="@phase.ToString()" > @phase.ToString()</option>
+                }
+            }
+        </select> 
+
+        <select id="hc_frequency" name="frequency">
+            <option value="weekly" > weekly</option>
+            <option value="daily" > daily</option>
+            <option value="monthly" > monthly</option>
+        </select> 
+        day:<input type="text" name="day" style="width: 50px"/>
+        hour:<input type="text" name="hour" style="width: 50px"/>
+        Mails(comma delimited):<input type="text" name="mails"/>
+        <input type="submit" value="Create" class="button" />
+        <br />
+        Test Scheduler (creates UserBGTask record when scheduled):
+        <input type="button" value="Test Scheduler" class="button" onclick="GenSubmitFormAction('smForm','@Url.Action("TestJobsScheduler", "GeneralDB")')"/>
+        
+    </p>
+      }

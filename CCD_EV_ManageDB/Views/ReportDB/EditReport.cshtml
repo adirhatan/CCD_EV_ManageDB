@@ -1,0 +1,342 @@
+﻿@model CCD_EV_ManageDB.Models.ReportData
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using MongoDB.Bson.Serialization;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using System.Web.Script.Serialization;
+
+
+@{
+    ViewBag.Title = "EditReport";
+}
+
+<script type="text/JavaScript">
+//    alert(ngon.dictionaryFields["noTestName"]);
+//    var arrayLength = ngon.dictionaryFields["noTestName"].length;
+//    for (var i = 0; i < arrayLength; i++) {
+//        alert(ngon.dictionaryFields["noTestName"][i]);
+//        //Do something
+    //    }
+    $(document).ready(function () {
+        //debugger;
+        $('#queryImageInput').hide();
+        $('#queryRefInput').hide();
+    });     
+    
+
+    function changedTestsSelect(selectTests, selectFields) {
+        //debugger;
+        //var selectFields = elem.nextSibling.nextSibling;
+
+        var output = [];
+        var length = ngon.dictionaryFields[selectTests.value].length;
+        for (var i = 0; i < length; i++) {
+            output[i] = '<option value="' + ngon.dictionaryFields[selectTests.value][i] + '">' + ngon.dictionaryFields[selectTests.value][i] + '</option>';
+            if (selectFields.value === ngon.dictionaryFields[selectTests.value][i]) {
+                output[i] = '<option value="' + ngon.dictionaryFields[selectTests.value][i] + '"' + ' selected="selected">' + ngon.dictionaryFields[selectTests.value][i] + '</option>';
+            }
+        }
+
+        selectFields.innerHTML = output.join('');
+
+    }
+
+    function changedTestsSelectImage(selectTests, selectFields, selectFieldsImage) {
+        //debugger;
+        //var selectFields = elem.nextSibling.nextSibling;
+
+        var output = [];
+        var length = ngon.dictionaryFields[selectTests.value].length;
+        for (var i = 0; i < length; i++) {
+            output[i] = '<option value="' + ngon.dictionaryFields[selectTests.value][i] + '">' + ngon.dictionaryFields[selectTests.value][i] + '</option>';
+        }
+
+        selectFields.innerHTML = output.join('');
+        selectFieldsImage.innerHTML = output.join('');
+
+    }
+
+    function changedTemplate(selectTemplate, lsl,usl) {
+        //debugger;
+        //var selectFields = elem.nextSibling.nextSibling;
+
+        var output = [];
+        var length = ngon.dictionaryFields[selectTests.value].length;
+        for (var i = 0; i < length; i++) {
+            output[i] = '<option value="' + ngon.dictionaryFields[selectTests.value][i] + '">' + ngon.dictionaryFields[selectTests.value][i] + '</option>';
+        }
+
+        selectFields.innerHTML = output.join('');
+
+    }
+    
+</script>
+ <h2>EditReport</h2>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+<br />
+  @using (Html.BeginForm("SaveReportChangeTab", "ReportDB", FormMethod.Post, new { @id = "SaveReportChangeTab", @name = "SaveReportChangeTab" }))
+  {
+    @Html.Hidden("id", Model.Report._id)
+    <p>Report Name: <b>@Model.Report.Name</b>&nbsp;  Report TestName: @Model.Report.TestName &nbsp; 
+        @if (ViewBag.collist != null)
+        {
+        <text> Report table: </text>
+            <select id="col" name="col" onchange="document.getElementById('SaveReportChangeTab').submit()" title="select to change report table"> 
+            @foreach (var col in ViewBag.collist)
+            {
+                if (col.ToString() == Model.Report.RConfig.table)
+                {
+                <option value="@col.ToString()" selected="selected"> @col.ToString()</option>   
+                }
+                else
+                {
+                <option value="@col.ToString()"> @col.ToString()</option>
+                }
+            }
+            </select> 
+        }
+        else
+        {
+            <text> Report table: </text> @Model.Report.RConfig.table
+        }
+
+    </p>
+  }
+
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+
+   @using (Html.BeginForm("SaveReport", "ReportDB", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+   {
+    bool cbChecked = false;
+    if (Model.Report.useMarginLimits) { cbChecked = true;}
+     <br />
+     <p>
+     Include <b>marginal limits</b> in report?&nbsp;@Html.CheckBox("useMarginLimits", cbChecked)
+    </p>
+    <br />
+   @Html.Hidden("id", Model.Report._id)
+   @Html.Hidden("FieldsSlidesStr", "")
+   @Html.Hidden("TitleItemsStr", "")
+   @Html.Hidden("ImageSlideID", "")
+    foreach (TitleItem TI in Model.Report.RConfig.TitleItems)
+    {
+        <div id="TitleInput">
+        <p>Title line details: &nbsp;Top &nbsp;
+        <input type="text" id="_TitleItems0" name="_TitleItems0" value="@TI.top" style="width: 35px;"/>
+        Height &nbsp;
+        <input type="text" id="_TitleItems1" name="_TitleItems1" value="@TI.height" style="width: 35px;"/>
+        FontSize &nbsp;
+        <input type="text" id="_TitleItems2" name="_TitleItems2" value="@TI.fontSize" style="width: 35px;"/>
+        Content
+        <textarea rows="2" cols="50" id="_TitleItems3" name="_TitleItems3" style="vertical-align: bottom; border: 1px solid #8A8575">@TI.content</textarea>
+        <input type="button" value="Remove" class="button" onclick="removeElem(this.parentNode)" /></p>
+        </div>
+    }
+    <div id="TitleEnd"></div>
+    <input type="button" value="add tiltle field" class="button" onclick="fnClone('TitleInput','TitleEnd')"/>
+       
+    foreach (FieldSlide FS in Model.Report.RConfig.FieldsSlides)
+    {
+        if ((!Model.Tests.Contains(FS.test)) && (FS.test.ToLower() != "initial")) { continue; }
+        string disabledVar = "";
+        if (FS.type == General.ReportSlideType.image.ToString()) { disabledVar = "disabled=\"disabled\""; }
+        <div id="queryInput">
+        Slide: Test &nbsp;
+        <select id="_FieldsSlides0" name="_FieldsSlides0" class="wmselect"  @disabledVar title="@FS.test" onchange="changedTestsSelect(this,this.nextSibling.nextSibling)">
+        @foreach (string _test in Model.Tests)
+        {
+            if (_test == FS.test)
+            {
+                <option value="@_test" selected="selected" >@_test</option>
+            }
+            else
+            {
+                <option value="@_test">@_test</option>
+            }
+        } 
+        </select> 
+        Field &nbsp;
+        <select id="_FieldsSlides1" name="_FieldsSlides1" class="wmselect" title="@FS.column" @disabledVar>
+        @{
+        //foreach (string field in Model.TableFields)
+        foreach (string field in Model.TestsFields[FS.test])
+        {
+            if (FS.column == field)
+            {
+                <option value="@field" selected="selected"> @field</option>   
+            }
+            else
+            {
+                <option value="@field"> @field</option>
+            }
+        }
+        }
+        </select> 
+        Text &nbsp;
+        <input type="text" id="_FieldsSlides2" name="_FieldsSlides2" title="@FS.text" value="@FS.text" style="width: 250px;" @disabledVar/>
+                Template &nbsp; 
+        <select id="_FieldsSlides3" name="_FieldsSlides3" class="wmselect" title="@FS.templateKey" @disabledVar>
+        @{
+        foreach (string template in Model.Templates)
+        {
+            if ((FS.type == General.ReportSlideType.image.ToString()) && (!template.Contains("image"))) { continue; }
+            if (FS.templateKey == template)
+            {
+                <option value="@template" selected="selected"> @template</option>   
+            }
+            else
+            {
+                <option value="@template"> @template</option>
+            }
+        }
+        }
+        </select> 
+       @if (FS.type == General.ReportSlideType.limits.ToString())
+       {
+        <text> Low limit &nbsp;</text>
+        <input type="text" id="_FieldsSlides4" name="_FieldsSlides4" value="@FS.lsl" style="width: 75px;"/>
+        <text> Up limit &nbsp;</text>
+        <input type="text" id="_FieldsSlides5" name="_FieldsSlides5" value="@FS.usl" style="width: 75px;"/>
+        <text> limit Units&nbsp;</text>
+        <input type="text" id="_FieldsSlides7" name="_FieldsSlides7" value="@FS.units" style="width: 75px;"/>
+        <text> Margin limit&nbsp;</text>
+        <input type="text" id="_FieldsSlides8" name="_FieldsSlides8" value="@FS.margin" style="width: 50px;"/>
+       }
+       @if (FS.type == General.ReportSlideType.image.ToString())
+       {
+          <input type="hidden" id="_FieldsSlides4" name="_FieldsSlides4" value="@FS.imageDetailsID" style="width: 100px;"/> 
+           <!-- next lines are empty place holders to have same number of parameters as limits slide-->
+          <input type="hidden" id="_FieldsSlides5" name="_FieldsSlides5" value="" style="width: 100px;"/>
+          <input type="hidden" id="_FieldsSlides7" name="_FieldsSlides7" value="" style="width: 100px;"/>
+           <input type="hidden" id="_FieldsSlides8" name="_FieldsSlides8" value="" style="width: 100px;"/>
+          <text>Click button to edit</text>
+           <input type="button" value="E" title="Edit images details" class="button" onclick="ReportFormToStr('@FS.imageDetailsID')"/> 
+           <text>&nbsp;</text>
+       }
+        <input type="hidden" id="_FieldsSlides6" name="_FieldsSlides6" value="@FS.type"/>
+        <input type="button" value="D" title="Delete" class="button" onclick="removeElem(this.parentNode)" />
+       @if (FS.type == General.ReportSlideType.image.ToString())
+       {
+         <input type="button" value="A" title="Add next slide field" class="button" onclick="fnCloneAdj('queryRefInput',this.parentNode)"/>
+       }else{
+         <input type="button" value="A" title="Add next slide field" class="button" onclick="fnCloneAdj('',this.parentNode)"/>
+       }
+        <input type="button" value="AIm" title="Add next slide image" class="button" onclick="fnCloneAdj('queryImageInput',this.parentNode)"/>
+    </div>
+    }
+    <div id="queryEnd"></div>
+       <!-- Reference slides which are not in results DB yet -->
+    foreach (FieldSlide FS in Model.Report.RConfig.FieldsSlides)
+    {
+        if ((Model.Tests.Contains(FS.test)) || (FS.test.ToLower() == "initial")) { continue; }
+        <div>
+            Additinal spec reference tests:
+            Test &nbsp;
+            <input type="text" id="_FieldsSlides0" name="_FieldsSlides0" value="@FS.test" title="@FS.test" style="width: 200px;" disabled="disabled"/>
+            Field &nbsp;
+            <input type="text" id="_FieldsSlides1" name="_FieldsSlides1" value="@FS.column" title="@FS.column" style="width: 200px;" disabled="disabled"/>
+            Template &nbsp;
+            <input type="text" id="_FieldsSlides2" name="_FieldsSlides2" value="NA" style="width: 100px;" disabled="disabled"/>
+            Low limit &nbsp;
+            <input type="text" id="_FieldsSlides3" name="_FieldsSlides3" value="@FS.lsl" style="width: 50px;" disabled="disabled"/>
+            Up limit &nbsp;
+            <input type="text" id="_FieldsSlides4" name="_FieldsSlides4" value="@FS.usl" style="width: 50px;" disabled="disabled"/>
+            <input type="hidden" id="_FieldsSlides5" name="_FieldsSlides5" value="@FS.type" />
+            <input type="button" value="Remove" class="button" onclick="removeElem(this.parentNode)" />
+        </div>
+           
+    }
+    <!--<input type="button" value="add slide field" class="button" onclick="fnEditSlideClone('queryRefInput','queryRefEnd')"/>-->
+    <input type="submit" value="Save Report" onclick="ReportFormToStr('')" />
+    <input type="button" class="button" value="Back to My Reports" onclick="GenLocatioAction('@Url.Action("MyReports", "ReportDB")')" />       
+   }
+
+   <!--new-->
+
+        <div id="queryRefInput">
+        Slide: Test &nbsp;
+        <select id="_FieldsSlides0" name="_FieldsSlides0" class="wmselect" onchange="changedTestsSelect(this,this.nextSibling.nextSibling)">
+        @foreach (string _test in Model.Tests)
+        {
+             <option value="@_test" >@_test</option>
+        } 
+        </select> 
+        Field &nbsp;
+        <select id="_FieldsSlides1" name="_FieldsSlides1" class="wmselect">
+            @foreach (string field in Model.TestsFields[Model.Tests.ElementAt(0)])
+            {
+                <option value="@field"> @field</option>
+            }
+        </select> 
+                Text &nbsp;
+        <input type="text" id="_FieldsSlides2" name="_FieldsSlides2" value="" style="width: 250px;" />
+                Template &nbsp; 
+        <select id="_FieldsSlides3" name="_FieldsSlides3" class="wmselect">
+        @{
+            foreach (string template in Model.Templates)
+            {
+               <option value="@template"> @template</option>
+            }
+        }
+        </select> 
+        Low limit &nbsp;
+        <input type="text" id="_FieldsSlides4" name="_FieldsSlides4" value="" style="width: 75px;"/>
+        Up limit &nbsp;
+        <input type="text" id="_FieldsSlides5" name="_FieldsSlides5" value="" style="width: 75px;"/>
+        limit Units&nbsp;
+        <input type="text" id="_FieldsSlides7" name="_FieldsSlides7" value="" style="width: 75px;"/>
+        Margin limit&nbsp;
+        <input type="text" id="_FieldsSlides8" name="_FieldsSlides8" value="" style="width: 50px;"/>
+        <input type="hidden" id="_FieldsSlides6" name="_FieldsSlides6" value="@General.ReportSlideType.limits.ToString()"/>
+        <input type="button" value="D" title="Delete" class="button" onclick="removeElem(this.parentNode)" />
+        <input type="button" value="A" title="Add next slide field" class="button" onclick="fnCloneAdj('queryRefInput',this.parentNode)"/>
+        <input type="button" value="AIm" title="Add next slide image" class="button" onclick="fnCloneAdj('queryImageInput',this.parentNode)"/>
+    </div>
+    <div id="queryRefEnd"></div>
+
+
+           <div id="queryImageInput">
+        Slide: Test &nbsp;
+        <select id="_FieldsSlides0" name="_FieldsSlides0" class="wmselect" disabled="disabled" onchange="changedTestsSelectImage(this,this.nextSibling.nextSibling,this.nextSibling.nextSibling.nextSibling.nextSibling)">
+        @foreach (string _test in Model.Tests)
+        {
+             <option value="@_test" >@_test</option>
+        } 
+        </select> 
+        Field &nbsp;
+        <select id="_FieldsSlides1" name="_FieldsSlides1" class="wmselect" disabled="disabled">
+            @foreach (string field in Model.TestsFields[Model.Tests.ElementAt(0)])
+            {
+                <option value="@field"> @field</option>
+            }
+        </select> 
+        Text &nbsp;
+        <input type="text" id="_FieldsSlides2" name="_FieldsSlides2" value="" style="width: 250px;" disabled="disabled"/>
+
+        Template &nbsp; 
+        <select id="_FieldsSlides3" name="_FieldsSlides3" disabled="disabled">
+        @{
+            foreach (string template in Model.Templates)
+            {
+                if (!template.Contains("image")) { continue; }
+               <option value="@template"> @template</option>
+            }
+        }
+        </select> 
+        Save report for Edit &nbsp;
+        <!-- next lines are empty place holders to have same number of parameters as limits slide-->
+        <input type="hidden" id="_FieldsSlides4" name="_FieldsSlides4" value="" />
+        <input type="hidden" id="_FieldsSlides5" name="_FieldsSlides5" value="" />
+        <input type="hidden" id="_FieldsSlides7" name="_FieldsSlides7" value="" />
+        <input type="hidden" id="_FieldsSlides8" name="_FieldsSlides8" value="" />
+        <input type="hidden" id="_FieldsSlides6" name="_FieldsSlides6" value="@General.ReportSlideType.image.ToString()" style="width: 100px;"/>
+
+        <input type="button" value="D" title="Delete" class="button" onclick="removeElem(this.parentNode)" />
+        <input type="button" value="A" title="Add next slide field" class="button" onclick="fnCloneAdj('queryInput',this.parentNode)"/>
+        <input type="button" value="AIm" title="Add next slide image" class="button" onclick="fnCloneAdj('queryImageInput',this.parentNode)"/>
+    </div>
+    <div id="queryImageEnd"></div>
+

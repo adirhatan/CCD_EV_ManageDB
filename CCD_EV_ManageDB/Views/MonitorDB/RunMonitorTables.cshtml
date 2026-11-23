@@ -1,0 +1,208 @@
+﻿@model CCD_EV_ManageDB.Models.VMonitorTables
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using System.Web;
+@using CCD_EV_ManageDB.Models;
+@{
+    ViewBag.Title = "RunMonitorTables";
+}
+
+<h2>RunMonitorTables</h2>
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+@if (Model.refresh == "Y")
+{
+    <script type="text/JavaScript">
+        $(document).ready(function () {
+            setInterval(function () {
+                window.location.reload() ;
+            }, 60000);
+        });
+    </script>
+}
+<p>
+    Monitor Set:@Model.Name Last Refresh:@DateTime.Now.ToString("yyyyMMdd_HHmmss")
+    @if (Model.refresh == "Y")
+    {
+        <input type="button" value="Stop Refresh" onclick="GenLocatioAction('@Url.Action("RunMonitorTables", "MonitorDB", new { _id = Model.UMTId, refresh = "N" })')" />
+    }
+    else
+    {
+        <input type="button" value="Restart Refresh" name="refresh" onclick="GenLocatioAction('@Url.Action("RunMonitorTables", "MonitorDB", new { _id = Model.UMTId, refresh = "Y" })')" />
+    }
+</p>
+<br />
+<table>
+    <tr>
+    @foreach (MonitorTable MT in Model.MTList)
+    {
+        string displaySpace = " ";
+        //string details = "";
+        //int detailsLength = 0;
+        bool running = false;
+        bool lateResult = false;
+        DateTime now = DateTime.Now;
+        DateTime resultDate = DateTime.Now;
+        String strPathAndQuery = System.Web.HttpContext.Current.Request.Url.PathAndQuery;
+        String strUrl = System.Web.HttpContext.Current.Request.Url.AbsoluteUri.Replace(strPathAndQuery, "/");
+        String permissionQuery = "EQ;ProjectName;" + MT.ExecutionProject + ";EQ;Phase;" + MT.ExecutionPhase + ";";
+        string resultsLink = strUrl + "ManageDB/SearchTMP?db=" + System.Configuration.ConfigurationManager.AppSettings["DB_TMP"] + "&col=" + System.Web.HttpUtility.UrlEncode(MT.TName) + "&Query=" + permissionQuery + "EQ;SessionStart;" + MT.ExecutionStartSession + "&SortStr=TestEnd";
+        string resultsFailsLink = strUrl + "ManageDB/SearchTMP?db=" + System.Configuration.ConfigurationManager.AppSettings["DB_TMP"] + "&col=" + System.Web.HttpUtility.UrlEncode(MT.TName) + "&Query=" + permissionQuery + "EQ;SessionStart;" + MT.ExecutionStartSession + ";Matches;TestStatus;/Fail/i&SortStr=TestEnd";
+        string logLink = strUrl + "ManageDB/ExecutionLogNew?db=" + System.Configuration.ConfigurationManager.AppSettings["DB_TMP"] + "&col=" + System.Web.HttpUtility.UrlEncode(MT.TName) + "&Query=EQ;SessionStart;" + MT.ExecutionStartSession;
+        if (MT.TableCurResult != null)
+        {
+            //foreach (string field in Model.Fields)
+            //{ details += field + " " + MT.TableCurResult.GetValue(field, "").ToString() + ","; }
+            //detailsLength = details.Length;
+            //if (detailsLength > 71) { detailsLength = 70; }
+            long timeStamp = 0;
+            long EtimeStamp = 0;
+            Int64.TryParse(MT.TableCurResult.GetValue("TestEnd", "0").ToString().Replace("_", ""), out timeStamp);
+            Int64.TryParse(MT.ExecutionTimeStamp.Replace("_", ""), out EtimeStamp);
+            if (timeStamp > EtimeStamp) { running = true; }
+            //TODO: add threhhold of last record: if (new DateTime(yyyy,mm,dd,hh,minute,second))-
+            now = DateTime.Now;
+            int Year=Int32.Parse(timeStamp.ToString().Substring(0,4));
+            int Month=Int32.Parse(timeStamp.ToString().Substring(4,2));
+            int Day=Int32.Parse(timeStamp.ToString().Substring(6,2));
+            int Hour=Int32.Parse(timeStamp.ToString().Substring(8,2));
+            int Minute=Int32.Parse(timeStamp.ToString().Substring(10,2));
+            int Second = Int32.Parse(timeStamp.ToString().Substring(12, 2));
+
+            resultDate = new DateTime(Year, Month, Day, Hour, Minute,Second);
+            if (((now - resultDate).Hours > 0) || ((now - resultDate).Minutes > 40)) { lateResult = true; }
+        }
+        if (MT.ExecutionCurStatus.ToUpper() == "FINISHED") { lateResult = false; }
+        <td>
+            <div id="wrapper" class="wrapper">
+            <table width="200" class="monitorTable">
+            <thead>
+                <tr>
+                    <th colspan="100">@MT.TName @displaySpace @MT.HostName &nbsp; &nbsp; <b style="background-color:Yellow">@MT.ExecutionProject &nbsp; @MT.ExecutionPhase &nbsp; Skew:@MT.ExecutionSkew </b></th>
+                </tr>
+                <tr>
+                    <th colspan="100">
+                        <a href="@resultsLink" target="_blank" style="color:Black; text-decoration:underline" title="Click to open results tab">
+                            Session:@MT.ExecutionStartSession,
+                        </a> 
+                        Board:@MT.ExecutionBoardNumber, 
+                        Unit:@MT.ExecutionUnitId
+                        &nbsp;&nbsp;
+                        @if (MT.ExecutionFails > 0)
+                        {
+                            <a href="@resultsFailsLink" target="_blank" style="color:Maroon; text-decoration:underline" title="Click to open fail results tab">
+                                Fails (@MT.ExecutionFails.ToString() out of @MT.ExecutionResultsNum.ToString())
+                            </a> 
+                        }
+                        else
+                        {
+                            <text>No Fails (@MT.ExecutionResultsNum.ToString() results)</text>
+                        }
+                    </th>
+                </tr>
+                @if (MT.ExecutionCurStatus.ToUpper().Contains("ERROR"))
+                {
+                    if (running)
+                    {
+                        <tr>
+                            <th colspan="100"><a href="@logLink" target="_blank" style="color:Black; text-decoration:underline" title="Click to view log">Status:</a>@displaySpace @MT.ExecutionCurStatus  <span title="@MT.ExecutionComment">  @MT.ExecutionComment.Substring(0, 20)...</span> Time:@MT.ExecutionTimeStamp</th>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <th colspan="100" style="color:Red"><a href="@logLink" target="_blank" style="color:Black; text-decoration:underline" title="Click to view log">Status:</a>@displaySpace @MT.ExecutionCurStatus  <span title="@MT.ExecutionComment">  @MT.ExecutionComment.Substring(0, 20)...</span> Time:@MT.ExecutionTimeStamp</th>
+                        </tr>
+                        
+                    }
+                }
+                else
+                {
+                <tr>
+                    <th colspan="100"><a href="@logLink" target="_blank" style="color:Black; text-decoration:underline" title="Click to view log">Status:</a>@displaySpace @MT.ExecutionCurStatus  </th>
+                </tr>
+                }
+
+                @if (!string.IsNullOrEmpty(MT.ExecutionLogCurStatus))
+                {
+                    int comentLen = 20;
+                    if (MT.ExecutionLogComment.Length<20)
+                    {
+                        comentLen = MT.ExecutionLogComment.Length;
+                    }
+                     
+                    <tr>
+                        <th colspan="100"><a href="@logLink" target="_blank" style="color:Black; text-decoration:underline" title="Click to view log">Log:</a>@displaySpace @MT.ExecutionLogCurStatus  <span title="@MT.ExecutionLogComment">  @MT.ExecutionLogComment.Substring(0, comentLen)...</span> Time:@MT.ExecutionLogTimeStamp</th>
+                    </tr>
+                }
+            </thead>
+            <tbody>
+                <tr>
+                @foreach (MItem corner in MT.Corners)
+                {
+                    <td bgcolor="@corner.Color">
+                    @corner.Name
+                    </td>
+                }
+                <td colspan="100"></td>
+                </tr>
+                <tr>
+                    @foreach (MItem test in MT.Tests)
+                    {
+                        int testLen = 10;
+                        if (test.Name.Length < testLen)
+                        {
+                            testLen = test.Name.Length;
+                        }
+                    <td bgcolor="@test.Color">
+                    <span title="@test.Name" >@test.Name.Substring(0, testLen)</span>
+                    </td>
+                    }
+                <td colspan="8"></td>
+                </tr>
+                <tr>
+                    @foreach (MItem port in MT.Ports)
+                    {
+                    <td bgcolor="@port.Color">
+                    @port.Name
+                    </td>
+                    }
+                <td colspan="8"></td>
+                </tr>
+                <tr>
+                    @foreach (MItem lane in MT.Lanes)
+                    {
+                    <td bgcolor="@lane.Color">
+                    @lane.Name
+                    </td>
+                    }
+                <td colspan="8"></td>
+                </tr>
+                @if (MT.TableCurResult != null)
+                {
+                    if (lateResult)
+                    {
+                        <tr>
+                        <td colspan="100" style="color:Red">Last Record: <span title="@MT.TableCurResult.ToString()">@MT.TableCurResult.ToString().Substring(1, 20)...</span> Time:@MT.TableCurResult.GetValue("TestEnd", "NA")</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                        <td colspan="100">Last Record: <span title="@MT.TableCurResult.ToString()">@MT.TableCurResult.ToString().Substring(1, 20)...</span> Time:@MT.TableCurResult.GetValue("TestEnd", "NA")</td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+            </div>
+        </td>
+                if (((Model.MTList.IndexOf(MT) + 1) % 3) == 0)
+                {
+ @:          </tr>  
+ @:           <tr>
+        }
+    }
+    </tr>
+</table>

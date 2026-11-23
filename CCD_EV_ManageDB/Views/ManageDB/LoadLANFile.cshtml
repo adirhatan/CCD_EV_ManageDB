@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "LoadLANFile";
+    string dbName = "PRM";
+}
+
+
+<h2>Load formatted LAN excel file to @dbName DB</h2>
+
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+
+@using (Html.BeginForm("LoadLANFile", "ManageDB", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <p>Select table: 
+        <select id="col" name="col">
+            <option value="LAN_BER" > LAN_BER</option>   
+            <option value="LAN_TTL" > LAN_TTL</option>   
+        </select> 
+        <input type="hidden" name="_db" value="@dbName" />
+        <input type="hidden" name="project" value="FXVL" />
+        <input type="hidden" name="phase" value="C0" />
+        <input type="file" name="file" class="button" />
+        <input type="submit" value="OK"  class="button"/>
+    </p>
+}
+            
+

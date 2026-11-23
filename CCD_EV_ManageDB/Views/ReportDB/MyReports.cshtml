@@ -1,0 +1,593 @@
+﻿@model MongoDB.Driver.MongoCursor
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using MongoDB.Bson.Serialization;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+
+@{
+    ViewBag.Title = "MyReports";
+}
+
+<h2>MyReports</h2>
+
+ <script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+ <script type="text/JavaScript">
+     $(document).ready(function () {
+         //debugger;
+         $('#rTables').dataTable({
+             "iDisplayLength": -1,
+             "columns": [
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": false },
+            { "orderable": true },
+            { "orderable": false },
+            { "orderable": true },
+            { "orderable": false }
+          ],
+             "autoWidth": true,
+             "jQueryUI": true,
+             //        //"sDom": '<"H"CTrf>t<"F"lip>',
+             "dom": '<"F"CTrif>t<"F"CTrif>',
+             "scrollX": "100%",
+             //"sScrollY": "700px",
+             "scrollY": (0.8 * $(window).height()),
+             "scrollCollapse": true
+         });
+     });
+
+</script>
+     <!-- Status Report export dialog -->
+      <script>
+          $(function () {
+              var dialog, form;
+
+              function addUser() {
+                  form.submit();
+              }
+
+              dialog = $("#dialog-form").dialog({
+                  autoOpen: false,
+                  height: 300,
+                  width: 450,
+                  modal: true
+              });
+
+          });
+
+          function ShowRSDialog(dialog,id) {
+
+              //debugger;
+              $("#SRid").val(id);
+              var td = "#" + dialog;
+              $(td).dialog();
+              $(td).dialog("option", "width", 450);
+              $(td).dialog("option", "length", 300);
+              $(td).dialog("option", "modal", true);
+              $(td).dialog("open");
+
+          };
+
+
+  </script>
+
+  
+       <!-- CIO Rx copy report dialog -->
+      <script>
+          $(function () {
+              var dialog, form;
+
+              function addUser() {
+                  form.submit();
+              }
+
+              dialog = $("#dialog-form-cio-rx").dialog({
+                  autoOpen: false,
+                  height: 200,
+                  width: 350,
+                  modal: true
+              });
+
+
+          });
+
+          function ShowCIORXDialog(dialog, id,table) {
+
+              //debugger;
+              $("#CIO_RXid").val(id);
+              $("#table_" + table).prop('checked', false);
+              var td = "#" + dialog;
+              $(td).dialog();
+              $(td).dialog("option", "width", 350);
+              $(td).dialog("option", "length", 200);
+              $(td).dialog("option", "modal", true);
+              $(td).dialog("open");
+
+          };
+
+          function ValidateCheckAlltabs(formId,buttonId) {
+              //debugger;
+              var x = document.getElementById(formId);
+              var c = document.getElementById(buttonId);
+              for (var i = 0; i < x.length; i++) {
+                  if (x.elements[i].name.match("table_.*")) {
+                      x.elements[i].checked = c.checked;
+                  }
+              }
+          }
+  </script>
+
+         <!-- CIO Tx copy report dialog -->
+      <script>
+          $(function () {
+              var dialog, form;
+
+              function addUser() {
+                  form.submit();
+              }
+
+              dialog = $("#dialog-form-cio-tx").dialog({
+                  autoOpen: false,
+                  height: 200,
+                  width: 350,
+                  modal: true
+              });
+
+          });
+
+          function ShowCIOTXDialog(dialog, id, table) {
+
+              //debugger;
+              $("#CIO_TXid").val(id);
+              $("#table_" + table).prop('checked', false);
+              var td = "#" + dialog;
+              $(td).dialog();
+              $(td).dialog("option", "width", 350);
+              $(td).dialog("option", "length", 200);
+              $(td).dialog("option", "modal", true);
+              $(td).dialog("open");
+
+          };
+
+  </script>
+
+       @{ var ExportedFile = TempData["ExportedFileNAme"];
+          if (ExportedFile != null)
+          {
+             <script type="text/JavaScript">
+                 $(document).ready(function () {
+                     var url = '@Url.Action("ViewExportFile", "ManageDB", new { filename = TempData["ExportedFileNAme"] })';
+                     $(location).attr('href', url);
+
+
+                 });
+             </script>
+          }
+     }
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"] 
+       @{ var ExportedFile2 = TempData["ExportedFileNAme2"];
+          if (ExportedFile2 != null)
+          {
+              <a href="@Url.Action("ViewExportBGFile", "ManageDB", new { filename = ExportedFile2 })" style="color:Green; text-decoration:underline; font-weight:bold">CustomExec File</a>
+          }
+        }
+ </p>
+@if ((!User.IsInRole("CCD_EV_GB")))
+{
+    using (Html.BeginForm("CreateReport", "ReportDB", FormMethod.Post, new { @id = "ReportForm", @name = "ReportForm" }))
+    {
+     <p>Create new empty report: &nbsp; 
+         Report name:
+        <input type="text" id="rName" name="rName" style="width: 120px" />
+        Test name (field):
+        <input type="text" id="tName" name="tName" style="width: 120px"  value="TestName"/>
+        Select table for report: 
+        <select id="tableName" name="tableName">
+            @foreach (var col in ViewBag.collist)
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        </select> 
+        <!-- 
+        Select reference
+        <select id="refId" name="refId">
+            @foreach (var col in ViewBag.reflist)
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        </select>
+        -->
+        <input type="submit" value="Submit" />
+    </p>
+    }
+
+    using (Html.BeginForm("SendReportToUser", "ReportDB", FormMethod.Post, new { @id = "CopyReportForm", @name = "CopyReportForm" }))
+    {
+     <p>Send report to another user: &nbsp; 
+        Report Name:
+        <select id="SReportId" name="ReportId" class="wselect">
+            <option value=""></option>
+            @{ MongoCursor cloneCur = Model.Clone((new BsonDocument()).GetType());
+               foreach (BsonDocument report in cloneCur)
+               {
+                    <option value="@report.GetValue("_id").ToString()"> @report.GetValue("name", "").ToString()</option>
+               }
+             }
+        </select>
+        User Name:
+        <select id="CUserId" name="UserId" class="wselect">
+            @foreach (var user in ViewBag.Users)
+            {
+                <option value="@user.ToString()"> @user.ToString()</option>
+            }
+        </select> 
+
+        <input type="submit" value="Submit" />
+    </p>
+    }
+
+    using (Html.BeginForm("CreateReport", "ReportDB", FormMethod.Post, new { @id = "ReportRefForm", @name = "ReportRefForm" }))
+    {
+     <p>Create new report from spec: &nbsp; 
+         Report name:
+        <input type="text" id="rrName" name="rName" style="width: 120px" />
+        <input type="hidden" id="rtName" name="tName" value="SpecTestName"/>
+        Select table for report: 
+        <select id="rtableName" name="tableName">
+            @foreach (var col in ViewBag.collist)
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        </select> 
+        Select spec
+        <select id="refId" name="refId">
+            @foreach (var col in ViewBag.reflist)
+            {
+                <option value="@col.ToString()"> @col.ToString()</option>
+            }
+        </select>
+        Select template
+        <select id="pandaTemplate" name="pandaTemplate" class="wmselect">
+            <option value=""> </option>
+        @{
+            foreach (string template in ViewBag.Templates)
+            {
+                {
+                    <option value="@template"> @template</option>
+                }
+            }
+        }
+        </select> 
+        optional: Select Report to copy Images/Templates
+       <select id="rFromId" name="rFromId" class="wselect">
+            <option value=""></option>
+            @{ MongoCursor cloneCur = Model.Clone((new BsonDocument()).GetType());
+               foreach (BsonDocument report in cloneCur)
+               {
+                    <option value="@report.GetValue("_id").ToString()"> @report.GetValue("name", "").ToString()</option>
+               }
+             }
+        </select>
+
+        <input type="submit" value="Submit" />
+    </p>
+    }
+
+ <br />
+}
+
+
+    @using (Html.BeginForm("MyReports", "ReportDB", FormMethod.Post, new { @id = "ReportDBForm", @name = "ReportDBForm" }))
+    {
+        bool prmChecked = (ViewBag.db == "PRM");
+        bool tmpChecked = (ViewBag.db == "TMP");
+        bool prmArchChecked = (ViewBag.db == "PRMArch");
+        if ((!User.IsInRole("CCD_EV_GB")))
+        {
+   <p> Choose DB for running report: @Html.RadioButton("db", "PRM", prmChecked, new { @onclick = "document.getElementById('ReportDBForm').submit()" })PRM @Html.RadioButton("db", "TMP", tmpChecked, new { @onclick = "document.getElementById('ReportDBForm').submit()" })TMP @Html.RadioButton("db", "PRMArch", prmArchChecked, new { @onclick = "document.getElementById('ReportDBForm').submit()" })PRM Archive.&nbsp;&nbsp; Current query: Table:"@ViewBag.col" Query: "@ViewBag.Query"</p>
+        }
+        else
+        {
+   <p> Choose DB for running report: @Html.RadioButton("db", "PRM", prmChecked, new { @onclick = "document.getElementById('ReportDBForm').submit()" })PRM @Html.RadioButton("db", "TMP", tmpChecked, new { @onclick = "document.getElementById('ReportDBForm').submit()" })TMP &nbsp;&nbsp; Current query: Table:"@ViewBag.col" Query: "@ViewBag.Query"</p>
+        }
+    }
+  <br />
+
+  <table id="rTables" class="display">
+    <thead>
+    <tr>
+        <th >
+            Run
+        </th>
+        <th >
+            Run last query
+        </th>
+        <th >
+            Edit
+        </th>
+        <th >
+            Status
+        </th>
+        <th >
+            Copy
+        </th>
+        <th >
+            Delete
+        </th>
+        <th >
+            Name
+        </th>
+        <th >
+            Rename
+        </th>
+        <th >
+            Table
+        </th>
+        <th >
+            P.Executions
+        </th>
+    </tr> 
+
+    </thead>
+    <tbody>
+    @foreach (BsonDocument item in Model)
+    {
+        string r_id = item.AsBsonDocument.GetElement("_id").Value.ToString();
+        string SaveName = "SaveName" + r_id;
+        string Name = "SaveName" + r_id;
+        string rForm = "r" + r_id;
+        string rlForm = "rl" + r_id;
+        UserTableReport Report = new UserTableReport();
+        Report._id = item.GetValue("_id", "").ToString(); ;
+        Report.Name = item.GetValue("name", "").ToString();
+        Report.RConfig = item.GetValue("RConfig").AsBsonDocument.BsonDocumentToReportConfig();
+        Report.ResultsPath = item.GetValue("ResultsPath", "").ToString();
+        //Report.Search = item.GetValue("Search").AsBsonDocument.BsonDocumentToDBsearchSave();
+        Report.Search = BsonSerializer.Deserialize<DBsearchSave>(item.GetElement("Search").Value.ToBsonDocument());
+        Report.TestName = item.GetValue("TestName", "").ToString(); 
+     <tr>
+        <td>
+        @if (Report.RConfig.table == ViewBag.col)
+        {
+            using (Html.BeginForm("RunReportBG", "ReportDB", FormMethod.Post, new { @id = rForm, @name = rForm }))
+            {
+                <input type="submit" value="R" title="Run Report with current query: DB @ViewBag.db; @ViewBag.Query" class="button" />
+                <input type="button" value="RP" title="Run Partial Report with current query: DB @ViewBag.db; @ViewBag.Query" class="button" onclick="GenSubmitFormAction('@rForm','@Url.Action("RunPartialReport", "ReportDB")')";/>
+                <input type="text" id="desc" name="desc" style="width: 75px" title="Report user note" />
+                <input type="checkbox" value="Y" name="debug" title="Debug Excel file"/>
+                <input type="hidden" id="_id" name="_id" value="@r_id" />
+                <input type="hidden" id="db" name="db" value="@ViewBag.db" />
+                <input type="hidden" id="FieldSlidesStr" name="FieldSlidesStr" value="" />
+            }
+        }
+        else
+        {
+            string action = "SearchTMP";
+            if (ViewBag.db == "PRM") { action = "SearchPRM"; }
+            using (Html.BeginForm("SearchTMP", "ManageDB", FormMethod.Post, new { @id = "qForm", @name = "qForm" }))
+            {
+                <input type="button" value="Q" title="Define query to run Report" class="button" onclick="FormConfirmAction('qForm','@Url.Action(action, "ManageDB")','Current query does not match table\nNeed to execute search and choose correct DB first')"/>
+            }
+        }
+        </td>  
+        <td>
+        @if ((Report.Search.Query != null) && (!Report.Search.Query.IsEmpty()))
+        {
+            using (Html.BeginForm("RunReportBG", "ReportDB", FormMethod.Post, new { @id = rlForm, @name = rlForm }))
+            {
+                <input type="submit" value="Rlast" title="Run Report with last query:DB @Report.Search.db ; @Report.Search.Query" class="button" />
+                <input type="button" class="button" value="RP" title="Run Partial Report with last query:DB @Report.Search.db ; @Report.Search.Query" onclick="GenSubmitFormAction('@rlForm','@Url.Action("RunPartialReport", "ReportDB")')";/>
+                <input type="text" id="ldesc" name="desc" style="width: 75px" title="Report user note" />
+                <input type="checkbox" value="Y" name="debug" title="Debug Excel file"/>
+                <input type="hidden" id="l_id" name="_id" value="@r_id" />
+                <input type="hidden" id="ldb" name="db" value="LST" />
+            }
+        }
+        else
+        {
+            <p>New Report</p>
+        }
+        </td>  
+        <td>
+        @using (Html.BeginForm("EditReport", "ReportDB", FormMethod.Post, new { @id = "eForm", @name = "eForm" }))
+        {
+            <input type="submit" value="E" title="Edit Report" class="button" />
+             <input type="hidden" id="e_id" name="_id" value="@r_id" />
+             <input type="hidden" id="fromCopy" name="fromCopy" value="false" />
+        }
+        </td>
+        <td>
+        @if (Report.RConfig.table == ViewBag.col)
+        {
+            <input type="button" value="RS" title="Run status report " class="button" onclick="ShowRSDialog('dialog-form','@r_id')" />
+        }
+        else
+        {
+           <input type="button" value="Q-RS" title="Run status report - query does not match " class="button" disabled="disabled" />
+        }
+        &nbsp;
+            <input type="button" value="V" title="Validate Report completeness" class="button" onclick="GenLocatioAction_id('@r_id','@Url.Action("ValidateResCompReport", "ReportDB")')" />
+        </td>
+        <td>
+        @{
+        bool notCIO = true;
+        if (Report.TestName != "SpecTestName")
+        {
+            if ((Report.RConfig.table == "CIO_Rounded_Gen2_Rx") || (Report.RConfig.table == "CIO_Rounded_Gen3_Rx") || (Report.RConfig.table == "TBT3_Legacy_Gen2_Rx") || (Report.RConfig.table == "TBT3_Legacy_Gen3_Rx"))
+            {
+                notCIO = false;
+                <input type="button" value="C" title="Copy Report"  class="button" onclick="ShowCIORXDialog('dialog-form-cio-rx','@r_id','@Report.RConfig.table')" />
+            }
+            if ((Report.RConfig.table == "CIO_Rounded_Gen2_Tx") || (Report.RConfig.table == "CIO_Rounded_Gen3_Tx") || (Report.RConfig.table == "TBT3_Legacy_Gen2_Tx") || (Report.RConfig.table == "TBT3_Legacy_Gen3_Tx"))
+            {
+                notCIO = false;
+                <input type="button" value="C" title="Copy Report"  class="button" onclick="ShowCIOTXDialog('dialog-form-cio-rx','@r_id','@Report.RConfig.table')" />
+            }
+        }
+        if (notCIO)
+        {
+                <input type="button" value="C" title="Copy Report" class="button" onclick="GenLocatioAction_id('@r_id','@Url.Action("CopyReport", "ReportDB")')" />
+        }
+        }
+        </td>
+        <td>
+            <input type="button" value="D" title="Delete Report" class="button" onclick="GenLocatioAction_id('@r_id','@Url.Action("DeleteReport", "ReportDB")')" />
+        </td>
+        <td id="@r_id">
+        @Report.Name
+        </td>
+        <td>
+            <input type="text" id="@SaveName" name="@SaveName" style="width: 120px" />
+            <input type="button" value="M" title="Rename Report" class="button" onclick="GenAjaxRenameElem_id('@SaveName','@r_id','@Url.Action("RenameReport", "ReportDB")')" />
+        </td>
+        <td >
+             @Report.RConfig.table
+        </td>
+        <td >
+              @using (Html.BeginForm("MyBGTasks", "ManageDB", FormMethod.Post, new { @id = "exForm", @name = "exForm" }))
+              {
+                <input type="submit" value="P. Exec" title="Previous executions" class="button" />
+                <input type="hidden" id="SourceID" name="SourceID" value="@Report._id" />
+              }
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+
+<div id="dialog-form" title="Status report">
+  <p class="validateTips">Edit Excel Status report content.</p>
+ 
+  <form action='@Url.Action("StatusReportExec", "ReportDB")' id="SRForm">
+    <fieldset>
+      <label for="name">Tests Format:</label>
+      	<select id="JoinFieldKey" name="JoinFieldKey" style="width: 150px">
+		<option value="N" > Test name</option>   
+        <option value="Y" > Test name & field</option>
+	    </select> 
+      <br />
+      <label for="name">Lanes Format:</label>
+      	<select id="Lanes" name="Lanes" style="width: 270px">
+        <option value="PABL01" > Ports (A,B) L0-L1 [BB,DB,AR,MR]</option>
+        <option value="PABEL01" > Ports (A,B,E) L0-L1 [TR]</option>
+        <option value="PABCDEL01" > Ports (A,B,C,D,E) L0-L1 [GR]</option>
+        <option value="PABCDL01" > Ports (A,B,C,D) L0-L1 [GR-Partial]</option>
+        <option value="PABL01" > Ports (A,B) L0-L1 [GR-Partial]</option>
+        <option value="PCDL01" > Ports (C,D) L0-L1 [GR-Partial]</option>
+        <option value="PABL03" > Ports (A,B) L0-L3 [BB,DB,AR,MR]</option>
+        <option value="PAB0L03" > Ports (A,B,S0) L0-L3 [BB,DB,AR,MR]</option>
+        <option value="PABCDEL03" > Ports (A,B,C,D,E) L0-L3 [GR]</option>
+        <option value="PABLNA" > Ports (A,B) No Lanes [AR,TR,MR]</option>
+        <option value="PAB0LNA" > Ports (A,B,S0) No Lanes [BB,DB,MR]</option>
+        <option value="PABELNA" > Ports (A,B,E) No Lanes [TR,GR]</option>
+        <option value="PABCDELNA" > Ports (A,B,C,D,E) No Lanes [GR]</option>
+        <option value="NPL03" > No Ports L0-L3 [BB,DB,AR,TR,MR]</option>
+        <option value="NPL0" > No Ports L0 [GR]</option>
+        <option value="NPL07" > No Ports L0-L7 [GR (RL)]</option>
+	    </select> 
+      <br />
+      <label for="name">Separator field 1:</label>
+      	<select id="S1" name="S1" style="width: 150px">
+		<option value="SessionStart" > SessionStart</option>   
+        <option value="BoardNumber"> BoardNumber</option>
+		<option value="UnitId"> UnitId</option>
+        <option value="Skew"> Skew</option>
+        <option value="HostName"> HostName</option>
+	    </select> 
+      <br />
+        <label for="name">Separator field 2:</label>
+      	<select id="S2" name="S2"style="width: 150px">
+        <option value=""></option>
+		<option value="SessionStart" > SessionStart</option>   
+        <option value="BoardNumber"> BoardNumber</option>
+		<option value="UnitId"> UnitId</option>
+        <option value="Skew"> Skew</option>
+        <option value="HostName"> HostName</option>
+	    </select> 
+      <br />
+        <label for="name">Separator field 3:</label>
+      	<select id="S3" name="S3" style="width: 150px">
+        <option value=""></option>
+		<option value="SessionStart" > SessionStart</option>   
+        <option value="BoardNumber"> BoardNumber</option>
+		<option value="UnitId"> UnitId</option>
+        <option value="Skew"> Skew</option>
+        <option value="HostName"> HostName</option>
+	    </select> 
+       <br />
+       <label for="name">Separator field 4:</label>
+      	<select id="S4" name="S4" style="width: 150px">
+        <option value=""></option>
+		<option value="SessionStart" > SessionStart</option>   
+        <option value="BoardNumber"> BoardNumber</option>
+		<option value="UnitId"> UnitId</option>
+        <option value="Skew"> Skew</option>
+        <option value="HostName"> HostName</option>
+	    </select> 
+      <br />
+            <label for="name">Separator field 5:</label>
+      	<select id="S5" name="S5" style="width: 150px">
+        <option value=""></option>
+		<option value="SessionStart" > SessionStart</option>   
+        <option value="BoardNumber"> BoardNumber</option>
+		<option value="UnitId"> UnitId</option>
+        <option value="Skew"> Skew</option>
+        <option value="HostName"> HostName</option>
+	    </select> 
+      <br />
+      <label for="name">Include mesurements summary:</label>
+      <input type="checkbox" id="mesure" name="mesure" checked="checked" />
+      <br />
+      <input type="hidden" id="SRdb" name="db" value="@ViewBag.db"/>
+      <input type="hidden" id="SRid" name="_id" />
+      <input type="submit" class="button"/>
+    </fieldset>
+  </form>
+</div>
+
+<div id="dialog-form-cio-rx" title="Copy CIO-RX report">
+  <p class="validateTips">@Html.CheckBox("_checkAllRx", false, new { @id = "_checkAllRx", @onclick = "ValidateCheckAlltabs('FormCIORx','_checkAllRx')" }) Choose CIO-Rx target report table.</p>
+ 
+  <form action='@Url.Action("CopyReport", "ReportDB")' method="post" id="FormCIORx">
+        <input type="hidden" id="CIO_RXid" name="_id" />
+    <fieldset>
+         @Html.CheckBox("table_CIO_Rounded_Gen2_Rx", true)
+        <label for="name">CIO_10G_Rx</label><br />
+        @Html.CheckBox("table_CIO_Rounded_Gen3_Rx", true)
+        <label for="name">CIO_20G_Rx</label><br />
+        @Html.CheckBox("table_TBT3_Legacy_Gen2_Rx", true)
+        <label for="name">TBT3_Legacy_Gen2_Rx</label><br />
+        @Html.CheckBox("table_TBT3_Legacy_Gen3_Rx", true)
+        <label for="name">TBT3_Legacy_Gen3_Rx</label><br />
+      <input type="submit" class="button"/>
+    </fieldset>
+  </form>
+</div>
+
+<div id="dialog-form-cio-tx" title="Copy CIO-TX report">
+  <p class="validateTips">@Html.CheckBox("_checkAllTx", false, new { @id = "_checkAllTx", @onclick = "ValidateCheckAlltabs('FormCIOTx','_checkAllTx')" }) Choose CIO-Tx target report table.</p>
+ 
+  <form action='@Url.Action("CopyReport", "ReportDB")' method="post" id="FormCIOTx">
+        <input type="hidden" id="CIO_Txid" name="_id" />
+    <fieldset>
+         @Html.CheckBox("table_CIO_Rounded_Gen2_Tx", true)
+        <label for="name">CIO_10G_Tx</label><br />
+        @Html.CheckBox("table_CIO_Rounded_Gen3_Tx", true)
+        <label for="name">CIO_20G_Tx</label><br />
+        @Html.CheckBox("table_TBT3_Legacy_Gen2_Tx", true)
+        <label for="name">TBT3_Legacy_Gen2_Tx</label><br />
+        @Html.CheckBox("table_TBT3_Legacy_Gen3_Tx", true)
+        <label for="name">TBT3_Legacy_Gen3_Tx</label><br />
+      <input type="submit" class="button"/>
+    </fieldset>
+  </form>
+</div>
+
+
+

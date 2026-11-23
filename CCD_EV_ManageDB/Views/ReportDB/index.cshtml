@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "index";
+}
+
+<h2>index</h2>
+ @using (Html.BeginForm("CreateReport", "ReportDB", FormMethod.Post, new { @id = "ReportForm", @name = "ReportForm" }))
+ {
+ <p>Create new report: &nbsp; 
+     Report name:
+    <input type="text" id="rName" name="rName" style="width: 120px" />
+    Select table for report: 
+    <select id="tableName" name="tableName">
+        @foreach (var col in ViewBag.collist)
+        {
+            <option value="@col.ToString()"> @col.ToString()</option>
+        }
+    </select> 
+    <input type="submit" value="Submit" />
+</p>
+ }

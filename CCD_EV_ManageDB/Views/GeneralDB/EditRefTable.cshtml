@@ -1,0 +1,81 @@
+﻿@model CCD_EV_ManageDB.Models.ADMReferenceTable
+@using MongoDB.Bson;
+@using MongoDB.Driver;
+@using MongoDB.Bson.Serialization;
+@using System.Collections.Generic;
+@using System.Web.UI.WebControls;
+@using CCD_EV_ManageDB.Models;
+@using System.Web.Script.Serialization;
+
+
+@{
+    ViewBag.Title = "Edit Spec Ref";
+}
+
+<script type="text/JavaScript">
+//    alert(ngon.dictionaryFields["noTestName"]);
+//    var arrayLength = ngon.dictionaryFields["noTestName"].length;
+//    for (var i = 0; i < arrayLength; i++) {
+//        alert(ngon.dictionaryFields["noTestName"][i]);
+//        //Do something
+//    }
+    function changedTestsSelect(selectTests, selectFields) {
+        //debugger;
+        //var selectFields = elem.nextSibling.nextSibling;
+
+        var output = [];
+        var length = ngon.dictionaryFields[selectTests.value].length;
+        for (var i = 0; i < length; i++) {
+            output[i] = '<option value="' + ngon.dictionaryFields[selectTests.value][i] + '">' + ngon.dictionaryFields[selectTests.value][i] + '</option>';
+        }
+
+        selectFields.innerHTML = output.join('');
+
+    }
+    
+</script>
+ <h2>Edit Spec Ref</h2>
+<p class="messageText">@TempData["message"]</p>
+<p class="messageInfoText">@TempData["messageInfo"]</p> 
+<br />
+  @using (Html.BeginForm("SaveReportChangeTab", "ReportDB", FormMethod.Post, new { @id = "SaveReportChangeTab", @name = "SaveReportChangeTab" }))
+  {
+    @Html.Hidden("id", Model._id)
+    <p>Spec Name: <b>@Model._id</b>  </p>
+  }
+<script src="@Url.Content("~/Scripts/ccdEV.js")" type="text/javascript" ></script>
+<!--  //public ActionResult SaveRef(string id,string _Protocol, string _PVersion, string FieldsSlidesStr) -->
+   @using (Html.BeginForm("SaveRef", "GeneralDB", FormMethod.Post, new { @id = "myForm", @name = "myForm" }))
+   {
+   @Html.Hidden("id", Model._id)
+   @Html.Hidden("FieldsSlidesStr", "")
+   @Html.Hidden("_Protocol", Model.Protocol)
+   @Html.Hidden("_PVersion", Model.PVersion)
+       
+       foreach (FieldSlide FS in Model.RConfig.FieldsSlides)
+       {
+        <div id="queryInput">
+        Spec Test Name &nbsp;
+        <input type="text" id="_FieldsSlides0" name="_FieldsSlides0" title="@FS.test" style="width: 400px" value="@FS.test" />
+        Field &nbsp;
+        <input type="text" id="_FieldsSlides1" name="_FieldsSlides1" title="@FS.column" style="width: 100px" value="@FS.column" />
+
+        Low limit &nbsp;
+        <input type="text" id="_FieldsSlides2" name="_FieldsSlides2" value="@FS.lsl" style="width: 50px;"/>
+        Up limit &nbsp;
+        <input type="text" id="_FieldsSlides3" name="_FieldsSlides3" value="@FS.usl" style="width: 50px;"/>
+        Limit Units&nbsp;
+        <input type="text" id="_FieldsSlides4" name="_FieldsSlides4" value="@FS.units" style="width: 50px;"/>
+        Spec Ref &nbsp;
+        <input type="text" id="_FieldsSlides5" name="_FieldsSlides5" value="@FS.specRef" style="width: 250px;"/>
+        Margin limit&nbsp;
+        <input type="text" id="_FieldsSlides6" name="_FieldsSlides6" value="@FS.margin" style="width: 50px;"/>
+        <input type="button" value="Remove" class="button" onclick="removeElem(this.parentNode)" />
+        <input type="button" value="add next slide field" class="button" onclick="fnCloneAdj('',this.parentNode)"/>
+    </div>
+       }
+    <div id="queryEnd"></div>
+    <input type="button" value="add slide field" class="button" onclick="fnEditSlideClone('queryInput','queryEnd')"/>
+    <input type="submit" value="Save" onclick="RefFormToStr()" />
+    <input type="button" class="button" value="Back to Spec Tables" onclick="GenLocatioAction('@Url.Action("ADMRefTables", "GeneralDB")')" /> 
+   }
